@@ -104,7 +104,11 @@ function goHome(){
   show('s-scene');
   ST.mat = null;
   renderBeachSpecs();
-  _resetScrollAnim();
+  // Atterrir sur la carte (90% du scroll max)
+  const target = window.innerHeight * 1.6 * 0.9;
+  if(_lenis) _lenis.scrollTo(target, {immediate:true});
+  else window.scrollTo(0, target);
+  _onScroll(target);
 }
 
 // ── Scroll-driven animation ───────────────────────────────────────
@@ -191,7 +195,7 @@ function renderBeachSpecs() {
     { id:'dermato',  icon:'🪮', nom:'Dermatologie',           col:'#0ea5e9' },
     { id:'infectio', icon:'🦠', nom:'Infectiologie',          col:'#22c55e' },
     { id:'neuro',    icon:'🧠', nom:'Neurologie',             col:'#a855f7' },
-    { id:'hge',      icon:'🍕', nom:'Hépato-Gastro-Entéro',  col:'#f97316' },
+    { id:'hge',      icon:'💩', nom:'Hépato-Gastro-Entéro',  col:'#f97316' },
   ];
   el.innerHTML = specs.map(s => {
     const tot  = QCMS.filter(q => q.tags.includes(s.id)).length;
