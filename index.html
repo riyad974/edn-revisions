@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDN · Révisions Actives</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+
+  <!-- FOND VIDÉO — fixe, derrière tout -->
+  <video id="bg-video" autoplay muted loop playsinline>
+    <source src="fond.mp4" type="video/mp4">
+  </video>
+  <div id="bg-vignette"></div>
+
+  <!-- SCENE — Plage interactive -->
+  <div id="s-scene" class="screen active">
+    <div class="beach-scene" id="beach-scene">
+      <div class="beach-vignette"></div>
+
+      <!-- ── HÉRO TYPOGRAPHIQUE ── -->
+      <div class="beach-hero">
+        <div class="hero-tag">
+          <span class="hero-tag-dot"></span>
+          Révisions actives · EDN
+        </div>
+        <h1 class="hero-title">
+          <span class="hero-l1">Révisez</span>
+          <span class="hero-l2">intelligemment<em>.</em></span>
+        </h1>
+      </div>
+
+      <!-- ── STATS + PROGRESSION — droite ── -->
+      <div class="beach-stats-col">
+        <div class="bsc-item">
+          <strong class="bsc-fraction">
+            <span id="st2-items-done">0</span><span class="bsc-total"> / <span id="st2-items-tot">367</span></span>
+          </strong>
+          <span>items R2C vus</span>
+        </div>
+        <div class="bsc-sep"></div>
+        <div class="bsc-item">
+          <strong id="st2-pct">0%</strong>
+          <span>progression</span>
+        </div>
+        <div class="bsc-wavebar">
+          <div class="bsc-wavebar-fill" id="st2-bar"></div>
+        </div>
+      </div>
+
+      <!-- ── BOUTONS D'ACCÈS ── -->
+      <div class="beach-cta">
+        <button class="beach-btn" onclick="showQCMOverlay()">
+          <span class="beach-btn-icon">🩺</span>
+          <span class="beach-btn-label">QCMs</span>
+          <span class="beach-btn-arrow">↗</span>
+        </button>
+        <button class="beach-btn" onclick="beachZoom(this,'items')">
+          <span class="beach-btn-icon">📋</span>
+          <span class="beach-btn-label">Référentiel R2C</span>
+          <span class="beach-btn-arrow">↗</span>
+        </button>
+      </div>
+
+      <!-- ── HINT BAR ── -->
+      <div class="beach-hint-bar">
+        <div class="hint-line"></div>
+        <span>Clique pour explorer</span>
+        <div class="hint-line"></div>
+      </div>
+
+      <!-- ── Overlay Spécialités (s'ouvre sur la plage) ── -->
+      <div class="qcm-overlay" id="qcm-overlay">
+        <div class="qcm-backdrop" onclick="hideQCMOverlay()"></div>
+        <div class="qcm-sheet">
+          <div class="qcm-sheet-bar"></div>
+          <div class="qcm-sheet-head">
+            <div>
+              <div class="qcm-sheet-title">Choisir une spécialité</div>
+              <div class="qcm-sheet-sub" id="qcm-global-stats">— QCMs disponibles</div>
+            </div>
+            <button class="qcm-sheet-close" onclick="hideQCMOverlay()">✕</button>
+          </div>
+          <div class="spec-grid">
+            <div class="spec-tile cardio" onclick="launchMat('cardio')">
+              <div class="spec-tile-icon">🫀</div>
+              <div class="spec-tile-info">
+                <div class="spec-tile-name">Cardiologie</div>
+                <div class="spec-tile-prog" id="sp-cardio">— QCMs</div>
+              </div>
+              <div class="spec-tile-bar"><div class="spec-tile-fill cardio-fill" id="spf-cardio"></div></div>
+            </div>
+            <div class="spec-tile dermato" onclick="launchMat('dermato')">
+              <div class="spec-tile-icon">🩺</div>
+              <div class="spec-tile-info">
+                <div class="spec-tile-name">Dermatologie</div>
+                <div class="spec-tile-prog" id="sp-dermato">— QCMs</div>
+              </div>
+              <div class="spec-tile-bar"><div class="spec-tile-fill dermato-fill" id="spf-dermato"></div></div>
+            </div>
+            <div class="spec-tile infectio" onclick="launchMat('infectio')">
+              <div class="spec-tile-icon">🦠</div>
+              <div class="spec-tile-info">
+                <div class="spec-tile-name">Infectiologie</div>
+                <div class="spec-tile-prog" id="sp-infectio">— QCMs</div>
+              </div>
+              <div class="spec-tile-bar"><div class="spec-tile-fill infectio-fill" id="spf-infectio"></div></div>
+            </div>
+            <div class="spec-tile neuro" onclick="launchMat('neuro')">
+              <div class="spec-tile-icon">🧠</div>
+              <div class="spec-tile-info">
+                <div class="spec-tile-name">Neurologie</div>
+                <div class="spec-tile-prog" id="sp-neuro">— QCMs</div>
+              </div>
+              <div class="spec-tile-bar"><div class="spec-tile-fill neuro-fill" id="spf-neuro"></div></div>
+            </div>
+            <div class="spec-tile hge spec-wide" onclick="launchMat('hge')">
+              <div class="spec-tile-icon">🍕</div>
+              <div class="spec-tile-info">
+                <div class="spec-tile-name">Hépato-Gastro-Entérologie</div>
+                <div class="spec-tile-prog" id="sp-hge">— QCMs</div>
+              </div>
+              <div class="spec-tile-bar"><div class="spec-tile-fill hge-fill" id="spf-hge"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="s-home" class="screen">
+    <button class="back-btn" onclick="goHome()">← Plage</button>
+
+    <header class="home-header">
+      <div class="brand">EDN<span>·</span>Médecine</div>
+    </header>
+
+    <section class="home-hero">
+      <div class="badge-top">
+        <span class="badge-dot"></span>
+        Révisions actives
+      </div>
+      <h1>Révisez<br><em>intelligemment.</em></h1>
+      <p class="hero-sub">QCMs interactifs par spécialité, suivi de progression et référentiel R2C — tout en un.</p>
+    </section>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">💡</div>
+        <div class="stat-num" id="st-tot-qcm">0</div>
+        <div class="stat-label">QCMs disponibles</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-num" id="st-qcm-faits">0</div>
+        <div class="stat-label">QCMs faits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-num" id="st-score">—</div>
+        <div class="stat-label">Score</div>
+      </div>
+    </div>
+
+    <div class="section-header"><span>Spécialités</span></div>
+
+    <div class="mat-grid">
+
+      <div class="mat-card cardio" onclick="openMat('cardio')">
+        <div class="mat-top">
+          <div class="mat-icon">🫀</div>
+          <div class="mat-arrow">↗</div>
+        </div>
+        <h3>Cardiologie</h3>
+        <div class="prog-wrap">
+          <div class="prog-track"><div class="prog-fill" id="pg-cardio" style="width:0%"></div></div>
+          <div class="prog-lbl" id="pgl-cardio">Calcul en cours…</div>
+        </div>
+      </div>
+
+      <div class="mat-card dermato" onclick="openMat('dermato')">
+        <div class="mat-top">
+          <div class="mat-icon">🩺</div>
+          <div class="mat-arrow">↗</div>
+        </div>
+        <h3>Dermatologie</h3>
+        <div class="prog-wrap">
+          <div class="prog-track"><div class="prog-fill" id="pg-dermato" style="width:0%"></div></div>
+          <div class="prog-lbl" id="pgl-dermato">Calcul en cours…</div>
+        </div>
+      </div>
+
+      <div class="mat-card infectio" onclick="openMat('infectio')">
+        <div class="mat-top">
+          <div class="mat-icon">🦠</div>
+          <div class="mat-arrow">↗</div>
+        </div>
+        <h3>Infectiologie</h3>
+        <div class="prog-wrap">
+          <div class="prog-track"><div class="prog-fill" id="pg-infectio" style="width:0%"></div></div>
+          <div class="prog-lbl" id="pgl-infectio">Calcul en cours…</div>
+        </div>
+      </div>
+
+      <div class="mat-card neuro" onclick="openMat('neuro')">
+        <div class="mat-top">
+          <div class="mat-icon">🧠</div>
+          <div class="mat-arrow">↗</div>
+        </div>
+        <h3>Neurologie</h3>
+        <div class="prog-wrap">
+          <div class="prog-track"><div class="prog-fill" id="pg-neuro" style="width:0%"></div></div>
+          <div class="prog-lbl" id="pgl-neuro">Calcul en cours…</div>
+        </div>
+      </div>
+
+      <div class="mat-card hge wide" onclick="openMat('hge')">
+        <div class="mat-top">
+          <div class="mat-icon">🍕</div>
+          <div class="mat-arrow">↗</div>
+        </div>
+        <h3>Hépato-Gastro-Entérologie</h3>
+        <div class="prog-wrap">
+          <div class="prog-track"><div class="prog-fill" id="pg-hge" style="width:0%"></div></div>
+          <div class="prog-lbl" id="pgl-hge">Calcul en cours…</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RÉFÉRENTIEL R2C -->
+    <div class="section-header" style="margin-top:36px"><span>Référentiel</span></div>
+    <div class="tool-card tc-items" onclick="openItems()" style="margin-bottom:8px">
+      <div class="tool-card-icon">📋</div>
+      <div class="tool-card-body">
+        <div class="tool-card-title">Référentiel R2C</div>
+        <div class="tool-card-sub">367 items · 11 UEs · Collèges officiels</div>
+      </div>
+      <div class="tool-card-arrow">↗</div>
+    </div>
+
+  </div>
+
+  <!-- MATIERE — QCMs uniquement -->
+  <div id="s-mat" class="screen">
+    <button class="back-btn" onclick="goHome()">← Plage</button>
+    <div class="mat-header">
+      <h1 id="mat-titre"></h1>
+    </div>
+    <div id="tc-qcm"></div>
+  </div>
+
+  <!-- ITEMS R2C -->
+  <div id="s-items" class="screen">
+    <div class="items-screen-header">
+      <button class="back-btn" onclick="goHome()" style="margin:0">← Accueil</button>
+      <div>
+        <h1 class="items-screen-title">Référentiel R2C</h1>
+        <p class="items-screen-sub">367 items officiels des Épreuves Dématérialisées Nationales</p>
+      </div>
+    </div>
+    <div id="items-prog-wrap"></div>
+    <div class="ue-tabs" id="ue-tabs"></div>
+    <div id="all-items-list"></div>
+  </div>
+
+  <script src="data.js?v=2"></script>
+  <script src="data-neuro.js?v=2"></script>
+  <script src="data-items.js?v=2"></script>
+  <script src="progress.js?v=1"></script>
+  <script src="app.js?v=5"></script>
+</body>
+</html>

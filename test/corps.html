@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anatomie Réelle - EDN</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #060810;
+  color: #f1f5f9;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ambient { position: fixed; border-radius: 50%; filter: blur(140px); pointer-events: none; z-index: 0; opacity: 0.2; }
+.o1 { width: 500px; height: 500px; background: #6366f1; top: -150px; left: -150px; }
+.o2 { width: 450px; height: 450px; background: #f97316; bottom: -150px; right: -150px; }
+
+.app-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 40px;
+  max-width: 950px;
+  width: 100%;
+  padding: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SECTION GAUCHE : LE CORPS */
+.body-box {
+  position: relative;
+  width: 400px;
+  height: 600px;
+  background: rgba(13, 17, 32, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.body-box h2 { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: -0.3px; text-align: center; }
+.body-box p { font-size: 0.75rem; color: #4b5675; margin-bottom: 10px; text-align: center; }
+
+.body-wrap { 
+  flex: 1; 
+  width: 100%; 
+  position: relative; 
+}
+
+.body-svg { width: 100%; height: 100%; overflow: visible; }
+
+/* STYLES DES ORGANES (SVG) */
+.organ-group { cursor: pointer; transition: all 0.2s; }
+.organ-group path, 
+.organ-group circle, 
+.organ-group rect, 
+.organ-group line {
+  fill: rgba(255, 255, 255, 0.04);
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1.5;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.organ-group .no-fill { fill: none !important; }
+
+/* HOVER DYNAMIQUE PAR SPÉCIALITÉ */
+.organ-group.neuro:hover * { fill: rgba(168, 85, 247, 0.3); stroke: #a855f7; filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6)); }
+.organ-group.neuro:hover .no-fill { fill: none !important; }
+
+.organ-group.pneumo:hover * { fill: rgba(6, 182, 212, 0.3); stroke: #06b6d4; filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.6)); }
+.organ-group.pneumo:hover .no-fill { fill: none !important; }
+
+.organ-group.cardio:hover * { fill: rgba(255, 75, 107, 0.4); stroke: #ff4b6b; filter: drop-shadow(0 0 8px rgba(255, 75, 107, 0.6)); }
+
+.organ-group.gastro:hover * { fill: rgba(249, 115, 22, 0.3); stroke: #f97316; filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.6)); }
+.organ-group.gastro:hover .no-fill { fill: none !important; }
+
+.organ-group.nephro:hover * { fill: rgba(239, 68, 68, 0.3); stroke: #ef4444; filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.6)); }
+
+.organ-group.dermato:hover * { fill: rgba(56, 189, 248, 0.3); stroke: #38bdf8; filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6)); }
+
+.organ-group.infectio:hover * { fill: rgba(34, 197, 94, 0.3); stroke: #22c55e; filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.6)); }
+.organ-group.infectio:hover .no-fill { fill: none !important; }
+
+
+/* SECTION DROITE : PANNEAU D'INFO */
+.info-panel {
+  width: 320px;
+  background: rgba(13, 17, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  padding: 24px;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  transition: all 0.3s;
+}
+.info-panel.active { border-color: var(--spec-color); box-shadow: 0 10px 30px var(--spec-shadow); }
+
+.panel-placeholder { text-align: center; color: #4b5675; font-size: 0.85rem; line-height: 1.5; }
+.panel-placeholder span { display: block; font-size: 2.5rem; margin-bottom: 10px; opacity: 0.4; }
+
+.spec-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.spec-ico { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+.spec-name { font-size: 1.1rem; font-weight: 800; color: #fff; }
+.spec-desc { font-size: 0.82rem; color: #94a3b8; line-height: 1.5; margin-bottom: 20px; }
+
+.action-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; border-radius: 12px; font-family: inherit; font-size: 0.85rem; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
+.action-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.badge-soon { display: inline-block; text-align: center; font-size: 0.72rem; font-weight: 700; background: rgba(255,255,255,0.04); color: #64748b; border: 1px solid rgba(255,255,255,0.08); padding: 8px; border-radius: 10px; }
+
+@media(max-width: 768px) {
+  .app-container { flex-direction: column; padding: 15px; }
+  .body-box, .info-panel { width: 100%; max-width: 380px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient o1"></div>
+<div class="ambient o2"></div>
+
+<div class="app-container">
+  
+  <!-- LE CORPS HUMAIN ANATOMIQUE -->
+  <div class="body-box">
+    <h2>Anatomie Révisions</h2>
+    <p>Survolez un organe ou un système</p>
+    
+    <div class="body-wrap">
+      <svg class="body-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+        
+        <!-- SILHOUETTE CORPS (Tête, Torse, Membres) -->
+        <path id="body-outline" d="M200,20 C180,20 165,35 165,55 C165,70 170,80 175,85 C165,90 145,95 125,105 C105,115 95,140 95,180 L110,180 C110,140 115,130 135,120 L135,280 C135,320 150,450 150,450 L180,450 L180,310 L220,310 L220,450 L250,450 C250,450 265,320 265,280 L265,120 C285,130 290,140 290,180 L305,180 C305,140 295,115 275,105 C255,95 235,90 225,85 C230,80 235,70 235,55 C235,35 220,20 200,20 Z" fill="#0b0f19" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+        
+        <!-- 1. NEURO (Cerveau) -->
+        <g class="organ-group neuro" onclick="selectSpec('neuro')" onmouseenter="previewSpec('neuro')">
+          <path d="M175,45 C170,30 190,25 200,25 C210,25 230,30 225,45 C230,55 210,70 200,70 C190,70 170,55 175,45 Z" />
+          <path class="no-fill" d="M185,35 Q200,45 215,35 M180,50 Q200,60 220,50 M200,25 L200,70"/>
+        </g>
+
+        <!-- 2. PNEUMO (Poumons et trachée) -->
+        <g class="organ-group pneumo" onclick="selectSpec('pneumo')" onmouseenter="previewSpec('pneumo')">
+          <path class="no-fill" d="M195,100 L195,120 L185,130" stroke-width="3"/>
+          <path class="no-fill" d="M205,100 L205,120 L215,130" stroke-width="3"/>
+          <!-- Poumon Gauche (anatomique) -->
+          <path d="M145,130 C125,160 135,200 165,200 C185,200 190,165 185,130 Z" />
+          <!-- Poumon Droit (anatomique) -->
+          <path d="M255,130 C275,160 265,200 235,200 C215,200 210,165 215,130 Z" />
+        </g>
+
+        <!-- 3. CARDIO (Cœur) -->
+        <g class="organ-group cardio" onclick="selectSpec('cardio')" onmouseenter="previewSpec('cardio')">
+          <path d="M195,150 C180,145 175,165 185,180 L205,200 L215,170 C225,155 210,140 195,150 Z" />
+          <path class="no-fill" d="M200,150 C200,135 210,135 210,145" stroke-width="2"/> <!-- Crosse de l'aorte -->
+        </g>
+
+        <!-- 4. NEPHRO (Reins - en arrière plan) -->
+        <g class="organ-group nephro" onclick="selectSpec('nephro')" onmouseenter="previewSpec('nephro')">
+          <path d="M165,215 C150,200 135,220 150,240 C165,255 180,235 165,215 Z" />
+          <path d="M235,215 C250,200 265,220 250,240 C235,255 220,235 235,215 Z" />
+          <path class="no-fill" d="M155,230 L185,290 M245,230 L215,290"/> <!-- Uretères -->
+        </g>
+
+        <!-- 5. HGE (De la bouche à l'anus + foie) -->
+        <g class="organ-group gastro" onclick="selectSpec('gastro')" onmouseenter="previewSpec('gastro')">
+          <path class="no-fill" d="M200,75 L200,155" stroke-width="4"/> <!-- Bouche + Oesophage -->
+          <!-- Foie -->
+          <path d="M195,160 C150,160 130,200 170,215 C195,225 215,185 205,170 Z" /> 
+          <!-- Estomac -->
+          <path d="M195,170 C195,155 245,155 255,185 C265,215 220,220 205,190 Z" /> 
+          <!-- Côlon (Gros intestin) -->
+          <path class="no-fill" d="M165,220 L150,285 L250,285 L235,220" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/> 
+          <!-- Intestin grêle (représentation stylisée) -->
+          <rect x="175" y="225" width="50" height="50" rx="15" />
+          <path class="no-fill" d="M185,235 Q190,265 215,235 T215,265"/>
+          <!-- Rectum et Anus -->
+          <path class="no-fill" d="M200,285 L200,335" stroke-width="7" stroke-linecap="round"/> 
+        </g>
+
+        <!-- 6. DERMATO (Peau - représentée sur le bras droit du schéma) -->
+        <g class="organ-group dermato" onclick="selectSpec('derm')" onmouseenter="previewSpec('derm')">
+          <path d="M107,175 C95,175 95,200 107,200 Z" />
+          <path class="no-fill" d="M98,187 L80,187 M80,177 L80,197" stroke-width="2"/> <!-- Symbole loupe/zoom -->
+          <circle class="no-fill" cx="80" cy="187" r="10" stroke-width="2"/>
+        </g>
+
+        <!-- 7. INFECTIO (Systémique/Transversal - Hors du corps) -->
+        <g class="organ-group infectio" onclick="selectSpec('inf')" onmouseenter="previewSpec('inf')" transform="translate(320, 110)">
+          <circle cx="0" cy="0" r="18" />
+          <circle class="no-fill" cx="0" cy="0" r="8" stroke-dasharray="2,2" />
+          <!-- Protéines de surface du virus -->
+          <line class="no-fill" x1="0" y1="-18" x2="0" y2="-28" stroke-width="2.5"/>
+          <line class="no-fill" x1="0" y1="18" x2="0" y2="28" stroke-width="2.5"/>
+          <line class="no-fill" x1="-18" y1="0" x2="-28" y2="0" stroke-width="2.5"/>
+          <line class="no-fill" x1="18" y1="0" x2="28" y2="0" stroke-width="2.5"/>
+          <line class="no-fill" x1="-13" y1="-13" x2="-20" y2="-20" stroke-width="2.5"/>
+          <line class="no-fill" x1="13" y1="13" x2="20" y2="20" stroke-width="2.5"/>
+          <line class="no-fill" x1="-13" y1="13" x2="-20" y2="20" stroke-width="2.5"/>
+          <line class="no-fill" x1="13" y1="-13" x2="20" y2="-20" stroke-width="2.5"/>
+        </g>
+        
+      </svg>
+    </div>
+  </div>
+  
+  <!-- LE PANNEAU D'INFORMATION FIXE -->
+  <div class="info-panel" id="infoPanel">
+    <div class="panel-placeholder" id="placeholder">
+      <span>🧍‍♂️</span>
+      Passez votre souris sur un organe ou un système pour analyser les cours disponibles.
+    </div>
+    <div id="panelContent" style="display: none;">
+      <!-- Injecté en JS -->
+    </div>
+  </div>
+
+</div>
+
+<script>
+const DATA = {
+  neuro: {
+    nom: 'Neurologie', ico: '🧠', desc: 'Accidents Vasculaires Cérébraux (AVC), crises d\'épilepsie, neuropathies périphériques et Sclérose En Plaques (SEP).',
+    col: '#a855f7', bg: 'rgba(168,85,247,0.12)', shadow: 'rgba(168,85,247,0.2)', avail: false
+  },
+  cardio: {
+    nom: 'Cardiologie', ico: '🫀', desc: 'Prise en charge de l\'Endocardite infectieuse, de l\'Insuffisance Cardiaque Aiguë (OAP) et de la Fibrillation Atriale (FA).',
+    col: '#ff4b6b', bg: 'rgba(255,75,107,0.12)', shadow: 'rgba(255,75,107,0.2)', avail: true, rawId: 'cardio'
+  },
+  pneumo: {
+    nom: 'Pneumologie', ico: '🫁', desc: 'Asthme aigu grave, exacerbations de BPCO, pneumopathies communautaires et embolies pulmonaires.',
+    col: '#06b6d4', bg: 'rgba(6,182,212,0.12)', shadow: 'rgba(6,182,212,0.2)', avail: false
+  },
+  gastro: {
+    nom: 'Hépato-Gastro-Entérologie', ico: '🍕', desc: 'Gestion des urgences d\'Hémorragies Digestives (hautes et basses), ulcères gastro-duodénaux et complications de la cirrhose.',
+    col: '#f97316', bg: 'rgba(249,115,22,0.12)', shadow: 'rgba(249,115,22,0.2)', avail: true, rawId: 'hge'
+  },
+  nephro: {
+    nom: 'Néphrologie', ico: '🔴', desc: 'Insuffisances Rénales Aiguës (IRA), néphropathies chroniques, désordres hydro-électrolytiques et syndromes néphrotiques.',
+    col: '#ef4444', bg: 'rgba(239,68,68,0.12)', shadow: 'rgba(239,68,68,0.2)', avail: false
+  },
+  derm: {
+    nom: 'Dermatologie', ico: '🩺', desc: 'Dépistage du Mélanome Malin (critères ABCDE, Breslow), toxidermies et dermatoses inflammatoires majeures.',
+    col: '#38bdf8', bg: 'rgba(56,189,248,0.12)', shadow: 'rgba(56,189,248,0.2)', avail: true, rawId: 'dermato'
+  },
+  inf: {
+    nom: 'Infectiologie', ico: '🦠', desc: 'Matière transversale : Maladie de Lyme, antibiothérapies probabilistes, septicémies et fièvres au retour des tropiques.',
+    col: '#22c55e', bg: 'rgba(34,197,94,0.12)', shadow: 'rgba(34,197,94,0.2)', avail: true, rawId: 'infectio'
+  }
+};
+
+const panel = document.getElementById('infoPanel');
+const placeholder = document.getElementById('placeholder');
+const content = document.getElementById('panelContent');
+
+function previewSpec(id) {
+  const d = DATA[id];
+  if (!d) return;
+
+  placeholder.style.display = 'none';
+  content.style.display = 'block';
+  
+  panel.style.setProperty('--spec-color', d.col + '33');
+  panel.style.setProperty('--spec-shadow', d.col + '15');
+  panel.className = 'info-panel active';
+
+  content.innerHTML = `
+    <div class="spec-header">
+      <div class="spec-ico" style="background:${d.bg}; border:1px solid ${d.col}44; color:${d.col}">${d.ico}</div>
+      <div class="spec-name">${d.nom}</div>
+    </div>
+    <div class="spec-desc">${d.desc}</div>
+    ${d.avail 
+      ? `<button class="action-btn" style="background:${d.col}; color:#fff;" onclick="goToApp('${d.rawId}')">Ouvrir la matière →</button>`
+      : `<div class="badge-soon">⚠️ Contenu en cours de rédaction (Bientôt dispo)</div>`
+    }
+  `;
+}
+
+function goToApp(specId) {
+  if (window.parent && typeof window.parent.openMat === 'function') {
+    window.parent.openMat(specId);
+  } else if (typeof openMat === 'function') {
+    openMat(specId);
+  } else {
+    alert(`💡 Liaison réussie ! L'application va ouvrir la matière : "${specId}"`);
+  }
+}
+
+function selectSpec(id) {
+  previewSpec(id);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1835 @@
+UE1 - Apprentissage de l'exercice médical et de la coopération interprofessionnelle
+Item 1
+La relation médecin-malade dans le cadre du colloque singulier ou au sein d'une équipe, le cas échéant pluriprofessionnelle. La communication avec le patient et son entourage. L'annonce d'une maladie grave ou létale ou d'un dommage associé aux soins. La formation du patient. La personnalisation de la prise en charge médicale
+Psy
+MI
+Item 2
+Les valeurs professionnelles du médecin et des autres professions de santé
+MI
+Item 3
+Le raisonnement et la décision en médecine. La médecine fondée sur les preuves (Evidence Based Medicine, EBM). La décision médicale partagée. La controverse
+SP
+MI
+Item 4
+Qualité et sécurité des soins. La sécurité du patient. La gestion des risques. Les événements indésirables associés aux soins (EIAS). Démarche qualité et évaluation des pratiques professionnelles
+SP
+Inf
+AR
+MIR
+Item 5
+La gestion des erreurs et des plaintes ; l'aléa thérapeutique
+SP
+MTL
+MIR
+Item 6
+L'organisation de l'exercice clinique et les méthodes qui permettent de sécuriser le parcours du patient
+SP
+Item 7
+Les droits individuels et collectifs du patient
+MTL
+Item 8
+Les discriminations
+SP
+MG
+Item 9
+Introduction à l’éthique médicale
+MTL
+Gér
+GO
+AR
+MPR
+MG
+Item 10
+Approches transversales du corps
+Item 11
+Violences et santé
+MTL
+MG
+Item 12
+Violences sexuelles
+MTL
+GO
+Item 13
+Certificats médicaux. Décès et législation
+MTL
+Ped
+Item 14
+La mort
+MTL
+Item 15
+Soins psychiatriques sans consentement
+Psy
+Item 16
+Organisation du système de soins. Sa régulation. Les indicateurs. Parcours de soins
+SP
+Item 17
+Télémédecine, télésanté et téléservices en santé
+SP
+Item 18
+Santé et numérique
+SP
+Item 19
+La sécurité sociale. L'assurance maladie. Les assurances complémentaires. La complémentaire santé solidaire (CSS). La consommation médicale. Protection sociale. Consommation médicale et économie de la santé
+SP
+Item 20
+La méthodologie de la recherche en santé
+SP
+Item 21
+Mesure de l'état de santé de la population
+SP
+MPR
+Item 22
+Maladies rares
+MI
+Gén
+UE2 : Items 23 à 55
+Item 23
+Grossesse normale
+GO
+Nép
+MG
+Item 24
+Principales complications de la grossesse
+GO
+Nép
+Item 25
+Grossesse extra-utérine
+GO
+Item 26
+Douleur abdominale aiguë chez une femme enceinte
+GO
+Item 27
+Prévention des risques fœtaux : infection, médicaments, toxiques, irradiation
+GO
+Inf
+Ped
+MG
+Item 28
+Connaître les particularités de l'infection urinaire au cours de la grossesse
+GO
+Inf
+Item 29
+Connaître les principaux risques professionnels pour la maternité, liés au travail de la mère
+GO
+MTL
+Item 30
+Prématurité et retard de croissance intra-utérin : facteurs de risque et prévention
+GO
+Ped
+Item 31
+Accouchement, délivrance et suites de couches normales
+GO
+Item 32
+Évaluation et soins du nouveau-né à terme
+Ped
+Item 33
+Allaitement maternel
+GO
+Ped
+Nut
+MG
+Item 34
+Suites de couches pathologiques : pathologie maternelle dans les 40 jours
+GO
+Item 35
+Anomalies du cycle menstruel. Métrorragies
+GO
+Item 36
+Contraception
+GO
+Thé
+End
+Uro
+MG
+Item 37
+Interruption volontaire de grossesse
+GO
+MG
+Item 38
+Infertilité du couple : conduite de la première consultation
+GO
+End
+Uro
+Item 39
+Assistance médicale à la procréation : principaux aspects biologiques, médicaux et éthiques
+GO
+Item 40
+Algies pelviennes chez la femme
+GO
+Uro
+Item 41
+Endométriose
+GO
+Item 42
+Aménorrhée
+GO
+End
+Item 43
+Hémorragie génitale chez la femme
+GO
+Item 44
+Tuméfaction pelvienne chez la femme
+GO
+Uro
+CD
+Item 45
+Spécificités des maladies génétiques
+Ped
+Gén
+Item 46
+Médecine génomique
+Gén
+Item 47
+Suivi d'un nourrisson, d'un enfant et d'un adolescent normal. Dépistage des anomalies orthopédiques, des troubles visuels, auditifs et dentaires. Examens de santé obligatoires. Médecine scolaire. Mortalité et morbidité infantiles
+Ped
+CMF
+Oph
+OT
+ORL
+MG
+Item 48
+Alimentation et besoins nutritionnels du nourrisson et de l'enfant
+Ped
+Item 49
+Puberté normale et pathologique
+Ped
+GO
+MG
+Item 50
+Pathologie génito-scrotale chez le garçon et chez l'homme
+Ped
+Uro
+End
+Item 51
+Troubles de la miction chez l'enfant
+Ped
+Item 52
+Strabisme et amblyopie de l'enfant
+Ped
+Oph
+Item 53
+Retard de croissance staturo-pondérale
+Ped
+Item 54
+Boiterie chez l'enfant
+Ped
+OT
+Rhu
+Item 55
+Développement psychomoteur du nourrisson et de l'enfant
+Ped
+Psy
+MG
+UE3 - Maturation - Vulnérabilité - Santé mentale - Conduites addictives
+Item 56
+L'enfant handicapé : orientation et prise en charge
+Ped
+MPR
+ORL
+Item 57
+Maltraitance et enfants en danger. Protection maternelle et infantile
+Ped
+MTL
+Item 58
+Sexualité normale et ses troubles
+Psy
+GO
+Uro
+Item 59
+Sujets en situation de précarité
+Psy
+Ped
+SP
+MI
+Item 60
+Connaître les facteurs de risque, prévention, dépistage des troubles psychiques de l'enfant à la personne âgée
+Psy
+Item 61
+Connaître les bases des classifications des troubles mentaux de l'enfant à la personne âgée
+Psy
+Item 62
+Décrire l'organisation de l'offre de soins en psychiatrie, de l'enfant à la personne âgée
+Psy
+Item 63
+Trouble schizophrénique
+Psy
+Item 64
+Trouble bipolaire
+Psy
+Item 65
+Trouble délirant persistant
+Psy
+Item 66
+Diagnostiquer : un trouble dépressif, un trouble anxieux généralisé, un trouble panique, un trouble phobique, un trouble obsessionnel compulsif, un état de stress post-traumatique, un trouble de l'adaptation (de l'enfant à la personne âgée), un trouble de la personnalité
+Psy
+MG
+Item 67
+Troubles envahissants du développement
+Psy
+Item 68
+Troubles du comportement de l'adolescent
+Psy
+Item 69
+Troubles psychiques de la grossesse et du post-partum
+Psy
+GO
+Item 70
+Troubles psychiques du sujet âgé
+Psy
+Gér
+Item 71
+Troubles des conduites alimentaires chez l'adolescent et l'adulte
+Psy
+Ped
+Nut
+Item 72
+Troubles à symptomatologie somatique et apparentés à tous les âges
+Psy
+DSP
+MI
+MG
+Item 73
+Différents types de techniques psychothérapeutiques
+Psy
+Item 74
+Prescription et surveillance des psychotropes
+Psy
+Thé
+Gér
+MG
+Item 75
+Addiction au tabac
+Psy
+SP
+Pne
+MG
+Item 76
+Addiction à l'alcool
+Psy
+SP
+Neu
+MG
+Item 77
+Addiction aux médicaments psychotropes (benzodiazépines et apparentés)
+Psy
+SP
+Item 78
+Addiction au cannabis, à la cocaïne, aux amphétamines, aux opiacés, aux drogues de synthèse
+Psy
+SP
+Item 79
+Addictions comportementales
+Psy
+SP
+MG
+Item 80
+Dopage et conduites dopantes
+Psy
+MG
+UE4 - Perception - Système nerveux - Revêtement cutané
+Item 81
+Altération chronique de la vision
+Oph
+Gér
+Item 82
+Altération aiguë de la vision
+Oph
+Neu
+Item 83
+Infections et inflammations oculaires
+Oph
+Item 84
+Glaucomes
+Oph
+Item 85
+Troubles de la réfraction
+Oph
+Item 86
+Pathologie des paupières
+Oph
+Item 87
+Epistaxis
+ORL
+Item 88
+Trouble aigu de la parole. Dysphonie
+ORL
+Neu
+Item 89
+Altération de la fonction auditive
+ORL
+Ped
+Gér
+Item 90
+Pathologie des glandes salivaires
+ORL
+CMF
+Item 91
+Déficit neurologique récent
+Neu
+Item 92
+Déficit moteur et/ou sensitif des membres
+Neu
+Item 93
+Compression médullaire non traumatique et syndrome de la queue de cheval
+Neu
+NC
+Rhu
+OT
+MPR
+Item 94
+Rachialgie
+Rhu
+OT
+MPR
+DSP
+MG
+Item 95
+Radiculalgie et syndrome canalaire
+Neu
+NC
+Rhu
+OT
+DSP
+Item 96
+Neuropathies périphériques
+Neu
+Item 97
+Polyradiculonévrite aiguë inflammatoire (syndrome de Guillain-Barré)
+Neu
+MIR
+Item 98
+Myasthénie
+Neu
+MIR
+Item 99
+Migraine, névralgie du trijumeau et algies de la face
+Neu
+NC
+CMF
+DSP
+MG
+Item 100
+Céphalée inhabituelle aiguë et chronique chez l'adulte et l'enfant
+Neu
+DSP
+Ped
+Item 101
+Paralysie faciale
+Neu
+CMF
+ORL
+Item 102
+Diplopie
+Neu
+Oph
+Item 103
+Vertige
+Neu
+ORL
+Item 104
+Sclérose en plaques
+Neu
+MPR
+Oph
+Item 105
+Épilepsie de l'enfant et de l'adulte
+Neu
+MIR
+Ped
+Item 106
+Maladie de Parkinson
+Neu
+MPR
+Item 107
+Mouvements anormaux
+Neu
+Item 108
+Confusion, démences
+Neu
+Gér
+MIR
+Item 109
+Troubles de la marche et de l'équilibre
+Neu
+MPR
+Gér
+ORL
+Rhu
+MG
+Item 110
+Troubles du sommeil de l'enfant et de l'adulte
+Neu
+Psy
+Pne
+ORL
+Ped
+MG
+Item 111
+Dermatoses faciales : acné, rosacée, dermatite séborrhéique
+Der
+Item 112
+Dermatose bulleuse touchant la peau et/ou les muqueuses externes
+Der
+Item 113
+Hémangiomes et malformations vasculaires cutanées
+Der
+CMF
+Item 114
+Exanthème et érythrodermie de l'adulte et de l'enfant
+Der
+Item 115
+Toxidermies
+Der
+Item 116
+Prurit
+Der
+Item 117
+Psoriasis
+Der
+Rhu
+UE5 - Handicap - Vieillissement - Dépendance - Douleur - Soins palliatifs - Accompagnement
+Item 118
+La personne handicapée : bases de l'évaluation fonctionnelle et thérapeutique
+MPR
+Neu
+ORL
+Item 119
+Soin et accompagnement dans la maladie chronique et le handicap
+MG
+Item 120
+Complications de l'immobilité et du décubitus. Prévention et prise en charge
+MPR
+Gér
+Item 121
+Le handicap psychique
+Psy
+Item 122
+Principales techniques de rééducation et de réadaptation
+MPR
+ORL
+Item 123
+Vieillissement normal : aspects biologiques, fonctionnels et relationnels. Données épidémiologiques et sociologiques. Prévention du vieillissement pathologique
+Gér
+MG
+Item 124
+Ménopause, insuffisance ovarienne prématurée, andropause, déficit androgénique lié à l’âge
+GO
+Uro
+End
+Thé
+Item 125
+Troubles de la miction et incontinence urinaire de l'adulte et du sujet âgé
+Uro
+Gér
+MPR
+Item 126
+Trouble de l'érection
+Uro
+End
+Item 127
+Hypertrophie bénigne de la prostate
+Uro
+Item 128
+Ostéopathies fragilisantes
+Gér
+Rhu
+End
+Item 129
+Arthrose
+Gér
+Rhu
+MPR
+Item 130
+La personne âgée malade : particularités sémiologiques, psychologiques et thérapeutiques
+Gér
+Item 131
+Troubles de la marche et de l'équilibre
+Gér
+Rhu
+Neu
+Item 132
+Troubles cognitifs du sujet âgé
+Gér
+Neu
+MG
+Item 133
+Autonomie et dépendance chez le sujet âgé
+Gér
+MG
+Item 134
+Bases neurophysiologiques, mécanismes physiopathologiques d'une douleur aiguë et d'une douleur chronique
+DSP
+Neu
+NC
+AR
+Gér
+Rhu
+Item 135
+Thérapeutiques antalgiques, médicamenteuses et non médicamenteuses
+DSP
+Thé
+NC
+AR
+MIR
+Rhu
+Item 136
+Anesthésie locale, locorégionale et générale
+DSP
+AR
+Item 137
+Douleur chez l'enfant : évaluation et traitements antalgiques
+DSP
+Ped
+Item 138
+Douleur chez la personne vulnérable
+DSP
+Psy
+Item 139
+Soins palliatifs pluridisciplinaires chez un malade en phase palliative ou terminale d'une maladie grave, chronique ou létale (1). Principaux repères cliniques. Modalités d'organisation des équipes, en établissement de santé et en et en ambulatoire
+DSP
+Gér
+MG
+Item 140
+Soins palliatifs pluridisciplinaires chez un malade en phase palliative ou terminale d'une maladie grave, chronique ou létale (2). Accompagnement de la personne malade et de son entourage. Principaux repères éthiques
+DSP
+Gér
+Item 141
+Soins palliatifs pluridisciplinaires chez un malade en phase palliative ou terminale d'une maladie grave, chronique ou létale (3). La sédation pour détresse en phase terminale et dans des situations spécifiques et complexes en fin de vie. Réponse à la demande d'euthanasie ou de suicide assisté
+DSP
+Gér
+Item 142
+Connaître les aspects spécifiques des soins palliatifs en pédiatrie
+DSP
+Ped
+Item 143
+Connaître les aspects spécifiques des soins palliatifs en réanimation
+DSP
+AR
+MIR
+Item 144
+Deuil normal et pathologique
+Psy
+MG
+UE6 - Maladies transmissibles - Risques sanitaires - Santé au travail
+Item 145
+Surveillance des maladies infectieuses transmissibles
+Inf
+SP
+MG
+Item 146
+Vaccinations
+Inf
+SP
+Ped
+MG
+Item 147
+Fièvre aiguë chez l'enfant et l'adulte
+Inf
+Ped
+MG
+Item 148
+Infections naso-sinusiennes de l'adulte et de l'enfant
+Inf
+ORL
+Ped
+MG
+Item 149
+Angines de l'adulte et de l'enfant et rhinopharyngites de l'enfant
+Inf
+ORL
+Ped
+MG
+Item 150
+Otites infectieuses de l'adulte et de l'enfant
+Inf
+ORL
+Ped
+MG
+Item 151
+Méningites, méningoencéphalites, abcès cérébral chez l'adulte et l'enfant
+Inf
+Neu
+MIR
+Ped
+Item 152
+Endocardite infectieuse
+Inf
+MCV
+MIR
+MI
+Item 153
+Surveillance des porteurs de valve et prothèses vasculaires
+Inf
+MCV
+Item 154
+Infections broncho pulmonaires communautaires de l'adulte et de l'enfant
+Inf
+Pne
+MIR
+Ped
+MG
+Item 155
+Infections cutanéo-muqueuses et des phanères, bactériennes et mycosiques de l'adulte et de l'enfant
+Inf
+Der
+CMF
+AR
+MIR
+Ped
+Item 156
+Infections ostéo articulaires (IOA) de l'enfant et de l'adulte
+Inf
+Rhu
+OT
+Ped
+Item 157
+Septicémie/Bactériémie/Fongémie de l'adulte et de l'enfant
+Inf
+AR
+MIR
+Ped
+Item 158
+Sepsis et choc septique de l’enfant et de l’adulte
+AR
+MIR
+Item 159
+Tuberculose de l'adulte et de l'enfant
+Inf
+Pne
+Ped
+Item 160
+Tétanos
+Inf
+Item 161
+Infections urinaires de l'enfant et de l'adulte
+Inf
+Uro
+Nép
+MIR
+Ped
+MG
+Item 162
+Infections sexuellement transmissibles (IST) : gonococcies, chlamydioses, syphilis, papillomavirus humain (HPV), trichomonose
+Inf
+GO
+Der
+MG
+Item 163
+Coqueluche
+Inf
+Ped
+Item 164
+Exanthèmes fébriles de l'enfant
+Der
+Ped
+Item 165
+Oreillons
+Inf
+Item 166
+Grippe
+Inf
+MG
+Item 167
+Hépatites virales
+Inf
+HGE
+MIR
+Item 168
+Infections à herpès virus du sujet immunocompétent
+Inf
+Der
+Neu
+CMF
+Ped
+MG
+Item 169
+Infections à VIH
+Inf
+Der
+Neu
+Ped
+Item 170
+Paludisme
+Inf
+MIR
+Ped
+Item 171
+Gale et pédiculose
+Inf
+Der
+Item 172
+Parasitoses digestives : giardiose, amoebose, téniasis, ascaridiose, oxyurose, anguillulose, cryptosporidiose
+Inf
+Item 173
+Zoonoses
+Inf
+Item 174
+Pathologie infectieuse chez les migrants adultes et enfants
+Inf
+Ped
+Item 175
+Voyage en pays tropical de l'adulte et de l'enfant : conseils avant le départ, pathologies du retour : fièvre, diarrhée, manifestations cutanées
+Inf
+Ped
+MG
+Item 176
+Diarrhées infectieuses de l'adulte et de l'enfant
+Inf
+Ped
+SP
+Item 177
+Prescription et surveillance des anti-infectieux chez l'adulte et l'enfant
+Thé
+Inf
+MIR
+Ped
+MG
+Item 178
+Risques émergents, bioterrorisme, maladies hautement transmissibles
+Inf
+Item 179
+Risques sanitaires liés à l'eau et à l'alimentation. Toxi-infections alimentaires
+SP
+Item 180
+Risques sanitaires liés aux irradiations. Radioprotection
+MTL
+Item 181
+La sécurité sanitaire des produits destinés à l'homme. La veille sanitaire
+SP
+Item 182
+Environnement professionnel et santé au travail
+MTL
+Item 183
+Organisation de la médecine du travail. Prévention des risques professionnels
+MTL
+Item 184
+Accidents du travail et maladies professionnelles : définitions et enjeux
+MTL
+Légende :
+Liste des Référentiels
+AR
+Anesthésie - Réanimation (Presse Universitaire)
+Can
+Cancérologie (MedLine)
+CD
+Chirurgie Digestive (MedLine)
+CMF
+CMF (Elsevier)
+Der
+Dermatologie (Elsevier)
+DSP
+Douleurs - Soins Palliatifs (MedLine)
+End
+Endocrinologie (Elsevier)
+Gén
+Génétique (Elsevier)
+Gér
+Gériatrie (Elsevier)
+GO
+Gynécologie - Obstétrique (Elsevier)
+Hém
+Hématologie (Elsevier)
+HGE
+HGE
+Imm
+Immunopathologie (Elsevier)
+Inf
+Infectiologie (Pilly)
+MG
+Médecine Générale (Elsevier)
+MCV
+Médecine Cardiovasculaire (Elsevier)
+MIR
+MIR - Urgences (Elsevier)
+MI
+Médecine Interne (MedLine)
+MPR
+MPR (Elsevier)
+MTL
+Médecine du Travail - Médecine Légale (Elsevier)
+Nut
+Nutrition (Elsevier)
+Nép
+Néphrologie (Ellipses)
+Neu
+Neurologie (Elsevier)
+NC
+Neurochirurgie (Elsevier)
+Oph
+Ophtalmologie (Elsevier)
+ORL
+ORL (Elsevier)
+OT
+Orthopédie - Traumatologie (Ellipses)
+Ped
+Pédiatrie (Ellipses)
+Pne
+Pneumologie (S. Editions)
+Psy
+Psychiatrie (Presse Universitaire)
+Rhu
+Rhumatologie (Elsevier)
+SP
+Santé Publique (Elsevier)
+Thé
+Thérapeutique
+Uro
+Urologie (Elsevier)
+UE7 - Inflammation - Immunopathologie - Poumon - Sang
+Item 185
+Réaction inflammatoire : aspects biologiques et cliniques. Conduite à tenir
+Imm
+Rhu
+MI
+Item 186
+Hypersensibilités et allergies chez l'enfant et l'adulte : aspects physiopathologiques, épidémiologiques, diagnostiques et principes de traitement
+Imm
+Pne
+MTL
+Ped
+Item 187
+Hypersensibilités et allergies cutanéomuqueuses chez l'enfant et l'adulte. Urticaire, dermatites atopique et de contact, conjonctivite allergique
+Imm
+Der
+Oph
+MTL
+Item 188
+Hypersensibilité et allergies respiratoires chez l'enfant et chez l'adulte. Asthme, rhinite
+Imm
+Pne
+MTL
+MIR
+Ped
+Item 189
+Déficit immunitaire
+Imm
+MI
+Ped
+Item 190
+Fièvre prolongée
+Imm
+Inf
+MI
+Item191
+Fièvre chez un patient immunodéprimé
+Imm
+Inf
+MI
+MIR
+Item 192
+Pathologies auto-immunes : aspects épidémiologiques, diagnostiques et principes de traitement
+Imm
+Rhu
+MI
+Item 193
+Connaître les principaux types de vascularite systémique, les organes cibles, les outils diagnostiques et les moyens thérapeutiques
+Imm
+Rhu
+MI
+Nép
+Item 194
+Lupus systémique. Syndrome des anti-phospholipides (SAPL)
+Imm
+Rhu
+MI
+Nép
+Der
+Item 195
+Artérite à cellules géantes
+Imm
+Rhu
+MI
+Item 196
+Polyarthrite rhumatoïde
+Imm
+Rhu
+MPR
+Item 197
+Spondyloarthrite
+Imm
+Rhu
+MPR
+Item 198
+Arthropathie microcristalline
+Imm
+Rhu
+Item 199
+Syndrome douloureux régional complexe (ex algodystrophie)
+Rhu
+OT
+MPR
+DSP
+Item 200
+Douleur et épanchement articulaire. Arthrite d'évolution récente
+Imm
+Rhu
+OT
+Item 201
+Transplantation d'organes : aspects épidémiologiques et immunologiques ; principes de traitement; complications et pronostic ; aspects éthiques et légaux. Prélèvements d'organes et législation
+Imm
+Uro
+Nép
+Der
+Oph
+CD
+MIR
+AR
+Item 202
+Biothérapies et thérapies ciblées
+Imm
+Hém
+Rhu
+MI
+Item 203
+Dyspnée aiguë et chronique
+Pne
+MCV
+ORL
+MIR
+Ped
+Item 204
+Toux chez l'enfant et chez l'adulte (avec le traitement)
+Pne
+Ped
+MG
+Item 205
+Hémoptysie
+Pne
+MIR
+Item 206
+Épanchement pleural liquidien
+Pne
+MIR
+Item 207
+Opacités et masses intra-thoraciques chez l'enfant et chez l'adulte
+Pne
+Ped
+Item 208
+Insuffisance respiratoire chronique
+Pne
+Item 209
+Bronchopneumopathie chronique obstructive chez l'adulte
+Pne
+MIR
+MG
+Item 210
+Pneumopathie interstitielle diffuse
+Pne
+Imm
+MI
+Item 211
+Sarcoïdose
+Pne
+Imm
+Der
+Rhu
+MI
+Item 212
+Hémogramme chez l'adulte et l'enfant : indications et interprétation
+Hém
+Imm
+Ped
+Item 213
+Anémie chez l'adulte et l'enfant
+Hém
+Imm
+MI
+Ped
+Item 214
+Thrombopénie chez l'adulte et l'enfant
+Hém
+Imm
+MI
+MIR
+Item 215
+Purpuras chez l'adulte et l'enfant
+Hém
+Inf
+MI
+MIR
+Der
+Ped
+Item 216
+Syndrome hémorragique d'origine hématologique
+Hém
+Ped
+Item 217
+Syndrome mononucléosique
+Hém
+Imm
+Inf
+MI
+Item 218
+Éosinophilie
+Hém
+Imm
+Inf
+MI
+Item 219
+Pathologie du fer chez l'adulte et l'enfant
+End
+HGE
+Rhu
+MI
+Ped
+Item 220
+Adénopathie superficielle de l'adulte et de l'enfant
+Hém
+Imm
+Inf
+MI
+ORL
+Ped
+UE8 - Circulation - Métabolismes
+Item 221
+Athérome : épidémiologie et physiopathologie. Le malade poly-athéromateux
+MCV
+SP
+MG
+Item 222
+Facteurs de risque cardio-vasculaire et prévention
+MCV
+End
+Nut
+SP
+MG
+Item 223
+Dyslipidémies
+MCV
+End
+Nut
+MG
+Item 224
+Hypertension artérielle de l'adulte et de l’enfant
+MCV
+End
+Nép
+Oph
+MI
+MIR
+Ped
+MG
+Item 225
+Artériopathie oblitérante de l'aorte, des artères viscérales et des membres inférieurs ; anévrysmes
+MCV
+Item 226
+Thrombose veineuse profonde et embolie pulmonaire
+MCV
+Pne
+Hém
+MI
+MIR
+Item 227
+Insuffisance veineuse chronique. Varices
+MCV
+Item 228
+Ulcère de jambe
+Der
+Item 229
+Surveillance et complications des abords veineux
+AR
+MIR
+Item 230
+Douleur thoracique aiguë
+MCV
+Pne
+Item 231
+Électrocardiogramme : indications et interprétations
+MCV
+Item 232
+Fibrillation atriale
+MCV
+Item 233
+Valvulopathies
+MCV
+Item 234
+Insuffisance cardiaque de l'adulte
+MCV
+MIR
+Item 235
+Péricardite aiguë
+MCV
+Item 236
+Troubles de la conduction intracardiaque
+MCV
+Item 237
+Palpitations
+MCV
+MG
+Item 238
+Souffle cardiaque chez l'enfant
+MCV
+Ped
+Item 239
+Acrosyndromes (phénomène de Raynaud, érythermalgie, acrocyanose, engelures, ischémie digitale)
+Der
+MI
+Item 240
+Hypoglycémie chez l'adulte et l'enfant
+End
+Ped
+Item 241
+Goitre, nodules thyroïdiens et cancers thyroïdiens
+End
+ORL
+CD
+Item 242
+Hyperthyroïdie
+End
+Oph
+Item 243
+Hypothyroïdie
+End
+Ped
+Item 244
+Adénome hypophysaire
+End
+NC
+Item 245
+Insuffisance surrénale chez l'adulte et l'enfant
+End
+MIR
+Ped
+Item 246
+Gynécomastie
+End
+Item 247
+Diabète sucré de types 1 et 2 de l'enfant et de l'adulte. Complications
+End
+Nut
+GO
+Nép
+Oph
+MIR
+Ped
+Thé
+MG
+Item 248
+Prévention primaire par la nutrition chez l'adulte et chez l'enfant
+Nut
+MG
+Item 249
+Modifications thérapeutiques du mode de vie (alimentation et activité physique) chez l'adulte et l'enfant
+Nut
+MPR
+Ped
+MG
+Item 250
+Dénutrition chez l'adulte et l'enfant
+Nut
+Ped
+MG
+Item 251
+Amaigrissement à tous les âges
+Nut
+MI
+Ped
+MG
+Item 252
+Troubles nutritionnels chez le sujet âgé
+Nut
+Gér
+Item 253
+Obésité de l'enfant et de l'adulte
+Nut
+End
+CD
+Ped
+MG
+Item 254
+Besoins nutritionnels et grossesse
+Nut
+GO
+Item 255
+Diabète gestationnel
+Nut
+End
+GO
+Ped
+Item 256
+Aptitude au sport chez l'adulte et l'enfant ; besoins nutritionnels chez le sportif
+Nut
+MPR
+Rhu
+Ped
+MG
+Item 257
+Œdèmes des membres inférieurs localisés ou généralisés
+Nép
+MI
+Item 258
+Protéinurie et syndrome néphrotique de chez l'adulte et de l'enfant
+Nép
+Ped
+Item 259
+Protéinurie et syndrome néphrotique de chez l'adulte et de l'enfant
+Nép
+Ped
+Item 260
+Hématurie
+Nép
+Uro
+Ped
+Item 261
+Néphropathie glomérulaire
+Nép
+Item 262
+Néphropathies interstitielles
+Nép
+Item 263
+Néphropathies vasculaires
+Nép
+Item 264
+Insuffisance rénale chronique chez l'adulte et l'enfant
+Nép
+Ped
+Item 265
+Lithiase urinaire
+Nép
+Uro
+Item 266
+Polykystose rénale
+Nép
+Item 267
+Troubles de l'équilibre acido-basique et désordres hydro-électrolytiques
+Nép
+End
+AR
+MIR
+Item 268
+Hypercalcémie
+Nép
+End
+Rhu
+MI
+MIR
+Item 269
+Douleurs abdominales aiguës chez l'enfant et chez l'adulte
+HGE
+Ped
+Item 270
+Douleurs lombaires aiguës chez l'enfant et chez l'adulte
+MG
+Item 271
+Reflux gastro-œsophagien chez le nourrisson, chez l'enfant et chez l'adulte. Hernie hiatale
+HGE
+Ped
+MG
+Item 272
+Ulcère gastrique et duodénal. Gastrite
+HGE
+Item 273
+Dysphagie
+HGE
+ORL
+Item 274
+Vomissements du nourrisson, de l'enfant et de l'adulte
+HGE
+Ped
+Item 275
+Splénomégalie
+Hém
+MI
+Item 276
+Hépatomégalie et masse abdominale
+HGE
+CD
+Item 277
+Lithiase biliaire et complications
+HGE
+CD
+Item 278
+Ictère
+HGE
+Ped
+MIR
+Item 279
+Cirrhose et complications
+HGE
+MIR
+Item 280
+Ascite
+HGE
+CD
+MIR
+Item 281
+Pancréatite chronique
+HGE
+Item 282
+Maladies Inflammatoires Chroniques de l'Intestin (MICI) chez l'adulte
+HGE
+CD
+Item 283
+Constipation chez l'enfant et l'adulte (avec le traitement)
+HGE
+Ped
+MG
+Item 284
+Colopathie fonctionnelle
+HGE
+MG
+Item 285
+Diarrhée chronique chez l'adulte et l'enfant
+HGE
+Ped
+Item 286
+Diarrhée aiguë et déshydratation chez le nourrisson, l'enfant et l'adulte
+HGE
+Ped
+Item 287
+Diverticulose colique et diverticulite aiguë du sigmoïde
+HGE
+CD
+Item 288
+Pathologie hémorroïdaire
+HGE
+CD
+Item 289
+Hernie pariétale chez l'enfant et l'adulte
+CD
+Ped
+UE9 - Cancérologie - Onco-hématologie
+Item 290
+Épidémiologie, facteurs de risque, prévention et dépistage des cancers
+Can
+SP
+MTL
+GO
+MG
+Item 291
+Cancer : cancérogénèse, oncogénétique
+Can
+MTL
+Item 292
+Diagnostic des cancers : signes d'appel et investigations para-cliniques ; caractérisation du stade ; pronostic
+Can
+MG
+Item 293
+Le médecin préleveur de cellules et/ou de tissus pour des examens d'Anatomie et Cytologie Pathologiques : connaître les principes de réalisation, transmission et utilisation des prélèvements à visée sanitaire et de recherche
+Can
+Item 294
+Traitement des cancers : principales modalités, classes thérapeutiques et leurs complications majeures. La décision thérapeutique pluridisciplinaire et l'information du malade
+Can
+CD
+Item 295
+Prise en charge et accompagnement d'un malade atteint de cancer à tous les stades de la maladie dont le stade de soins palliatifs en abordant les problématiques techniques, relationnelles, sociales et éthiques. Traitements symptomatiques. Modalités de surveillance
+Can
+Item 296
+Agranulocytose médicamenteuse : conduite à tenir
+Hém
+Item 297
+Cancer de l'enfant : particularités épidémiologiques, diagnostiques et thérapeutiques
+Can
+Ped
+SP
+NC
+Item 298
+Tumeurs de la cavité buccale, naso-sinusiennes et du cavum, et des voies aérodigestives supérieures
+Can
+ORL
+CMF
+Item 299
+Tumeurs intracrâniennes
+Can
+Neu
+NC
+Item 300
+Tumeurs du col utérin, tumeur du corps utérin
+Can
+GO
+MG
+Item 301
+Tumeurs du colon et du rectum
+Can
+HGE
+CD
+MG
+Item 302
+Tumeurs cutanées, épithéliales et mélaniques
+Can
+Der
+CMF
+Item 303
+Tumeurs de l'estomac
+Can
+HGE
+CD
+Item 304
+Tumeurs du foie, primitives et secondaires
+Can
+HGE
+CD
+Item 305
+Tumeurs de l'œsophage
+Can
+HGE
+CD
+Item 306
+Tumeurs de l'ovaire
+Can
+GO
+Item 307
+Tumeurs des os primitives et secondaires
+Can
+Rhu
+OT
+CMF
+Item 308
+Tumeurs du pancréas
+Can
+HGE
+CD
+Item 309
+Tumeurs du poumon, primitives et secondaires
+Can
+Pne
+Item 310
+Tumeurs de la prostate
+Can
+Uro
+Item 311
+Tumeurs du rein de l’adulte
+Can
+Uro
+Item 312
+Tumeurs du sein
+Can
+GO
+MG
+Item 313
+Tumeurs du testicule
+Can
+Uro
+Item 314
+Tumeurs vésicales
+Can
+Uro
+Item 315
+Leucémies aiguës
+Hém
+Ped
+Item 316
+Syndromes myélodysplasiques
+Hém
+Item 317
+Syndromes myéloprolifératifs
+Hém
+Item 318
+Leucémies lymphoïdes chroniques
+Hém
+Item 319
+Lymphomes malins
+Hém
+Der
+Item 320
+Myélome multiple des os
+Hém
+Rhu
+Nép
+UE10 - Le bon usage du médicament et des thérapeutiques non médicamenteuses
+Item 321
+Principe du bon usage du médicament
+Thé
+MG
+Item 322
+La décision thérapeutique personnalisée : bon usage dans des situations à risque
+Thé
+Gér
+AR
+MG
+Item 323
+Analyser et utiliser les résultats des études cliniques dans la perspective du bon usage - analyse critique, recherche clinique et niveaux de preuve
+Thé
+SP
+Item 324
+Éducation thérapeutique, observance et automédication
+Thé
+MI
+MG
+Item 325
+Identification et gestion des risques liés aux médicaments et aux biomatériaux, risque iatrogène, erreur médicamenteuse
+Thé
+SP
+Gér
+MIR
+Item 326
+Cadre réglementaire de la prescription thérapeutique et recommandations pour le bon usage
+Thé
+Item 327
+Principes de la médecine intégrative, utilité et risques des interventions non médicamenteuses et des thérapies complémentaires
+Thé
+MG
+Item 328
+Thérapeutiques non médicamenteuses et dispositifs médicaux
+Thé
+MPR
+Item 329
+Transfusion sanguine et produits dérivés du sang : indications, complications. Hémovigilance
+Thé
+Hém
+Gér
+Ped
+MIR
+AR
+Item 330
+Prescription et surveillance des classes de médicaments les plus courantes chez l'adulte et chez l'enfant, hors anti-infectieux. Connaitre les grands principes thérapeutiques
+Thé
+Hém
+Gér
+Ped
+MIR
+DSP
+Rhu
+Nép
+MI
+MCV
+Der
+UE11 - Urgences et défaillances viscérales aiguës
+Item 331
+Arrêt cardio-circulatoire
+MIR
+AR
+MCV
+Ped
+Item 332
+État de choc. Principales étiologies : hypovolémique, septique, cardiogénique, anaphylactique
+MIR
+AR
+Ped
+Item 333
+Situations sanitaires exceptionnelles
+MIR
+AR
+Item 334
+Prise en charge immédiate pré-hospitalière et à l'arrivée à l'hôpital, évaluation des complications chez : un brûlé, un traumatisé sévère, un traumatisé thoracique, un traumatisé abdominal, un traumatisé des membres et/ou du bassin, un traumatisé du rachis ou vertébro-médullaire, un traumatisé crânien ou crânio-encéphalique
+MIR
+AR
+OT
+NC
+ORL
+CD
+Ped
+Item 335
+Orientation diagnostique et conduite à tenir devant un traumatisme maxillo-facial et oculaire
+CMF
+ORL
+Oph
+NC
+Ped
+Item 336
+Coma non traumatique chez l'adulte et chez l'enfant
+MIR
+AR
+Neu
+Item 337
+Principales intoxications aiguës
+MIR
+AR
+Ped
+Item 338
+Œdème de Quincke et anaphylaxie
+MIR
+AR
+Pne
+Item 339
+Syndromes coronariens aigus
+MIR
+MCV
+Item 340
+Accidents vasculaires cérébraux
+MIR
+Neu
+NC
+MPR
+Item 341
+Hémorragie méningée
+MIR
+AR
+Neu
+NC
+Item 342
+Malaise, perte de connaissance, crise convulsive chez l'adulte
+MIR
+Neu
+MCV
+Item 343
+État confusionnel et trouble de conscience chez l'adulte et chez l'enfant
+MIR
+Neu
+Gér
+Ped
+Item 344
+Prise en charge d'une patiente atteinte de pré-éclampsie
+MIR
+GO
+Nép
+AR
+Item 345
+Malaise grave du nourrisson et mort inattendue du nourrisson
+Ped
+Item 346
+Convulsions chez le nourrisson et chez l'enfant
+Ped
+Item 347
+Rétention aiguë d'urine
+Uro
+Gér
+Item 348
+Insuffisance rénale aiguë - Anurie
+Nép
+Uro
+MIR
+AR
+Ped
+Item 349
+Infection aiguë des parties molles (abcès, panaris, phlegmon des gaines)
+OT
+AR
+Item 350
+Grosse jambe rouge aiguë
+Der
+Item 351
+Agitation et délire aiguë
+Psy
+Item 352
+Crise d'angoisse aiguë et attaque de panique
+Psy
+Item 353
+Risque et conduite suicidaires chez l'enfant, l'adolescent et l'adulte : identification et prise en charge
+Psy
+Ped
+MG
+Item 354
+Syndrome occlusif de l'enfant et de l'adulte
+CD
+Ped
+Item 355
+Hémorragie digestive
+HGE
+MIR
+AR
+Ped
+Item 356
+Appendicite de l'enfant et de l'adulte
+CD
+Ped
+Item 357
+Péritonite aiguë chez l'enfant et chez l'adulte
+CD
+Inf
+AR
+Ped
+Item 358
+Pancréatite aiguë
+HGE
+CD
+MIR
+AR
+Item 359
+Détresse et insuffisance respiratoire aigüe du nourrisson, de l'enfant et de l'adulte
+Pne
+ORL
+MIR
+AR
+Ped
+Item 360
+Pneumothorax
+Pne
+MIR
+Item 361
+Lésions péri-articulaires et ligamentaires du genou, de la cheville et de l'épaule
+OT
+Rhu
+Item 362
+Prothèses et ostéosynthèses
+OT
+Inf
+Item 363
+Fractures fréquentes de l'adulte et du sujet âgé
+OT
+Item 364
+Fractures chez l'enfant : particularités épidémiologiques, diagnostiques et thérapeutiques
+OT
+Ped
+Item 365
+Surveillance d'un malade sous plâtre/résine, diagnostiquer une complication
+OT
+Ped
+Item 366
+Exposition accidentelle aux liquides biologiques : conduite à tenir
+Inf
+Item 367
+Impact de l’environnement sur la santé
+SP
+MTL
+MG
+Légende :
+Liste des Référentiels
+AR
+Anesthésie - Réanimation (Presse Universitaire)
+Can
+Cancérologie (MedLine)
+CD
+Chirurgie Digestive (MedLine)
+CMF
+CMF (Elsevier)
+Der
+Dermatologie (Elsevier)
+DSP
+Douleurs - Soins Palliatifs (MedLine)
+End
+Endocrinologie (Elsevier)
+Gén
+Génétique (Elsevier)
+Gér
+Gériatrie (Elsevier)
+GO
+Gynécologie - Obstétrique (Elsevier)
+Hém
+Hématologie (Elsevier)
+HGE
+HGE
+Imm
+Immunopathologie (Elsevier)
+Inf
+Infectiologie (Pilly)
+MCV
+Médecine Cardiovasculaire (Elsevier)
+MG
+Médecine Générale (Elsevier)
+MIR
+MIR - Urgences (Elsevier)
+MI
+Médecine Interne (MedLine)
+MPR
+MPR (Elsevier)
+MTL
+Médecine du Travail - Médecine Légale (Elsevier)
+Nut
+Nutrition (Elsevier)
+Nép
+Néphrologie (Ellipses)
+NC
+Neurochirurgie (Elsevier)
+Neu
+Neurologie (Elsevier)
+Oph
+Ophtalmologie (Elsevier)
+ORL
+ORL (Elsevier)
+OT
+Orthopédie - Traumatologie (Ellipses)
+Ped
+Pédiatrie (Ellipses)
+Pne
+Pneumologie (S. Editions)
+Psy
+Psychiatrie (Presse Universitaire)
+Rhu
+Rhumatologie (Elsevier)
+SP
+Santé Publique (Elsevier)
+Thé
+Thérapeutique
+Uro
+Urologie (Elsevier)

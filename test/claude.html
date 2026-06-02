@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#060810;color:#f1f5f9;min-height:100vh;overflow-x:hidden}
+
+:root{
+  --bg:#060810;--s1:#0d1117;--s2:#161b27;--s3:#1e2535;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --muted:#4b5675;--muted2:#64748b;--text:#e2e8f0;
+  --cardio:#ff4b6b;--dermato:#38bdf8;--infectio:#22c55e;--neuro:#a855f7;
+  --rythmo:#ec4899; /* Couleur pour la sous-partie Rythmologie */
+  --ok:#22c55e;--ko:#ef4444;--primary:#6366f1;
+}
+
+/* AMBIENT GLOW */
+.glow-orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;opacity:0.18}
+.glow-1{width:600px;height:600px;background:#6366f1;top:-200px;left:-200px}
+.glow-2{width:500px;height:500px;background:#38bdf8;bottom:-200px;right:-200px}
+
+/* SCREENS */
+.screen{display:none;position:relative;z-index:1;padding:28px 20px;max-width:700px;margin:0 auto}
+.screen.active{display:block}
+
+/* ── HOME ── */
+.home-hero{padding:40px 0 32px;position:relative}
+.home-hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,0.6),transparent)}
+.badge-top{display:inline-flex;align-items:center;gap:6px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);padding:5px 12px;border-radius:100px;font-size:0.72rem;font-weight:600;color:#818cf8;margin-bottom:16px;letter-spacing:0.5px}
+.badge-top span{width:6px;height:6px;border-radius:50%;background:#6366f1;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.home-hero h1{font-size:2.2rem;font-weight:800;line-height:1.15;letter-spacing:-1px;margin-bottom:10px}
+.home-hero h1 span{background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.home-hero p{color:var(--muted2);font-size:0.9rem;line-height:1.6}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0 32px}
+.stat{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:16px;text-align:center;position:relative;overflow:hidden;transition:border-color 0.3s}
+.stat::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(99,102,241,0.05),transparent);opacity:0}
+.stat:hover{border-color:var(--border2)}
+.stat:hover::before{opacity:1}
+.stat .v{font-size:1.6rem;font-weight:800;color:#fff;line-height:1}
+.stat .l{font-size:0.65rem;color:var(--muted2);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
+
+/* SECTION LABEL */
+.s-label{font-size:0.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.s-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* MATIERE CARDS */
+.mat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.mat-card{background:var(--s1);border:1px solid var(--border);border-radius:22px;padding:22px;cursor:pointer;position:relative;overflow:hidden;transition:all 0.25s cubic-bezier(0.4,0,0.2,1)}
+.mat-card:hover{transform:translateY(-3px) scale(1.01);border-color:var(--border2)}
+.mat-card:active{transform:scale(0.98)}
+
+.mat-card .noise{position:absolute;inset:0;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none}
+.mat-card .blob{position:absolute;width:120px;height:120px;border-radius:50%;top:-30px;right:-30px;opacity:0.15;filter:blur(30px);transition:opacity 0.3s}
+.mat-card:hover .blob{opacity:0.25}
+
+.mat-card.cardio .blob{background:var(--cardio)}
+.mat-card.dermato .blob{background:var(--dermato)}
+.mat-card.infectio .blob{background:var(--infectio)}
+.mat-card.neuro .blob{background:var(--neuro)}
+
+.mat-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:16px;position:relative;z-index:1}
+.mat-card.cardio .mat-icon{background:linear-gradient(135deg,rgba(255,75,107,0.2),rgba(255,140,97,0.2));border:1px solid rgba(255,75,107,0.3)}
+.mat-card.dermato .mat-icon{background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(129,140,248,0.2));border:1px solid rgba(56,189,248,0.3)}
+.mat-card.infectio .mat-icon{background:linear-gradient(135deg,rgba(34,197,94,0.2),rgba(6,182,212,0.2));border:1px solid rgba(34,197,94,0.3)}
+.mat-card.neuro .mat-icon{background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(236,72,153,0.2));border:1px solid rgba(168,85,247,0.3)}
+
+.mat-card h3{font-size:1rem;font-weight:700;color:#fff;margin-bottom:3px;position:relative;z-index:1}
+.mat-card .sub{font-size:0.75rem;color:var(--muted2);position:relative;z-index:1;margin-bottom:14px}
+
+.prog-wrap{position:relative;z-index:1}
+.prog-track{height:2px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
+.mat-card.cardio .prog-fill{background:linear-gradient(90deg,var(--cardio),#ff8c61)}
+.mat-card.dermato .prog-fill{background:linear-gradient(90deg,var(--dermato),#818cf8)}
+.mat-card.infectio .prog-fill{background:linear-gradient(90deg,var(--infectio),#06b6d4)}
+.mat-card.neuro .prog-fill{background:linear-gradient(90deg,var(--neuro),#ec4899)}
+.prog-lbl{font-size:0.68rem;color:var(--muted);margin-top:6px}
+
+/* ── MATIERE SCREEN ── */
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted2);padding:8px 14px;border-radius:10px;cursor:pointer;font-size:0.82rem;font-weight:500;margin-bottom:24px;transition:all 0.2s}
+.back-btn:hover{background:rgba(255,255,255,0.07);color:var(--text)}
+
+.mat-header{margin-bottom:24px}
+.mat-header h1{font-size:1.6rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}
+.mat-header p{font-size:0.85rem;color:var(--muted2)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:4px;margin-bottom:22px}
+.tab{flex:1;padding:9px;text-align:center;font-size:0.82rem;font-weight:600;color:var(--muted2);border-radius:10px;cursor:pointer;transition:all 0.2s}
+.tab.active{background:var(--s3);color:#fff;border:1px solid var(--border2)}
+
+/* COURS LIST & TAGS */
+.cours-item{display:flex;align-items:center;justify-content:space-between;background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:16px 18px;cursor:pointer;margin-bottom:10px;transition:all 0.2s}
+.cours-item:hover{background:var(--s2);border-color:var(--border2);transform:translateX(3px)}
+.ci-left{display:flex;align-items:center;gap:12px}
+.ci-dot{width:38px;height:38px;border-radius:11px;background:var(--s3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.ci-info h4{font-size:0.9rem;font-weight:600;color:#fff;margin-bottom:3px}
+.ci-info span{font-size:0.73rem;color:var(--muted2)}
+
+/* Tags pour les sous-parties (Rythmo, Multi) */
+.tags-container {display: inline-flex; gap: 6px; margin-left: 6px; vertical-align: middle;}
+.tag-badge {font-size:0.62rem; padding:2px 7px; border-radius:5px; font-weight:700;}
+.tag-multi {background:rgba(99,102,241,0.15); color:#818cf8; border:1px solid rgba(99,102,241,0.25);}
+.tag-rythmo {background:rgba(236,72,153,0.15); color:var(--rythmo); border:1px solid rgba(236,72,153,0.25);}
+
+.ci-arrow{color:var(--muted);font-size:0.9rem;transition:transform 0.2s}
+.cours-item:hover .ci-arrow{transform:translateX(3px)}
+
+/* QCM CARD */
+.qcm-card{background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:22px;margin-bottom:14px;transition:border-color 0.3s}
+
+.badge-type{display:inline-flex;align-items:center;gap:5px;font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:7px;letter-spacing:0.5px;margin-bottom:14px}
+.badge-type.qru{background:rgba(99,102,241,0.12);color:#818cf8;border:1px solid rgba(99,102,241,0.2)}
+.badge-type.qrm{background:rgba(168,85,247,0.12);color:#c084fc;border:1px solid rgba(168,85,247,0.2)}
+.badge-source{font-size:0.7rem;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:5px}
+
+.q-text{font-size:0.95rem;font-weight:600;line-height:1.55;margin-bottom:16px;color:#e2e8f0}
+
+/* OPTIONS */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:13px 15px;border-radius:13px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;transition:all 0.2s;user-select:none}
+.opt:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1)}
+.opt.sel{border-color:var(--primary);background:rgba(99,102,241,0.08)}
+.opt.ok{background:rgba(34,197,94,0.08)!important;border-color:rgba(34,197,94,0.4)!important}
+.opt.ko{background:rgba(239,68,68,0.08)!important;border-color:rgba(239,68,68,0.3)!important}
+
+.opt-letter{width:26px;height:26px;min-width:26px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:var(--muted2);transition:all 0.2s;margin-top:1px}
+.opt.sel .opt-letter{background:var(--primary);border-color:var(--primary);color:#fff}
+.opt.ok .opt-letter{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.ko .opt-letter{background:var(--ko);border-color:var(--ko);color:#fff}
+.opt-body{flex:1}
+.opt-text{font-size:0.88rem;line-height:1.4;color:var(--text)}
+
+/* EXPL */
+.expl{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:0.78rem;line-height:1.55;display:none}
+.expl.vis{display:block;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.expl.good{background:rgba(34,197,94,0.06);border-left:2px solid rgba(34,197,94,0.5)}
+.expl.bad{background:rgba(239,68,68,0.06);border-left:2px solid rgba(239,68,68,0.3)}
+.expl-lbl{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px}
+.expl.good .expl-lbl{color:#4ade80}
+.expl.bad .expl-lbl{color:#f87171}
+.expl p{color:#94a3b8}
+
+.btn-cours-lien{display:inline-flex;align-items:center;gap:5px;font-size:0.73rem;font-weight:600;color:#818cf8;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);padding:4px 10px;border-radius:7px;cursor:pointer;margin-top:8px;transition:all 0.15s}
+.btn-cours-lien:hover{background:rgba(99,102,241,0.2);transform:translateY(-1px)}
+
+/* VERIFY BTN */
+.btn-verify{width:100%;margin-top:18px;padding:13px;background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;border:none;border-radius:13px;font-family:inherit;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;letter-spacing:0.2px}
+.btn-verify:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(99,102,241,0.3)}
+.btn-verify:active{transform:scale(0.98)}
+.btn-verify:disabled{opacity:0.3;cursor:default;transform:none;box-shadow:none}
+
+.feedback{text-align:center;font-size:0.82rem;font-weight:600;margin-top:12px;min-height:18px;transition:all 0.3s}
+.feedback.ok{color:#4ade80}
+.feedback.ko{color:#f87171}
+
+/* SESSION BAR */
+.session-bar{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.session-bar span{font-size:0.78rem;color:var(--muted2)}
+.session-bar strong{color:#fff;font-size:0.85rem}
+
+/* CHIP SCORE */
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:0.68rem;font-weight:700;padding:3px 8px;border-radius:6px;margin-left:8px;vertical-align:middle}
+.chip.ok{background:rgba(34,197,94,0.12);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
+.chip.ko{background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
+
+/* COURS LECTURE */
+.cours-body{background:var(--s1);border:1px solid var(--border);border-radius:22px;padding:28px}
+.cours-body h2{font-size:1.4rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:14px;line-height:1.3;color:#fff}
+.cours-body h3{font-size:0.92rem;font-weight:700;color:#e2e8f0;margin:22px 0 9px;text-transform:uppercase;letter-spacing:0.5px}
+.cours-body p,.cours-body ul{font-size:0.88rem;color:#94a3b8;line-height:1.75;margin-bottom:14px}
+.cours-body ul{padding-left:18px}
+.cours-body li{margin-bottom:7px}
+.cours-body b{color:#cbd5e1;font-weight:600}
+.memo{background:rgba(99,102,241,0.07);border:1px solid rgba(99,102,241,0.18);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:0.82rem;color:#a5b4fc;line-height:1.6}
+.memo strong{display:block;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6366f1;margin-bottom:6px}
+
+/* EMPTY */
+.empty{text-align:center;color:var(--muted);font-size:0.85rem;padding:28px;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="glow-orb glow-1"></div>
+<div class="glow-orb glow-2"></div>
+
+<div id="s-home" class="screen active">
+  <div class="home-hero">
+    <div class="badge-top"><span></span>EDN · Révisions actives</div>
+    <h1>Révisez<br><span>intelligemment.</span></h1>
+    <p>QCMs, cours interconnectés et suivi de progression — tout en un.</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat"><div class="v" id="st-tot-qcm">0</div><div class="l">Total QCMs</div></div>
+    <div class="stat"><div class="v" id="st-qcm-faits">0</div><div class="l">QCMs Faits</div></div>
+    <div class="stat"><div class="v" id="st-score">—</div><div class="l">Réussite</div></div>
+  </div>
+
+  <div class="s-label">Spécialités</div>
+  <div class="mat-grid">
+    <div class="mat-card cardio" onclick="openMat('cardio')">
+      <div class="noise"></div><div class="blob"></div>
+      <div class="mat-icon">🫀</div>
+      <h3>Cardiologie</h3>
+      <div class="sub">Inclut Rythmologie</div>
+      <div class="prog-wrap">
+        <div class="prog-track"><div class="prog-fill" id="pg-cardio" style="width:0%"></div></div>
+        <div class="prog-lbl" id="pgl-cardio">Calcul en cours...</div>
+      </div>
+    </div>
+    <div class="mat-card dermato" onclick="openMat('dermato')">
+      <div class="noise"></div><div class="blob"></div>
+      <div class="mat-icon">🩺</div>
+      <h3>Dermatologie</h3>
+      <div class="sub">Tumeurs, inflammatoire</div>
+      <div class="prog-wrap">
+        <div class="prog-track"><div class="prog-fill" id="pg-dermato" style="width:0%"></div></div>
+        <div class="prog-lbl" id="pgl-dermato">Calcul en cours...</div>
+      </div>
+    </div>
+    <div class="mat-card infectio" onclick="openMat('infectio')">
+      <div class="noise"></div><div class="blob"></div>
+      <div class="mat-icon">🦠</div>
+      <h3>Infectiologie</h3>
+      <div class="sub">Bactéries, virus, Lyme</div>
+      <div class="prog-wrap">
+        <div class="prog-track"><div class="prog-fill" id="pg-infectio" style="width:0%"></div></div>
+        <div class="prog-lbl" id="pgl-infectio">Calcul en cours...</div>
+      </div>
+    </div>
+    <div class="mat-card neuro" onclick="openMat('neuro')">
+      <div class="noise"></div><div class="blob"></div>
+      <div class="mat-icon">🧠</div>
+      <h3>Neurologie</h3>
+      <div class="sub">Bientôt disponible</div>
+      <div class="prog-wrap">
+        <div class="prog-track"><div class="prog-fill" id="pg-neuro" style="width:0%"></div></div>
+        <div class="prog-lbl" id="pgl-neuro">À venir</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="s-mat" class="screen">
+  <button class="back-btn" onclick="goHome()">← Accueil</button>
+  <div class="mat-header">
+    <h1 id="mat-titre"></h1>
+    <p id="mat-desc"></p>
+  </div>
+  <div class="tabs">
+    <div class="tab active" id="t-cours" onclick="switchTab('cours')">📖 Cours</div>
+    <div class="tab" id="t-qcm" onclick="switchTab('qcm')">💡 QCMs</div>
+  </div>
+  <div id="tc-cours"></div>
+  <div id="tc-qcm" style="display:none"></div>
+</div>
+
+<div id="s-lec" class="screen">
+  <button class="back-btn" onclick="backCours()">← Retour</button>
+  <div id="lec-body" class="cours-body"></div>
+</div>
+
+<script>
+const ST={qcm:0,ok:0,done:{},from:null,mat:null};
+
+const MATS={
+  cardio:{nom:'🫀 Cardiologie',desc:'Pathologies cardiaques, rythmologie, insuffisance',col:'#ff4b6b'},
+  dermato:{nom:'🩺 Dermatologie',desc:'Dermatoses inflammatoires, tumeurs cutanées',col:'#38bdf8'},
+  infectio:{nom:'🦠 Infectiologie',desc:'Infections bactériennes, virales, parasitaires',col:'#22c55e'},
+  neuro:{nom:'🧠 Neurologie',desc:'Bientôt disponible',col:'#a855f7'}
+};
+
+const COURS=[
+  {id:'c_endo',titre:'Endocardite Infectieuse',desc:'Critères de Duke, signes périphériques, ATB',tags:['cardio','infectio'],
+   html:`<h2>Endocardite Infectieuse</h2>
+   <p>Infection bactérienne ou fongique de l'endocarde pariétal ou valvulaire. Urgence diagnostique et thérapeutique.</p>
+   <div class="memo"><strong>⚡ Rang A — indispensable</strong>Fièvre + souffle cardiaque = endocardite jusqu'à preuve du contraire. Hémocultures avant tout ATB.</div>
+   <h3>Signes périphériques</h3>
+   <ul>
+     <li><b>Faux panaris d'Osler :</b> nodules douloureux fugaces à la pulpe des doigts — complexes immuns.</li>
+     <li><b>Placard de Janeway :</b> macules érythémateuses indolores des paumes — emboles septiques.</li>
+     <li><b>Taches de Roth :</b> hémorragies rétiniennes périfovéolaires.</li>
+   </ul>
+   <h3>Critères de Duke modifiés</h3>
+   <p>Diagnostic = 2 majeurs OU 1 majeur + 3 mineurs OU 5 mineurs.</p>
+   <ul>
+     <li><b>Majeur 1 :</b> hémocultures positives (≥ 2, germe typique)</li>
+     <li><b>Majeur 2 :</b> atteinte endocardique à l'ETO</li>
+   </ul>
+   <h3>Traitement</h3>
+   <p>ATB bactéricide prolongée (4–6 semaines IV). Chirurgie si : IC sévère, végétation > 10 mm, abcès, échec ATB.</p>`},
+  {id:'c_ica',titre:'Insuffisance Cardiaque Aiguë',desc:'OAP, traitement d\'urgence, critères réa',tags:['cardio'],
+   html:`<h2>Insuffisance Cardiaque Aiguë</h2>
+   <p>Décompensation rapide de la fonction ventriculaire, potentiellement létale.</p>
+   <div class="memo"><strong>⚡ Priorités urgences</strong>O₂ si SpO₂ &lt; 90% · Furosémide IV · Position demi-assise · Monitoring continu</div>
+   <h3>OAP cardiogénique — traitement</h3>
+   <ul>
+     <li><b>Furosémide IV :</b> 40–80 mg bolus. 1ère intention absolue.</li>
+     <li><b>Dérivés nitrés IV :</b> vasodilatation veineuse, réduction précharge.</li>
+     <li><b>VNI (CPAP/BiPAP) :</b> si détresse respiratoire persistante.</li>
+     <li><b>Bêtabloquants :</b> formellement contre-indiqués en phase aiguë initiale.</li>
+   </ul>
+   <h3>Critères de réanimation</h3>
+   <p>Choc cardiogénique (TAS &lt; 90 mmHg + bas débit), trouble du rythme grave, vasopresseurs nécessaires.</p>`},
+  // NOUVEAU COURS : RYTHMOLOGIE
+  {id:'c_fa',titre:'Fibrillation Atriale (FA)',desc:'Physiopathologie, ECG et prise en charge',tags:['cardio', 'rythmo'],
+   html:`<h2>Fibrillation Atriale (FA)</h2>
+   <p>Trouble du rythme supraventriculaire le plus fréquent, caractérisé par une activation atriale anarchique.</p>
+   <div class="memo"><strong>⚡ Risque majeur</strong>La stase sanguine dans l'auricule gauche expose à un risque thromboembolique élevé (AVC ischémique).</div>
+   <h3>Diagnostic ECG</h3>
+   <ul>
+     <li>Absence d'ondes P sinusales.</li>
+     <li>Trémulation de la ligne de base (ondes f, fréquence 400-600/min).</li>
+     <li>Espace R-R irrégulier (réponse ventriculaire irrégulière).</li>
+   </ul>
+   <h3>Prise en charge</h3>
+   <p>1. Prévention thromboembolique (Score CHA2DS2-VASc, AOD ou AVK).<br>2. Contrôle de la fréquence (Bêtabloquants, inhibiteurs calciques bradycardisants).<br>3. Contrôle du rythme (réduction par amiodarone ou choc électrique externe).</p>`},
+  {id:'c_mel',titre:'Le Mélanome Malin',desc:'ABCDE, formes cliniques, indice de Breslow',tags:['dermato'],
+   html:`<h2>Mélanome Malin</h2>
+   <p>Tumeur maligne mélanocytaire. Pronostic corrélé à l'indice de Breslow (épaisseur en mm).</p>
+   <div class="memo"><strong>⚡ Règle ABCDE</strong>A = Asymétrie · B = Bords irréguliers · C = Couleur hétérogène · D = Diamètre > 6 mm · E = Évolution</div>
+   <h3>Formes cliniques</h3>
+   <ul>
+     <li><b>SSM (70%) :</b> extensif superficiel, extension horizontale d'abord — meilleur pronostic.</li>
+     <li><b>Nodulaire :</b> emblée invasif verticalement — pronostic défavorable.</li>
+     <li><b>Dubreuilh :</b> sujet âgé, face, évolution lente.</li>
+     <li><b>Acrolentigineux :</b> paumes/plantes/sous-unguéal — souvent diagnostiqué tard.</li>
+   </ul>
+   <h3>Prise en charge</h3>
+   <p>Exérèse chirurgicale avec marges selon Breslow. Ganglion sentinelle si Breslow > 1 mm.</p>`},
+  {id:'c_lyme',titre:'Maladie de Lyme',desc:'Érythème migrant, phases, traitement',tags:['infectio','dermato'],
+   html:`<h2>Maladie de Lyme (Borréliose)</h2>
+   <p>Infection à <i>Borrelia burgdorferi</i> transmise par <i>Ixodes ricinus</i>.</p>
+   <div class="memo"><strong>⚡ Clé diagnostique</strong>Érythème migrant = diagnostic clinique pur. Sérologie inutile en phase primaire (souvent faussement négative).</div>
+   <h3>Phases</h3>
+   <ul>
+     <li><b>Primaire (J3–J30) :</b> érythème migrant centrifuge, indolore, non prurigineux.</li>
+     <li><b>Secondaire :</b> neuroborréliose (paralysie faciale, méningite), arthrite, cardite (BAV).</li>
+     <li><b>Tertiaire :</b> arthrite chronique, encéphalopathie.</li>
+   </ul>
+   <h3>Traitement</h3>
+   <p>Phase primaire : <b>Amoxicilline 3 g/j × 14 j</b> ou Doxycycline 200 mg/j × 14 j.<br>Formes neuro graves : Ceftriaxone IV 2 g/j × 21 j.</p>`}
+];
+
+const QCMS=[
+  {id:'q1',type:'QRU',tags:['cardio','infectio'],src:'ECN 2019 — Item 149',
+   q:"Quel est le signe cutané périphérique caractéristique de l'endocardite infectieuse ?",
+   opts:[
+     {t:"Érythème migrant",ok:false,j:"L'érythème migrant est la lésion pathognomonique de la phase primaire de la maladie de Lyme. Il s'étend de façon centrifuge et est indolore.",cid:'c_lyme',cl:'Voir cours Maladie de Lyme'},
+     {t:"Faux panaris d'Osler",ok:true,j:"Nodules douloureux et fugaces de la pulpe des doigts, causés par des complexes immuns ou micro-emboles septiques. Signe périphérique classique de l'endocardite.",cid:'c_endo',cl:"Revoir l'Endocardite"},
+     {t:"Signe de Koplik",ok:false,j:"Taches blanchâtres sur la muqueuse jugale, strictement pathognomoniques de la rougeole. Rien à voir avec l'endocardite."}
+   ]},
+  {id:'q2',type:'QRU',tags:['cardio'],src:'ECN 2021 — Item 234',
+   q:"Quel traitement est formellement contre-indiqué en phase aiguë initiale d'un OAP cardiogénique ?",
+   opts:[
+     {t:"Furosémide IV",ok:false,j:"Au contraire, le furosémide IV est le traitement de 1ère intention. Il réduit rapidement la surcharge hydrosodée.",cid:'c_ica',cl:'Revoir l\'ICA'},
+     {t:"Dérivés nitrés IV",ok:false,j:"Les dérivés nitrés sont indiqués en aigu pour réduire la précharge par vasodilatation veineuse."},
+     {t:"Bêtabloquants",ok:true,j:"Formellement contre-indiqués en phase aiguë : leur effet inotrope négatif risque d'aggraver la dysfonction ventriculaire et le bas débit.",cid:'c_ica',cl:'Revoir l\'ICA'}
+   ]},
+  // NOUVEAU QCM : RYTHMOLOGIE
+  {id:'q_rythmo_1',type:'QRU',tags:['cardio', 'rythmo'],src:'Création Révision — Rythmologie',
+   q:"Parmi ces descriptions, laquelle correspond à l'aspect ECG caractéristique d'une Fibrillation Atriale (FA) ?",
+   opts:[
+     {t:"Ondes P régulières en dents de scie, à une fréquence d'environ 300/min",ok:false,j:"Cette description est celle du Flutter Atrial commun, et non de la FA."},
+     {t:"Absence d'ondes P, trémulation de la ligne de base et intervalle R-R irrégulier",ok:true,j:"C'est la définition exacte de la FA à l'ECG. L'activité atriale est anarchique (ondes f) et la transmission aux ventricules est irrégulière.",cid:'c_fa',cl:"Revoir la FA"},
+     {t:"Allongement progressif de l'espace PR suivi d'une onde P bloquée",ok:false,j:"Il s'agit d'un Bloc Auriculo-Ventriculaire (BAV) de 2ème degré type Wenckebach."}
+   ]},
+  {id:'q3',type:'QRU',tags:['dermato','infectio'],src:'ECN 2022 — Item 169',
+   q:"Quelle affirmation concernant la maladie de Lyme est exacte ?",
+   opts:[
+     {t:"La sérologie est indispensable au diagnostic de phase primaire",ok:false,j:"Faux. La sérologie est souvent faussement négative en phase primaire. L'érythème migrant suffit au diagnostic clinique.",cid:'c_lyme',cl:'Revoir la Maladie de Lyme'},
+     {t:"L'érythème migrant est douloureux et prurigineux",ok:false,j:"Faux. L'érythème migrant est typiquement indolore et non prurigineux. C'est un élément clé pour le différencier d'autres lésions."},
+     {t:"Le traitement de 1ère intention en phase primaire est l'amoxicilline",ok:true,j:"Exact. Amoxicilline 3 g/j × 14 j (ou doxycycline 200 mg/j). Traitement oral, pas besoin d'IV en phase primaire.",cid:'c_lyme',cl:'Revoir la Maladie de Lyme'}
+   ]},
+  {id:'q4',type:'QRU',tags:['dermato'],src:'ECN 2020 — Item 299',
+   q:"Quelle forme de mélanome est emblée invasive et de pronostic défavorable ?",
+   opts:[
+     {t:"Mélanome superficiel extensif (SSM)",ok:false,j:"Le SSM est la forme la plus fréquente (70%). Il s'étend d'abord horizontalement, ce qui laisse du temps pour un diagnostic précoce.",cid:'c_mel',cl:'Revoir le Mélanome'},
+     {t:"Mélanome nodulaire",ok:true,j:"Le mélanome nodulaire croît emblée en profondeur (phase verticale immédiate). Il est souvent diagnostiqué à un stade avancé et son pronostic est défavorable.",cid:'c_mel',cl:'Revoir le Mélanome'},
+     {t:"Mélanome acrolentigineux",ok:false,j:"Le mélanome acrolentigineux est rare mais souvent diagnostiqué tard (zones peu visibles), pas emblée invasif comme le nodulaire."}
+   ]}
+];
+
+// Initialisation au chargement de la page
+window.onload = () => {
+  // MAJ du nombre total de QCMs existants dans l'application
+  document.getElementById('st-tot-qcm').textContent = QCMS.length;
+  updateStats();
+  updateProg();
+};
+
+function goHome(){show('s-home');ST.mat=null}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+
+function openMat(id){
+  ST.mat=id;
+  const m=MATS[id];
+  document.getElementById('mat-titre').textContent=m.nom;
+  document.getElementById('mat-desc').textContent=m.desc;
+  switchTab('cours');
+  show('s-mat');
+}
+
+function switchTab(tab){
+  document.getElementById('t-cours').classList.toggle('active',tab==='cours');
+  document.getElementById('t-qcm').classList.toggle('active',tab==='qcm');
+  document.getElementById('tc-cours').style.display=tab==='cours'?'block':'none';
+  document.getElementById('tc-qcm').style.display=tab==='qcm'?'block':'none';
+  if(tab==='cours') renderCours(); else renderQCMs();
+}
+
+function renderCours(){
+  const el=document.getElementById('tc-cours');
+  const list=COURS.filter(c=>c.tags.includes(ST.mat));
+  if(!list.length){el.innerHTML='<div class="empty">Aucun cours disponible.</div>';return}
+  el.innerHTML=list.map(c=>{
+    // Création dynamique des badges en fonction des tags
+    let badges = '';
+    if (c.tags.length > 1 && !c.tags.includes('rythmo')) badges += '<span class="tag-badge tag-multi">Multi-spé</span>';
+    if (c.tags.includes('rythmo')) badges += '<span class="tag-badge tag-rythmo">Rythmologie</span>';
+
+    return `
+    <div class="cours-item" onclick="openCours('${c.id}','mat')">
+      <div class="ci-left">
+        <div class="ci-dot">📄</div>
+        <div class="ci-info">
+          <h4>${c.titre} <span class="tags-container">${badges}</span></h4>
+          <span>${c.desc}</span>
+        </div>
+      </div>
+      <span class="ci-arrow">›</span>
+    </div>`
+  }).join('');
+}
+
+function renderQCMs(){
+  const el=document.getElementById('tc-qcm');
+  const list=QCMS.filter(q=>q.tags.includes(ST.mat));
+  if(!list.length){el.innerHTML='<div class="empty">Aucun QCM disponible.</div>';return}
+  const done=list.filter(q=>ST.done[q.id]).length;
+  el.innerHTML=`<div class="session-bar"><span>Progression</span><strong>${done} / ${list.length} QCMs</strong></div>`
+    +list.map(q=>{
+      const d=ST.done[q.id];
+      // Badge spécial Rythmologie si présent
+      let badgeRythmo = q.tags.includes('rythmo') ? `<span class="badge-type" style="background:rgba(236,72,153,0.12);color:var(--rythmo);border:1px solid rgba(236,72,153,0.2)">Rythmologie</span>` : '';
+
+      return `<div class="qcm-card" id="${q.id}">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:2px">
+          <span class="badge-type ${q.type.toLowerCase()}">${q.type}</span>
+          ${badgeRythmo}
+          ${d?`<span class="chip ${d.ok?'ok':'ko'}">${d.ok?'✓ Réussi':'✗ Raté'}</span>`:''}
+        </div>
+        <div class="badge-source">📚 ${q.src}</div>
+        <div class="q-text">${q.q}</div>
+        <div class="opts" id="opts-${q.id}" data-corrected="${d?'1':'0'}">
+          ${q.opts.map((o,i)=>{
+            let cls='opt';
+            if(d){if(o.ok)cls+=' ok';else if(d.sel===i)cls+=' ko'}
+            const L=String.fromCharCode(65+i);
+            return `<div class="${cls}" data-ok="${o.ok}" onclick="selOpt(this,'${q.id}')">
+              <div class="opt-letter">${L}</div>
+              <div class="opt-body">
+                <div class="opt-text">${o.t}</div>
+                ${d&&o.j?`<div class="expl ${o.ok?'good':'bad'} vis">
+                  <div class="expl-lbl">${o.ok?'Correct':'Incorrect'}</div>
+                  <p>${o.j}</p>
+                  ${o.cid?`<button class="btn-cours-lien" onclick="event.stopPropagation();openCours('${o.cid}','qcm')">📖 ${o.cl}</button>`:''}
+                </div>`:''}
+              </div>
+            </div>`
+          }).join('')}
+        </div>
+        ${!d?`<button class="btn-verify" id="bv-${q.id}" onclick="verify('${q.id}')" disabled>Vérifier</button>
+        <div class="feedback" id="fb-${q.id}"></div>`:''}
+      </div>`
+    }).join('')
+}
+
+function selOpt(el,qid){
+  const list=document.getElementById('opts-'+qid);
+  if(list.getAttribute('data-corrected')==='1') return;
+  list.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('bv-'+qid).disabled=false;
+}
+
+function verify(qid){
+  const list=document.getElementById('opts-'+qid);
+  if(list.getAttribute('data-corrected')==='1') return;
+  list.setAttribute('data-corrected','1');
+  const q=QCMS.find(x=>x.id===qid);
+  const opts=list.querySelectorAll('.opt');
+  let win=false,sel=-1;
+  opts.forEach((opt,i)=>{
+    const isOk=opt.getAttribute('data-ok')==='true';
+    const isSel=opt.classList.contains('sel');
+    const o=q.opts[i];
+    if(isSel) sel=i;
+    if(isOk){opt.classList.add('ok');if(isSel) win=true}
+    else if(isSel) opt.classList.add('ko');
+    if(o.j){
+      const ex=document.createElement('div');
+      ex.className=`expl ${isOk?'good':'bad'} vis`;
+      ex.innerHTML=`<div class="expl-lbl">${isOk?'Correct':'Incorrect'}</div><p>${o.j}</p>${o.cid?`<button class="btn-cours-lien" onclick="event.stopPropagation();openCours('${o.cid}','qcm')">📖 ${o.cl}</button>`:''}`;
+      opt.querySelector('.opt-body').appendChild(ex);
+    }
+  });
+  ST.done[qid]={ok:win,sel};
+  ST.qcm++;if(win) ST.ok++;
+  updateStats();updateProg();
+  const fb=document.getElementById('fb-'+qid);
+  const bv=document.getElementById('bv-'+qid);
+  if(fb){fb.className='feedback '+(win?'ok':'ko');fb.textContent=win?'Excellente réponse ! 🎉':'Pas tout à fait — consultez les explications.'}
+  if(bv) bv.style.display='none';
+  const sb=document.querySelector('#tc-qcm .session-bar strong');
+  if(sb){const l=QCMS.filter(q=>q.tags.includes(ST.mat));const d=l.filter(q=>ST.done[q.id]).length;sb.textContent=`${d} / ${l.length} QCMs`}
+}
+
+function openCours(id,from){
+  ST.from=from;
+  const c=COURS.find(x=>x.id===id);
+  document.getElementById('lec-body').innerHTML=c.html;
+  show('s-lec');
+}
+
+function backCours(){
+  show('s-mat');
+  if(ST.from==='qcm') switchTab('qcm'); else switchTab('cours');
+}
+
+function updateStats(){
+  document.getElementById('st-qcm-faits').textContent=ST.qcm;
+  document.getElementById('st-score').textContent=ST.qcm>0?Math.round(ST.ok/ST.qcm*100)+'%':'—';
+}
+
+function updateProg(){
+  ['cardio','dermato','infectio'].forEach(m=>{
+    const tot=QCMS.filter(q=>q.tags.includes(m)).length;
+    if(!tot) return;
+    const done=QCMS.filter(q=>q.tags.includes(m)&&ST.done[q.id]).length;
+    const pct=Math.round(done/tot*100);
+    const f=document.getElementById('pg-'+m);
+    const l=document.getElementById('pgl-'+m);
+    if(f) f.style.width=pct+'%';
+    if(l) l.textContent=`${done} / ${tot} tenté${done>1?'s':''}`;
+  });
+}
+</script>
+</body>
+</html>

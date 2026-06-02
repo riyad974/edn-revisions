@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte Mentale - EDN</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #060810;
+  color: #f1f5f9;
+  height: 100vh;
+  overflow: hidden; /* Désactive le scroll de la page */
+}
+
+/* Orbes de fond */
+.ambient { position: fixed; border-radius: 50%; filter: blur(140px); pointer-events: none; z-index: 0; opacity: 0.25; }
+.o1 { width: 500px; height: 500px; background: #6366f1; top: -100px; left: -100px; }
+.o2 { width: 500px; height: 500px; background: #38bdf8; bottom: -100px; right: -100px; }
+
+/* En-tête */
+.header { position: absolute; top: 30px; left: 30px; z-index: 10; }
+.header h1 { font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+.header p { font-size: 0.85rem; color: #64748b; margin-top: 4px; }
+
+.btn-retour {
+  position: absolute; top: 30px; right: 30px; z-index: 10;
+  background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 16px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.85rem;
+  transition: all 0.2s; opacity: 0; pointer-events: none; transform: translateY(-10px);
+}
+.btn-retour.vis { opacity: 1; pointer-events: all; transform: translateY(0); }
+.btn-retour:hover { background: rgba(255,255,255,0.1); }
+
+/* SYSTEME DE VUE (VIEWPORT & CANVAS) */
+#viewport {
+  position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+  overflow: hidden; z-index: 1;
+}
+
+#canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 0;
+  /* L'origine de la transformation est le point 0,0 du canvas */
+  transform-origin: 0 0;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Lignes SVG connectant les noeuds */
+#lines {
+  position: absolute; top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  overflow: visible; pointer-events: none;
+}
+path.link {
+  fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 2px;
+  transition: stroke 0.4s, stroke-width 0.4s;
+}
+path.link.active { stroke: var(--link-color); stroke-width: 3px; filter: drop-shadow(0 0 4px var(--link-color)); }
+path.link.hidden { opacity: 0; }
+
+/* LES BULLES (NODES) */
+.node {
+  position: absolute;
+  transform: translate(-50%, -50%); /* Centre la div sur ses coordonnées x,y */
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border-radius: 16px; cursor: pointer; transition: all 0.3s;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.node:hover { transform: translate(-50%, -50%) scale(1.05); }
+
+/* Racine (Spécialités) */
+.node-root {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  width: 130px; height: 60px;
+  font-size: 1rem; font-weight: 800; color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+}
+
+/* Niveau 1 (Cardio, Pneumo...) */
+.node-l1 {
+  background: rgba(15, 23, 42, 0.8);
+  width: 150px; padding: 12px 10px;
+  backdrop-filter: blur(8px);
+}
+.node-l1 .ico { font-size: 1.4rem; margin-bottom: 4px; }
+.node-l1 .lbl { font-size: 0.85rem; font-weight: 700; color: #f1f5f9; }
+
+/* Niveau 2 (Rythmologie, Valvulo...) */
+.node-l2 {
+  background: rgba(15, 23, 42, 0.9);
+  padding: 10px 14px; border-radius: 30px;
+  font-size: 0.75rem; font-weight: 600; color: #cbd5e1;
+  opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.5);
+}
+.node-l2.vis {
+  opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1);
+}
+.node-l2:hover { background: var(--l2-color); color: #fff; border-color: transparent; }
+
+/* État inactif (quand on zoom sur une autre branche) */
+.node.dimmed { opacity: 0.15; pointer-events: none; filter: grayscale(1); }
+
+</style>
+</head>
+<body>
+
+<div class="ambient o1"></div>
+<div class="ambient o2"></div>
+
+<div class="header">
+  <h1>Atlas des Connaissances</h1>
+  <p>Carte mentale interactive des spécialités EDN</p>
+</div>
+
+<button class="btn-retour" id="btnBack" onclick="resetView()">⟵ Vue Globale</button>
+
+<div id="viewport">
+  <div id="canvas">
+    <svg id="lines"></svg>
+    </div>
+</div>
+
+<script>
+// --- 1. LES DONNÉES DE LA CARTE ---
+const mapData = {
+  id: 'root', label: 'Spécialités', type: 'root',
+  children: [
+    { 
+      id: 'cardio', label: 'Cardiologie', ico: '🫀', color: '#ff4b6b', 
+      children: [
+        { id: 'c1', label: 'Rythmologie' },
+        { id: 'c2', label: 'Valvulopathie' },
+        { id: 'c3', label: 'Coronaropathie' },
+        { id: 'c4', label: 'Insuffisance Cardiaque' }
+      ]
+    },
+    { 
+      id: 'hge', label: 'Hépato-Gastro', ico: '🍕', color: '#f97316', 
+      children: [
+        { id: 'h1', label: 'Hémorragies Dig.' },
+        { id: 'h2', label: 'Cirrhose' },
+        { id: 'h3', label: 'MICI' }
+      ]
+    },
+    { 
+      id: 'pneumo', label: 'Pneumologie', ico: '🫁', color: '#06b6d4', 
+      children: [
+        { id: 'p1', label: 'Asthme & BPCO' },
+        { id: 'p2', label: 'Infections Resp.' },
+        { id: 'p3', label: 'Embolie Pulmonaire' }
+      ]
+    },
+    { 
+      id: 'dermato', label: 'Dermatologie', ico: '🩺', color: '#38bdf8', 
+      children: [
+        { id: 'd1', label: 'Mélanome' },
+        { id: 'd2', label: 'Toxidermies' },
+        { id: 'd3', label: 'Dermatoses Bulleuses' }
+      ]
+    },
+    { 
+      id: 'neuro', label: 'Neurologie', ico: '🧠', color: '#a855f7', 
+      children: [
+        { id: 'n1', label: 'AVC' },
+        { id: 'n2', label: 'Épilepsie' },
+        { id: 'n3', label: 'Céphalées' }
+      ]
+    },
+    { 
+      id: 'infectio', label: 'Infectiologie', ico: '🦠', color: '#22c55e', 
+      children: [
+        { id: 'i1', label: 'VIH' },
+        { id: 'i2', label: 'Lyme & Tiques' },
+        { id: 'i3', label: 'Antibiothérapie' }
+      ]
+    }
+  ]
+};
+
+// --- 2. LE MOTEUR DE RENDU (Coordonnées + DOM) ---
+const canvas = document.getElementById('canvas');
+const svgLines = document.getElementById('lines');
+const btnBack = document.getElementById('btnBack');
+
+const RADIUS_L1 = 220; // Distance du centre pour les matières
+const RADIUS_L2 = 160; // Distance des sous-parties par rapport à leur matière
+
+let nodes = [];
+let links = [];
+
+// Fonction mathématique pour générer les coordonnées polaires (Cercle et Éventail)
+function generateCoordinates() {
+  // Noeud central (Root)
+  nodes.push({ id: mapData.id, label: mapData.label, type: 'root', x: 0, y: 0 });
+
+  const l1Count = mapData.children.length;
+  const angleStepL1 = (Math.PI * 2) / l1Count;
+
+  mapData.children.forEach((l1, i) => {
+    // Calcul de la position de la Spécialité (En cercle)
+    const angleL1 = i * angleStepL1;
+    const xL1 = Math.cos(angleL1) * RADIUS_L1;
+    const yL1 = Math.sin(angleL1) * RADIUS_L1;
+
+    nodes.push({ id: l1.id, label: l1.label, ico: l1.ico, color: l1.color, type: 'l1', parent: 'root', x: xL1, y: yL1 });
+    links.push({ source: 'root', target: l1.id, color: l1.color });
+
+    // Calcul de la position des sous-parties (En éventail autour de la spécialité)
+    if (l1.children) {
+      const l2Count = l1.children.length;
+      // On répartit les sous-parties sur un arc de 120 degrés tourné vers l'extérieur
+      const spreadAngle = (120 * Math.PI) / 180; 
+      const startAngle = angleL1 - (spreadAngle / 2);
+      const stepAngleL2 = l2Count > 1 ? spreadAngle / (l2Count - 1) : 0;
+
+      l1.children.forEach((l2, j) => {
+        const angleL2 = l2Count > 1 ? startAngle + (j * stepAngleL2) : angleL1;
+        const xL2 = xL1 + Math.cos(angleL2) * RADIUS_L2;
+        const yL2 = yL1 + Math.sin(angleL2) * RADIUS_L2;
+
+        nodes.push({ id: l2.id, label: l2.label, color: l1.color, type: 'l2', parent: l1.id, x: xL2, y: yL2 });
+        links.push({ source: l1.id, target: l2.id, color: l1.color, isL2: true });
+      });
+    }
+  });
+}
+
+// Fonction pour dessiner les éléments HTML et SVG
+function renderMap() {
+  // 1. Dessiner les lignes SVG (Courbes de Bézier pour un effet naturel)
+  let svgHTML = '';
+  links.forEach(link => {
+    const src = nodes.find(n => n.id === link.source);
+    const tgt = nodes.find(n => n.id === link.target);
+    // Création d'une courbe en 'S'
+    const path = `M ${src.x} ${src.y} C ${src.x} ${tgt.y}, ${tgt.x} ${src.y}, ${tgt.x} ${tgt.y}`;
+    svgHTML += `<path id="link-${link.target}" class="link ${link.isL2 ? 'hidden' : ''}" d="${path}" style="--link-color: ${link.color};"></path>`;
+  });
+  svgLines.innerHTML = svgHTML;
+
+  // 2. Dessiner les noeuds HTML
+  nodes.forEach(node => {
+    const el = document.createElement('div');
+    el.id = `node-${node.id}`;
+    el.style.left = `${node.x}px`;
+    el.style.top = `${node.y}px`;
+
+    if (node.type === 'root') {
+      el.className = 'node node-root';
+      el.innerText = node.label;
+      el.onclick = () => resetView();
+    } 
+    else if (node.type === 'l1') {
+      el.className = 'node node-l1';
+      el.style.border = `1px solid ${node.color}44`;
+      el.innerHTML = `<div class="ico">${node.ico}</div><div class="lbl">${node.label}</div>`;
+      el.onclick = () => focusNode(node);
+    } 
+    else if (node.type === 'l2') {
+      el.className = `node node-l2 l2-child-of-${node.parent}`;
+      el.style.setProperty('--l2-color', node.color);
+      el.innerText = node.label;
+      // Action quand on clique sur le cours final (Ouvre la matière)
+      el.onclick = () => alert(`Lancement du module : ${node.label}`);
+    }
+    
+    canvas.appendChild(el);
+  });
+}
+
+// --- 3. L'INTERACTIVITÉ ET LE ZOOM ---
+
+function centerCanvas(targetX = 0, targetY = 0, scale = 1) {
+  const vW = window.innerWidth;
+  const vH = window.innerHeight;
+  // Calcul pour placer la coordonnée cible exactement au milieu de l'écran
+  const offsetX = (vW / 2) - (targetX * scale);
+  const offsetY = (vH / 2) - (targetY * scale);
+  canvas.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+}
+
+function focusNode(targetNode) {
+  // 1. Appliquer le zoom sur le noeud
+  centerCanvas(targetNode.x, targetNode.y, 1.4);
+  btnBack.classList.add('vis');
+
+  // 2. Gérer la visibilité (Cacher les autres, Afficher les enfants)
+  nodes.forEach(n => {
+    const el = document.getElementById(`node-${n.id}`);
+    
+    // Gérer les noeuds L1 (Diminuer l'opacité des non-sélectionnés)
+    if (n.type === 'l1') {
+      if (n.id === targetNode.id) el.classList.remove('dimmed');
+      else el.classList.add('dimmed');
+    }
+    
+    // Gérer les noeuds L2 (Afficher seulement ceux du noeud cliqué)
+    if (n.type === 'l2') {
+      if (n.parent === targetNode.id) el.classList.add('vis');
+      else el.classList.remove('vis');
+    }
+  });
+
+  // 3. Allumer/Cacher les lignes
+  links.forEach(l => {
+    const path = document.getElementById(`link-${l.target}`);
+    if (!path) return;
+    
+    if (l.isL2) {
+      if (l.source === targetNode.id) { path.classList.remove('hidden'); path.classList.add('active'); }
+      else { path.classList.add('hidden'); path.classList.remove('active'); }
+    } else {
+      if (l.target === targetNode.id) path.classList.add('active');
+      else path.classList.remove('active');
+    }
+  });
+}
+
+function resetView() {
+  // 1. Remettre le zoom par défaut au centre (scale auto-adaptatif selon l'écran)
+  const baseScale = window.innerWidth < 800 ? 0.6 : 0.9;
+  centerCanvas(0, 0, baseScale);
+  btnBack.classList.remove('vis');
+
+  // 2. Réinitialiser la visibilité
+  document.querySelectorAll('.node.dimmed').forEach(el => el.classList.remove('dimmed'));
+  document.querySelectorAll('.node-l2.vis').forEach(el => el.classList.remove('vis'));
+  
+  document.querySelectorAll('path.link').forEach(path => {
+    path.classList.remove('active');
+    if (path.classList.contains('hidden') === false && path.id.startsWith('link-') && document.getElementById(path.id.replace('link-','node-')).classList.contains('node-l2')) {
+      path.classList.add('hidden'); // Recacher les lignes niveau 2
+    }
+  });
+}
+
+// Initialisation au lancement
+window.onload = () => {
+  generateCoordinates();
+  renderMap();
+  
+  // Timeout pour faire un effet de zoom-in stylé à l'ouverture de la page
+  setTimeout(() => resetView(), 100); 
+};
+
+// Ajuster le centre si on redimensionne la fenêtre
+window.onresize = () => {
+  if (!btnBack.classList.contains('vis')) resetView();
+};
+
+</script>
+</body>
+</html>

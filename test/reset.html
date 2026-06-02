@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Révisions - Premium</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ========================================== */
+        /* 1. VARIABLES DE DESIGN                     */
+        /* ========================================== */
+        :root {
+            --bg-color: #0b0f19; --text-color: #f8fafc; --text-muted: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.4); --card-border: rgba(255, 255, 255, 0.05);
+            --success-color: #22c55e; --error-color: #ef4444; --primary-color: #3b82f6;
+            
+            --cardio: linear-gradient(135deg, #ff4b6b, #ff758c); --cardio-glow: rgba(255, 75, 107, 0.25);
+            --dermato: linear-gradient(135deg, #38bdf8, #0369a1); --dermato-glow: rgba(56, 189, 248, 0.25);
+            --neuro: linear-gradient(135deg, #a855f7, #6366f1); --neuro-glow: rgba(168, 85, 247, 0.25);
+            --infectio: linear-gradient(135deg, #22c55e, #10b981); --infectio-glow: rgba(34, 197, 94, 0.25);
+            
+            --theme-actuel: var(--primary-color); /* Sera modifié en JS selon la matière */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif; margin: 0; padding: 25px 20px;
+            background-color: var(--bg-color); color: var(--text-color);
+            -webkit-tap-highlight-color: transparent; min-height: 100vh;
+        }
+
+        body::before {
+            content: ""; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+            width: 300px; height: 300px; background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            z-index: -1; pointer-events: none;
+        }
+
+        .header { margin-bottom: 35px; margin-top: 10px; }
+        .header h1 { font-size: 2.2rem; margin: 0 0 8px 0; font-weight: 800; letter-spacing: -0.5px; }
+        .header p { margin: 0; color: var(--text-muted); font-size: 1rem; }
+        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; letter-spacing: -0.2px; }
+
+        /* Grille Accueil */
+        .grid-matieres { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 16px; }
+        .card-matiere {
+            background: var(--card-bg); border-radius: 24px; padding: 24px; border: 1px solid var(--card-border);
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .card-matiere:active { transform: scale(0.96); }
+        .icon-wrapper { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.4rem; margin-bottom: 20px; }
+        .card-matiere h3 { margin: 0 0 6px 0; font-size: 1.2rem; font-weight: 700; }
+        .badge-stats { font-size: 0.8rem; color: var(--text-muted); background: rgba(255, 255, 255, 0.04); padding: 4px 10px; border-radius: 20px; }
+
+        .cardio .icon-wrapper { background: var(--cardio); box-shadow: 0 8px 20px var(--cardio-glow); }
+        .dermato .icon-wrapper { background: var(--dermato); box-shadow: 0 8px 20px var(--dermato-glow); }
+        .neuro .icon-wrapper { background: var(--neuro); box-shadow: 0 8px 20px var(--neuro-glow); }
+        .infectio .icon-wrapper { background: var(--infectio); box-shadow: 0 8px 20px var(--infectio-glow); }
+
+        /* Éléments génériques */
+        .btn-retour {
+            background: rgba(255,255,255,0.05); color: #f8fafc; border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 18px; border-radius: 12px; cursor: pointer; font-family: inherit; font-weight: 600;
+            margin-bottom: 25px; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s;
+        }
+        .box-contenu { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 24px; margin-bottom: 25px; }
+
+        /* Listes de cours */
+        .item-liste {
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 18px; border-radius: 16px; cursor: pointer; transition: all 0.2s ease; margin-bottom: 12px;
+        }
+        .item-liste:last-child { margin-bottom: 0; }
+        .item-liste:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); transform: translateX(2px); }
+        .item-info h4 { margin: 0 0 4px 0; font-size: 1rem; font-weight: 600; }
+        .item-info span { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Badges de types de QCM */
+        .badge-type { display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .badge-qru { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .badge-qrm { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); }
+        .badge-kfp { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); }
+
+        /* QCMs */
+        .zone-qcm { background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.02); border-radius: 16px; padding: 15px; margin-bottom: 25px; }
+        .zone-qcm:last-child { margin-bottom: 0; }
+        .question-text { font-weight: 600; margin-bottom: 18px; font-size: 1.05rem; }
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+        
+        /* Ajustement flex pour accueillir les explications sur une nouvelle ligne */
+        .option-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 16px; border-radius: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; transition: all 0.2s ease; }
+        .option-item-content { display: flex; align-items: center; gap: 12px; width: 100%; }
+        
+        .option-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+        .option-item.selected { border-color: var(--theme-actuel); background: rgba(255, 255, 255, 0.02); }
+        .option-item.correct { background: rgba(34, 197, 94, 0.15) !important; border-color: var(--success-color) !important; color: #4ade80; font-weight: 600; }
+        .option-item.incorrect { background: rgba(239, 68, 68, 0.15) !important; border-color: var(--error-color) !important; color: #f87171; }
+
+        /* Style des explications/justifications */
+        .justif-text {
+            font-size: 0.88rem;
+            margin-top: 4px;
+            padding-left: 28px; /* Aligné avec le texte de l'option */
+            color: #cbd5e1;
+            font-weight: 400;
+            line-height: 1.45;
+        }
+
+        .btn-verifier { background: #ffffff; color: #0b0f19; border: none; padding: 12px 24px; border-radius: 14px; font-family: inherit; font-weight: 700; width: 100%; cursor: pointer; margin-top: 20px; }
+        .feedback-qcm { margin-top: 15px; font-size: 0.9rem; font-weight: 600; text-align: center; min-height: 20px; }
+
+        /* Lecture Cours */
+        .ecran-lecture-cours { background: #0e1424; border-radius: 28px; padding: 30px 24px; border: 1px solid rgba(255, 255, 255, 0.03); line-height: 1.7; }
+        .ecran-lecture-cours h2 { font-size: 1.6rem; font-weight: 800; margin-top: 0; margin-bottom: 15px; color: var(--theme-actuel); }
+        .ecran-lecture-cours h3 { color: #f8fafc; font-size: 1.1rem; margin-top: 20px; }
+        .ecran-lecture-cours p, .ecran-lecture-cours ul { color: #cbd5e1; font-size: 1rem; margin-bottom: 20px; }
+        
+        /* Message vide */
+        .empty-state { text-align: center; color: var(--text-muted); font-size: 0.9rem; font-style: italic; padding: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="ecran-accueil">
+        <div class="header">
+            <h1 style="background: linear-gradient(135deg, #ffffff 40%, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Mon Espace Révisions</h1>
+            <p>Prêt pour une session d'apprentissage ?</p>
+        </div>
+        <div class="section-title">Spécialités Médicales</div>
+        <div class="grid-matieres">
+            <div class="card-matiere cardio" onclick="ouvrirMatiere('cardio')">
+                <div class="icon-wrapper"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h3>Cardio</h3>
+            </div>
+            <div class="card-matiere dermato" onclick="ouvrirMatiere('dermato')">
+                <div class="icon-wrapper"><i class="fa-solid fa-hand-dots"></i></div>
+                <h3>Dermato</h3>
+            </div>
+            <div class="card-matiere infectio" onclick="ouvrirMatiere('infectio')">
+                <div class="icon-wrapper"><i class="fa-solid fa-virus"></i></div>
+                <h3>Infectio</h3>
+            </div>
+        </div>
+    </div>
+
+    <div id="ecran-matiere" style="display: none;">
+        <button class="btn-retour" onclick="retourAccueil()"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+        <div class="header">
+            <h1 id="titre-matiere">Titre</h1> 
+            <p>Espace d'entraînement et d'apprentissage</p>
+        </div>
+
+        <div class="section-title">📖 Cours</div>
+        <div class="box-contenu" id="conteneur-liste-cours"></div>
+
+        <div class="section-title">💡 Banque de QCM</div>
+        <div id="conteneur-liste-qcm"></div>
+    </div>
+
+    <div id="ecran-lecture" style="display: none;">
+        <button class="btn-retour" onclick="retourMatiere()"><i class="fa-solid fa-arrow-left"></i> Retour au module</button>
+        <div class="ecran-lecture-cours" id="conteneur-texte-cours"></div>
+    </div>
+
+
+    <script>
+        // 1. CONFIGURATION DES MATIÈRES
+        const configMatieres = {
+            'cardio': { nom: '🫀 Cardiologie', couleur: 'var(--cardio)' },
+            'dermato': { nom: '🩺 Dermatologie', couleur: 'var(--dermato)' },
+            'infectio': { nom: '🦠 Infectiologie', couleur: 'var(--infectio)' }
+        };
+
+        // 2. BANQUE DE COURS
+        const banqueCours = [
+            {
+                id: 'c_endo',
+                titre: 'Endocardite Infectieuse',
+                desc: 'Diagnostic, physiopathologie et traitements',
+                tags: ['cardio', 'infectio'],
+                contenu: `
+                    <h2>Endocardite Infectieuse</h2>
+                    <p>L'endocardite infectieuse est une infection de l'endocarde, le plus souvent valvulaire, caractérisée par la formation de végétations.</p>
+                    <h3>1. Signes cliniques :</h3>
+                    <ul>
+                        <li>Fièvre prolongée (souvent inexpliquée au début).</li>
+                        <li>Apparition ou modification d'un souffle cardiaque.</li>
+                        <li>Signes périphériques : Faux panaris d'Osler, placards de Janeway.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 'c_melanome',
+                titre: 'Le Mélanome Maligne',
+                desc: 'Dépistage et critères ABCDE',
+                tags: ['dermato'],
+                contenu: `
+                    <h2>Le Mélanome</h2>
+                    <p>Tumeur maligne développée aux dépens des mélanocytes.</p>
+                    <h3>Règle ABCDE :</h3>
+                    <ul><li>Asymétrie, Bords irréguliers, Couleur hétérogène...</li></ul>
+                `
+            }
+        ];
+
+        // 3. BANQUE DE QCM AVEC INTÉGRATION DES EXPLICATIONS (justif)
+        const banqueQCM = [
+            {
+                id: 'q_endo_1',
+                type: 'QRU',
+                tags: ['cardio', 'infectio'],
+                question: 'Quel est le signe cutané périphérique classique de l\'endocardite infectieuse ?',
+                options: [
+                    { texte: 'Érythème migrant', correct: false, justif: 'L\'érythème migrant est la lésion pathognomonique de la phase primaire de la maladie de Lyme (borréliose).' },
+                    { texte: 'Faux panaris d\'Osler', correct: true, justif: 'C\'est une lésion nodulaire, nodulaire éphémère et douloureuse des pulpes digitales, très évocatrice d\'un processus immunologique ou embolique d\'endocardite.' },
+                    { texte: 'Signe de Koplik', correct: false, justif: 'Le signe de Koplik (taches blanchâtres sur muqueuse jugale) est caractéristique de la phase d\'invasion de la rougeole.' }
+                ]
+            },
+            {
+                id: 'q_ic_1',
+                type: 'QRU',
+                tags: ['cardio'],
+                question: 'Quel est le traitement de première intention dans l\'insuffisance cardiaque aiguë ?',
+                options: [
+                    { texte: 'Bêtabloquants isolés', correct: false, justif: 'Les bêtabloquants sont contre-indiqués à la phase aiguë initiale d\'une décompensation en raison de leur effet inotrope négatif (ils s\'introduisent à distance, à dose filée et sur un patient stable).' },
+                    { texte: 'Diurétiques de l\'anse IV', correct: true, justif: 'Les diurétiques de l\'anse par voie intraveineuse permettent une déplétion rapide et efficace pour soulager la surcharge hydrosodée et l\'œdème pulmonaire.' },
+                    { texte: 'Inhibiteurs calciques', correct: false, justif: 'Les inhibiteurs calciques bradycardisants ou vasodilatateurs n\'ont pas de place en première intention et certains (comme le vérapamil) sont contre-indiqués par effet inotrope négatif.' }
+                ]
+            },
+            {
+                id: 'q_endo_multi',
+                type: 'QRM',
+                tags: ['cardio', 'infectio'],
+                question: 'Quels examens paracliniques font partie des critères majeurs de Duke pour le diagnostic d\'endocardite infectieuse ? (Plusieurs réponses possibles)',
+                options: [
+                    { texte: 'Hémocultures positives persistantes à germes typiques', correct: true, justif: 'C\'est l\'un des deux piliers des critères majeurs de Duke (critère microbiologique).' },
+                    { texte: 'Mise en évidence d\'une végétation à l\'échographie cardiaque', correct: true, justif: 'C\'est le second pilier des critères majeurs de Duke (critère d\'imagerie endocardique).' },
+                    { texte: 'Élévation de la CRP supérieure à 100 mg/L', correct: false, justif: 'Le syndrome inflammatoire biologique (CRP, VS) est un critère très fréquent mais non spécifique. Il ne retient qu\'un rôle de critère mineur dans certaines classifications ou reste un simple signe biologique d\'accompagnement.' },
+                    { texte: 'Hyperleucocytose à polynucléaires neutrophiles', correct: false, justif: 'L\'hyperleucocytose est un signe biologique aspécifique d\'infection systémique et ne constitue pas un critère majeur de Duke.' }
+                ]
+            },
+            {
+                id: 'q_kfp_dermato',
+                type: 'KFP',
+                tags: ['dermato'],
+                question: 'Un patient de 45 ans consulte pour une lésion cutanée suspecte du dos, asymétrique, à bords irréguliers, de 8 mm de diamètre, présentant plusieurs teintes de brun. Dans l\'hypothèse d\'un mélanome, quelles sont les affirmations exactes concernant sa prise en charge ?',
+                options: [
+                    { texte: 'L\'exérèse chirurgicale initiale doit être diagnostique et complète d\'emblée', correct: true, justif: 'L\'exérèse doit être complète d\'emblée (marge étroite de 2 à 5 mm) pour permettre une analyse anatomopathologique globale sur toute la pièce.' },
+                    { texte: 'Une biopsie partielle (shaving ou punching) est recommandée en première intention', correct: false, justif: 'La biopsie partielle est formellement proscrite car elle peut fausser la mesure de l\'indice de Breslow (épaisseur maximale) et augmente le risque de dissémination tumorale.' },
+                    { texte: 'Les marges d\'exérèse définitives dépendent de l\'indice de Breslow mesuré sur l\'histologie', correct: true, justif: 'Exact. La reprise chirurgicale pour obtenir des marges de sécurité définitives (de 0,5 cm à 2 cm) est ajustée précisément selon l\'épaisseur de Breslow mesurée sur la biopsie-exérèse initiale.' },
+                    { texte: 'La radiothérapie locale systématique est obligatoire après exérèse d\'un mélanome in situ', correct: false, justif: 'Le traitement du mélanome in situ repose exclusivement sur l\'exérèse chirurgicale complète avec une marge de sécurité de 0,5 cm. La radiothérapie locale n\'est pas indiquée.' },
+                    { texte: 'L\'indice de Breslow correspond à la mesure de l\'épaisseur tumorale maximale en millimètres', correct: true, justif: 'Il s\'agit de la mesure verticale allant de la couche granuleuse de l\'épiderme (ou du fond de l\'ulcération) jusqu\'à la cellule mélanique tumorale la plus profonde.' },
+                    { texte: 'La recherche du ganglion sentinelle est systématique dès que la lésion mesure plus de 0,1 mm', correct: false, justif: 'La biopsie du ganglion sentinelle n\'est pas systématique pour les lésions aussi minimes. Elle se discute généralement pour les mélanomes infiltrants à partir d\'un Breslow > 0,8 mm ou présentant des facteurs de risque histologiques.' },
+                    { texte: 'Les mutations du gène BRAF sont fréquemment recherchées dans les formes métastatiques', correct: true, justif: 'La recherche de la mutation BRAF (notamment V600E) est indispensable au stade métastatique ou non résécable pour orienter vers une thérapie ciblée (anti-BRAF + anti-MEK).' },
+                    { texte: 'Une chimiothérapie néo-adjuvante par cisplatine est indispensable avant toute chirurgie', correct: false, justif: 'La chirurgie première d\'exérèse complète reste la règle d\'or absolue. La chimiothérapie systémique classique n\'est pas un traitement standard néo-adjuvant.' }
+                ]
+            }
+        ];
+
+        // VARIABLES GLOBALES DE NAVIGATION
+        let matiereEnCours = null;
+
+        // ==========================================
+        // FONCTIONS D'AFFICHAGE (MOTEUR DE L'APP)
+        // ==========================================
+
+        function ouvrirMatiere(idMatiere) {
+            matiereEnCours = idMatiere;
+            const config = configMatieres[idMatiere];
+            
+            // 1. Mettre à jour le titre et la couleur
+            const titreEl = document.getElementById('titre-matiere');
+            titreEl.innerText = config.nom;
+            titreEl.style.background = config.couleur;
+            titreEl.style.webkitBackgroundClip = 'text';
+            titreEl.style.webkitTextFillColor = 'transparent';
+            document.documentElement.style.setProperty('--theme-actuel', config.couleur);
+
+            // 2. Filtrer et injecter les COURS correspondants
+            const coursFiltres = banqueCours.filter(cours => cours.tags.includes(idMatiere));
+            const conteneurCours = document.getElementById('conteneur-liste-cours');
+            if (coursFiltres.length > 0) {
+                conteneurCours.innerHTML = coursFiltres.map(cours => `
+                    <div class="item-liste" onclick="ouvrirCours('${cours.id}')">
+                        <div class="item-info">
+                            <h4>${cours.titre}</h4>
+                            <span>${cours.desc}</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right arrow-icon" style="color: var(--text-muted);"></i>
+                    </div>
+                `).join('');
+            } else {
+                conteneurCours.innerHTML = '<div class="empty-state">Aucun cours disponible pour le moment.</div>';
+            }
+
+            // 3. MOTEUR DE RENDU QCM ADAPTATIF
+            const qcmFiltres = banqueQCM.filter(qcm => qcm.tags.includes(idMatiere));
+            const conteneurQCM = document.getElementById('conteneur-liste-qcm');
+            if (qcmFiltres.length > 0) {
+                conteneurQCM.innerHTML = qcmFiltres.map(qcm => {
+                    const iconeInitiale = (qcm.type === 'QRU') ? 'fa-regular fa-circle' : 'fa-regular fa-square';
+                    
+                    return `
+                        <div class="zone-qcm" id="${qcm.id}">
+                            <span class="badge-type badge-${qcm.type.toLowerCase()}">${qcm.type}</span>
+                            
+                            <div class="question-text">${qcm.question}</div>
+                            <div class="options-list" data-type="${qcm.type}">
+                                ${qcm.options.map((opt, index) => `
+                                    <div class="option-item" data-correct="${opt.correct}" onclick="selectionnerOption(this)">
+                                        <div class="option-item-content">
+                                            <i class="${iconeInitiale}"></i> 
+                                            <span>${String.fromCharCode(65 + index)}) ${opt.texte}</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button class="btn-verifier" onclick="verifierReponse('${qcm.id}')">Vérifier la réponse</button>
+                            <div class="feedback-qcm"></div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                conteneurQCM.innerHTML = '<div class="empty-state">Aucun QCM disponible pour le moment.</div>';
+            }
+
+            // Navigation
+            document.getElementById('ecran-accueil').style.display = 'none';
+            document.getElementById('ecran-matiere').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function ouvrirCours(idCours) {
+            const cours = banqueCours.find(c => c.id === idCours);
+            document.getElementById('conteneur-texte-cours').innerHTML = cours.contenu;
+            
+            document.getElementById('ecran-matiere').style.display = 'none';
+            document.getElementById('ecran-lecture').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function retourAccueil() {
+            document.getElementById('ecran-matiere').style.display = 'none';
+            document.getElementById('ecran-accueil').style.display = 'block';
+            matiereEnCours = null;
+        }
+
+        function retourMatiere() {
+            document.getElementById('ecran-lecture').style.display = 'none';
+            document.getElementById('ecran-matiere').style.display = 'block';
+        }
+
+        // ===================================================
+        // LOGIQUE DES CLICS (Détection QRU vs Multi)
+        // ===================================================
+        function selectionnerOption(elementOption) {
+            const parentList = elementOption.parentElement;
+            if(parentList.classList.contains('corrected')) return;
+
+            const typeQCM = parentList.getAttribute('data-type');
+            const icon = elementOption.querySelector('.option-item-content i');
+
+            if (typeQCM === 'QRU') {
+                const toutesLesOptions = parentList.querySelectorAll('.option-item');
+                toutesLesOptions.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.querySelector('.option-item-content i').className = 'fa-regular fa-circle';
+                });
+                elementOption.classList.add('selected');
+                icon.className = 'fa-solid fa-circle-dot';
+            } else {
+                if (elementOption.classList.contains('selected')) {
+                    elementOption.classList.remove('selected');
+                    icon.className = 'fa-regular fa-square';
+                } else {
+                    elementOption.classList.add('selected');
+                    icon.className = 'fa-solid fa-square-check';
+                }
+            }
+        }
+
+        // ===================================================
+        // MOTEUR DE VERIFICATION UNIVERSEL (Avec explications)
+        // ===================================================
+        function verifierReponse(idQcm) {
+            const conteneur = document.getElementById(idQcm);
+            const listeOptions = conteneur.querySelector('.options-list');
+            const feedback = conteneur.querySelector('.feedback-qcm');
+            
+            if(listeOptions.classList.contains('corrected')) return;
+
+            const optionsSelectionnees = listeOptions.querySelectorAll('.option-item.selected');
+            if (optionsSelectionnees.length === 0) {
+                feedback.style.color = 'var(--text-muted)';
+                feedback.innerHTML = "⚠️ Sélectionnez au moins une réponse !";
+                return;
+            }
+
+            listeOptions.classList.add('corrected');
+            const toutesLesOptions = listeOptions.querySelectorAll('.option-item');
+            let estParfait = true;
+
+            // Récupération des données originales du QCM pour lire les justifications
+            const questionData = banqueQCM.find(q => q.id === idQcm);
+
+            toutesLesOptions.forEach((opt, index) => {
+                const isTrue = opt.getAttribute('data-correct') === 'true';
+                const isChecked = opt.classList.contains('selected');
+                const infosOption = questionData.options[index];
+                const icon = opt.querySelector('.option-item-content i');
+
+                if (isTrue) {
+                    opt.classList.add('correct');
+                    icon.className = 'fa-solid fa-circle-check';
+                    if (!isChecked) estParfait = false; 
+                } else {
+                    if (isChecked) {
+                        opt.classList.add('incorrect');
+                        icon.className = 'fa-solid fa-circle-xmark';
+                        estParfait = false; 
+                    }
+                }
+
+                // AJOUT : Injection dynamique de la justification (si présente)
+                if (infosOption && infosOption.justif) {
+                    const justifEl = document.createElement('div');
+                    justifEl.className = 'justif-text';
+                    
+                    // Préfixe adapté à l'exactitude de la proposition
+                    const prefixe = isTrue ? '💡 <b>Justification (Vrai) :</b> ' : '💡 <b>Explication (Faux) :</b> ';
+                    justifEl.innerHTML = prefixe + infosOption.justif;
+                    
+                    opt.appendChild(justifEl);
+                }
+            });
+
+            if (estParfait) {
+                feedback.style.color = 'var(--success-color)';
+                feedback.innerHTML = "Excellent ! Tout est exact. 🎉";
+            } else {
+                feedback.style.color = 'var(--error-color)';
+                feedback.innerHTML = "Il y a des erreurs dans vos choix. ❌";
+            }
+        }
+    </script>
+</body>
+</html>

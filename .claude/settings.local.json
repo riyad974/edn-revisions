@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Set-Content -Path 'C:\\\\Users\\\\riyad\\\\OneDrive\\\\Desktop\\\\projet\\\\index.html' -Encoding utf8 -Value '@ *)",
+      "Bash(ls /mnt/c/Users/riyad/OneDrive/Desktop/projet/ 2>/dev/null || ls \"C:/Users/riyad/OneDrive/Desktop/projet/\" 2>/dev/null || echo \"path not found\")",
+      "Bash(ls /mnt/c/Users/ 2>/dev/null | head -5; echo \"---\"; pwd; ls /proc/version 2>/dev/null | head -1 || uname -a)",
+      "Bash(ls \"C:/Users/riyad/OneDrive/Desktop/D1 S2/neurooo/\")",
+      "Bash(python3 parse_items.py)",
+      "Read(//c/c/Users/riyad/OneDrive/Desktop/projet/**)",
+      "PowerShell(if \\(!\\(Test-Path \"C:\\\\Users\\\\riyad\\\\OneDrive\\\\Desktop\\\\projet\\\\.claude\"\\)\\) { New-Item -ItemType Directory -Path \"C:\\\\Users\\\\riyad\\\\OneDrive\\\\Desktop\\\\projet\\\\.claude\" })",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(cat \"C:\\\\Users\\\\riyad\\\\AppData\\\\Roaming\\\\Claude\\\\local-agent-mode-sessions\\\\skills-plugin\\\\e71881e6-36ab-49c5-b025-0e09c766183f\\\\5f6db773-6a06-4d6d-9927-18c3992ac432\\\\skills\\\\impeccable\\\\reference\\\\product.md\" 2>/dev/null | head -80)",
+      "Bash(gh auth *)"
+    ]
+  }
+}

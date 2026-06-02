@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Révisions - Premium</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ========================================== */
+        /* 1. VARIABLES DE DESIGN                     */
+        /* ========================================== */
+        :root {
+            --bg-color: #0b0f19; --text-color: #f8fafc; --text-muted: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.4); --card-border: rgba(255, 255, 255, 0.05);
+            --success-color: #22c55e; --error-color: #ef4444; --primary-color: #3b82f6;
+            
+            --cardio: linear-gradient(135deg, #ff4b6b, #ff758c); --cardio-glow: rgba(255, 75, 107, 0.25);
+            --dermato: linear-gradient(135deg, #38bdf8, #0369a1); --dermato-glow: rgba(56, 189, 248, 0.25);
+            --neuro: linear-gradient(135deg, #a855f7, #6366f1); --neuro-glow: rgba(168, 85, 247, 0.25);
+            --infectio: linear-gradient(135deg, #22c55e, #10b981); --infectio-glow: rgba(34, 197, 94, 0.25);
+            
+            --theme-actuel: var(--primary-color);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif; margin: 0; padding: 25px 20px;
+            background-color: var(--bg-color); color: var(--text-color);
+            -webkit-tap-highlight-color: transparent; min-height: 100vh;
+        }
+
+        body::before {
+            content: ""; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+            width: 300px; height: 300px; background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            z-index: -1; pointer-events: none;
+        }
+
+        .header { margin-bottom: 35px; margin-top: 10px; }
+        .header h1 { font-size: 2.2rem; margin: 0 0 8px 0; font-weight: 800; letter-spacing: -0.5px; }
+        .header p { margin: 0; color: var(--text-muted); font-size: 1rem; }
+        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; letter-spacing: -0.2px; }
+
+        /* Grille Accueil */
+        .grid-matieres { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 16px; }
+        .card-matiere {
+            background: var(--card-bg); border-radius: 24px; padding: 24px; border: 1px solid var(--card-border);
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .card-matiere:active { transform: scale(0.96); }
+        .icon-wrapper { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.4rem; margin-bottom: 20px; }
+        .card-matiere h3 { margin: 0 0 6px 0; font-size: 1.2rem; font-weight: 700; }
+
+        .cardio .icon-wrapper { background: var(--cardio); box-shadow: 0 8px 20px var(--cardio-glow); }
+        .dermato .icon-wrapper { background: var(--dermato); box-shadow: 0 8px 20px var(--dermato-glow); }
+        .infectio .icon-wrapper { background: var(--infectio); box-shadow: 0 8px 20px var(--infectio-glow); }
+
+        /* Éléments génériques */
+        .btn-retour {
+            background: rgba(255,255,255,0.05); color: #f8fafc; border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 18px; border-radius: 12px; cursor: pointer; font-family: inherit; font-weight: 600;
+            margin-bottom: 25px; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s;
+        }
+        .box-contenu { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 24px; margin-bottom: 25px; }
+
+        /* Listes de cours */
+        .item-liste {
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 18px; border-radius: 16px; cursor: pointer; transition: all 0.2s ease; margin-bottom: 12px;
+        }
+        .item-liste:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); transform: translateX(2px); }
+        .item-info h4 { margin: 0 0 4px 0; font-size: 1rem; font-weight: 600; }
+        .item-info span { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Badges de types de QCM */
+        .badge-type { display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .badge-qru { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .badge-qrm { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); }
+        .badge-kfp { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); }
+
+        /* QCMs */
+        .zone-qcm { background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.02); border-radius: 16px; padding: 15px; margin-bottom: 25px; }
+        .question-text { font-weight: 600; margin-bottom: 18px; font-size: 1.05rem; }
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+        
+        .option-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 16px; border-radius: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; transition: all 0.2s ease; }
+        .option-item-content { display: flex; align-items: center; gap: 12px; width: 100%; }
+        
+        .option-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+        .option-item.selected { border-color: var(--theme-actuel); background: rgba(255, 255, 255, 0.02); }
+        .option-item.correct { background: rgba(34, 197, 94, 0.15) !important; border-color: var(--success-color) !important; color: #4ade80; font-weight: 600; }
+        .option-item.incorrect { background: rgba(239, 68, 68, 0.15) !important; border-color: var(--error-color) !important; color: #f87171; }
+
+        /* Bloc Explication Intelligente */
+        .justif-text {
+            font-size: 0.88rem;
+            margin-top: 6px;
+            padding-left: 28px;
+            color: #cbd5e1;
+            font-weight: 400;
+            line-height: 1.5;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Images cliniques intégrées */
+        .img-clinique {
+            display: block;
+            max-width: 220px;
+            border-radius: 8px;
+            margin-top: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Liens/Boutons d'interconnexion vers d'autres cours */
+        .btn-intercours {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+        .btn-intercours:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-verifier { background: #ffffff; color: #0b0f19; border: none; padding: 12px 24px; border-radius: 14px; font-family: inherit; font-weight: 700; width: 100%; cursor: pointer; margin-top: 20px; }
+        .feedback-qcm { margin-top: 15px; font-size: 0.9rem; font-weight: 600; text-align: center; min-height: 20px; }
+
+        /* Lecture Cours */
+        .ecran-lecture-cours { background: #0e1424; border-radius: 28px; padding: 30px 24px; border: 1px solid rgba(255, 255, 255, 0.03); line-height: 1.7; }
+        .ecran-lecture-cours h2 { font-size: 1.6rem; font-weight: 800; margin-top: 0; margin-bottom: 15px; color: var(--theme-actuel); }
+        .ecran-lecture-cours h3 { color: #f8fafc; font-size: 1.1rem; margin-top: 20px; }
+        .ecran-lecture-cours p, .ecran-lecture-cours ul { color: #cbd5e1; font-size: 1rem; margin-bottom: 20px; }
+        
+        .empty-state { text-align: center; color: var(--text-muted); font-size: 0.9rem; font-style: italic; padding: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="ecran-accueil">
+        <div class="header">
+            <h1 style="background: linear-gradient(135deg, #ffffff 40%, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Mon Espace Révisions</h1>
+            <p>Prêt pour une session d'apprentissage ?</p>
+        </div>
+        <div class="section-title">Spécialités Médicales</div>
+        <div class="grid-matieres">
+            <div class="card-matiere cardio" onclick="ouvrirMatiere('cardio')">
+                <div class="icon-wrapper"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h3>Cardio</h3>
+            </div>
+            <div class="card-matiere dermato" onclick="ouvrirMatiere('dermato')">
+                <div class="icon-wrapper"><i class="fa-solid fa-hand-dots"></i></div>
+                <h3>Dermato</h3>
+            </div>
+            <div class="card-matiere infectio" onclick="ouvrirMatiere('infectio')">
+                <div class="icon-wrapper"><i class="fa-solid fa-virus"></i></div>
+                <h3>Infectio</h3>
+            </div>
+        </div>
+    </div>
+
+    <div id="ecran-matiere" style="display: none;">
+        <button class="btn-retour" onclick="retourAccueil()"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+        <div class="header">
+            <h1 id="titre-matiere">Titre</h1> 
+            <p>Espace d'entraînement et d'apprentissage</p>
+        </div>
+
+        <div class="section-title">📖 Cours</div>
+        <div class="box-contenu" id="conteneur-liste-cours"></div>
+
+        <div class="section-title">💡 Banque de QCM</div>
+        <div id="conteneur-liste-qcm"></div>
+    </div>
+
+    <div id="ecran-lecture" style="display: none;">
+        <button class="btn-retour" onclick="gestionRetourCours()"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+        <div class="ecran-lecture-cours" id="conteneur-texte-cours"></div>
+    </div>
+
+
+    <script>
+        const configMatieres = {
+            'cardio': { nom: '🫀 Cardiologie', couleur: 'var(--cardio)' },
+            'dermato': { nom: '🩺 Dermatologie', couleur: 'var(--dermato)' },
+            'infectio': { nom: '🦠 Infectiologie', couleur: 'var(--infectio)' }
+        };
+
+        // 2. BANQUE DE COURS ENRICHIE D'INTERCONNEXIONS
+        const banqueCours = [
+            {
+                id: 'c_endo',
+                titre: 'Endocardite Infectieuse',
+                desc: 'Diagnostic, physiopathologie et traitements',
+                tags: ['cardio', 'infectio'],
+                contenu: `
+                    <h2>Endocardite Infectieuse</h2>
+                    <p>Infection bactérienne ou fongique de l'endocarde ou des valves cardiaques.</p>
+                    <h3>Signes majeurs :</h3>
+                    <ul>
+                        <li><b>Faux panaris d'Osler :</b> Nodules douloureux, éphémères, siégeant à la pulpe des doigts ou des orteils. Ils témoignent de vascularites d'hypersensibilité ou de micro-emboles septiques.</li>
+                        <li>Souffle de régurgitation cardiaque d'apparition récente.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 'c_melanome',
+                titre: 'Le Mélanome Malin',
+                desc: 'Dépistage et critères ABCDE',
+                tags: ['dermato'],
+                contenu: `
+                    <h2>Le Mélanome</h2>
+                    <p>Tumeur maligne hautement agressive développée aux dépens des mélanocytes cutanés.</p>
+                `
+            },
+            {
+                id: 'c_rougeole',
+                titre: 'La Rougeole (Morbilli)',
+                desc: 'Infection à Paramyxoviridae & Signe de Koplik',
+                tags: ['infectio'],
+                contenu: `
+                    <h2>La Rougeole</h2>
+                    <p>Infection virale éruptive hautement contagieuse.</p>
+                    <h3>Le Signe de Koplik :</h3>
+                    <p>Il apparaît à la phase d'invasion (prodromique). Ce sont de petites taches blanchâtres ou bleu-pâle, punctiformes, entourées d'une aréole érythémateuse, situées sur la muqueuse jugale en regard des premières molaires. <b>Il est strictement pathognomonique de la rougeole.</b></p>
+                `
+            },
+            {
+                id: 'c_lyme',
+                titre: 'Maladie de Lyme',
+                desc: 'Borréliose et Érythème migrant',
+                tags: ['infectio', 'dermato'],
+                contenu: `
+                    <h2>Maladie de Lyme (Borréliose)</h2>
+                    <p>Infection transmise par la morsure d'une tique du genre Ixodes.</p>
+                    <h3>L'Érythème Migrant :</h3>
+                    <p>Lésion cutanée typique de la phase primaire se propageant de manière centrifuge à partir du point de piqûre, avec un centre souvent plus clair.</p>
+                `
+            }
+        ];
+
+        // 3. BANQUE DE QCM AMÉLIORÉE (avec Images + Liens interconnectés vers les cours)
+        const banqueQCM = [
+            {
+                id: 'q_endo_1',
+                type: 'QRU',
+                tags: ['cardio', 'infectio'],
+                question: 'Quel est le signe cutané périphérique classique de l\'endocardite infectieuse ?',
+                options: [
+                    { 
+                        texte: 'Érythème migrant', 
+                        correct: false, 
+                        justif: 'L\'érythème migrant est la lésion caractéristique de la phase primaire de la maladie de Lyme.',
+                        image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=400&q=80', // Illustration médicale générale
+                        idCoursLie: 'c_lyme',
+                        labelCours: 'Consulter le cours Maladie de Lyme'
+                    },
+                    { 
+                        texte: 'Faux panaris d\'Osler', 
+                        correct: true, 
+                        justif: 'C\'est une lésion nodulaire douloureuse et fugace de la pulpe des doigts, causée par des complexes immuns lors d\'une endocardite.',
+                        image: 'https://images.unsplash.com/photo-1628771065518-0d82f1113871?auto=format&fit=crop&w=400&q=80', // Remplacer par des URL réelles de tes clichés cliniques
+                        idCoursLie: 'c_endo',
+                        labelCours: 'Revoir l\'Endocardite'
+                    },
+                    { 
+                        texte: 'Signe de Koplik', 
+                        correct: false, 
+                        justif: 'Signe de Koplik --> rougeole.',
+                        image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=400&q=80',
+                        idCoursLie: 'c_rougeole',
+                        labelCours: 'Ouvrir le cours Rougeole'
+                    }
+                ]
+            },
+            {
+                id: 'q_ic_1',
+                type: 'QRU',
+                tags: ['cardio'],
+                question: 'Quel est le traitement de première intention dans l\'insuffisance cardiaque aiguë ?',
+                options: [
+                    { texte: 'Bêtabloquants isolés', correct: false, justif: 'Contre-indiqués en phase aiguë initiale (effet inotrope négatif).' },
+                    { texte: 'Diurétiques de l\'anse IV', correct: true, justif: 'Traitement clé pour réduire rapidement la surcharge hydrosodée.' },
+                    { texte: 'Inhibiteurs calciques', correct: false, justif: 'Pas d\'indication en aigu, risquent d\'aggraver la dysfonction ventriculaire.' }
+                ]
+            }
+        ];
+
+        let matiereEnCours = null;
+        let provenanceEcran = 'matiere'; // Suivi de navigation pour le bouton retour
+
+        // ==========================================
+        // FONCTIONS DE NAVIGATION ET RENDU
+        // ==========================================
+
+        function ouvrirMatiere(idMatiere) {
+            matiereEnCours = idMatiere;
+            const config = configMatieres[idMatiere];
+            
+            const titreEl = document.getElementById('titre-matiere');
+            titreEl.innerText = config.nom;
+            titreEl.style.background = config.couleur;
+            titreEl.style.webkitBackgroundClip = 'text';
+            titreEl.style.webkitTextFillColor = 'transparent';
+            document.documentElement.style.setProperty('--theme-actuel', config.couleur);
+
+            const coursFiltres = banqueCours.filter(cours => cours.tags.includes(idMatiere));
+            const conteneurCours = document.getElementById('conteneur-liste-cours');
+            if (coursFiltres.length > 0) {
+                conteneurCours.innerHTML = coursFiltres.map(cours => `
+                    <div class="item-liste" onclick="ouvrirCours('${cours.id}', 'matiere')">
+                        <div class="item-info">
+                            <h4>${cours.titre}</h4>
+                            <span>${cours.desc}</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right arrow-icon" style="color: var(--text-muted);"></i>
+                    </div>
+                `).join('');
+            } else {
+                conteneurCours.innerHTML = '<div class="empty-state">Aucun cours disponible pour le moment.</div>';
+            }
+
+            const qcmFiltres = banqueQCM.filter(qcm => qcm.tags.includes(idMatiere));
+            const conteneurQCM = document.getElementById('conteneur-liste-qcm');
+            if (qcmFiltres.length > 0) {
+                conteneurQCM.innerHTML = qcmFiltres.map(qcm => {
+                    const iconeInitiale = (qcm.type === 'QRU') ? 'fa-regular fa-circle' : 'fa-regular fa-square';
+                    
+                    return `
+                        <div class="zone-qcm" id="${qcm.id}">
+                            <span class="badge-type badge-${qcm.type.toLowerCase()}">${qcm.type}</span>
+                            <div class="question-text">${qcm.question}</div>
+                            <div class="options-list" data-type="${qcm.type}">
+                                ${qcm.options.map((opt, index) => `
+                                    <div class="option-item" data-correct="${opt.correct}" onclick="selectionnerOption(this)">
+                                        <div class="option-item-content">
+                                            <i class="${iconeInitiale}"></i> 
+                                            <span>${String.fromCharCode(65 + index)}) ${opt.texte}</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button class="btn-verifier" onclick="verifierReponse('${qcm.id}')">Vérifier la réponse</button>
+                            <div class="feedback-qcm"></div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                conteneurQCM.innerHTML = '<div class="empty-state">Aucun QCM disponible pour le moment.</div>';
+            }
+
+            document.getElementById('ecran-accueil').style.display = 'none';
+            document.getElementById('ecran-matiere').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function ouvrirCours(idCours, depuisOù = 'matiere') {
+            provenanceEcran = depuisOù;
+            const cours = banqueCours.find(c => c.id === idCours);
+            document.getElementById('conteneur-texte-cours').innerHTML = cours.contenu;
+            
+            document.getElementById('ecran-accueil').style.display = 'none';
+            document.getElementById('ecran-matiere').style.display = 'none';
+            document.getElementById('ecran-lecture').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function gestionRetourCours() {
+            document.getElementById('ecran-lecture').style.display = 'none';
+            if (provenanceEcran === 'qcm' && matiereEnCours) {
+                document.getElementById('ecran-matiere').style.display = 'block';
+            } else if (matiereEnCours) {
+                document.getElementById('ecran-matiere').style.display = 'block';
+            } else {
+                document.getElementById('ecran-accueil').style.display = 'block';
+            }
+        }
+
+        function retourAccueil() {
+            document.getElementById('ecran-matiere').style.display = 'none';
+            document.getElementById('ecran-accueil').style.display = 'block';
+            matiereEnCours = null;
+        }
+
+        function retourMatiere() {
+            document.getElementById('ecran-lecture').style.display = 'none';
+            document.getElementById('ecran-matiere').style.display = 'block';
+        }
+
+        function selectionnerOption(elementOption) {
+            const parentList = elementOption.parentElement;
+            if(parentList.classList.contains('corrected')) return;
+
+            const typeQCM = parentList.getAttribute('data-type');
+            const icon = elementOption.querySelector('.option-item-content i');
+
+            if (typeQCM === 'QRU') {
+                const toutesLesOptions = parentList.querySelectorAll('.option-item');
+                toutesLesOptions.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.querySelector('.option-item-content i').className = 'fa-regular fa-circle';
+                });
+                elementOption.classList.add('selected');
+                icon.className = 'fa-solid fa-circle-dot';
+            } else {
+                if (elementOption.classList.contains('selected')) {
+                    elementOption.classList.remove('selected');
+                    icon.className = 'fa-regular fa-square';
+                } else {
+                    elementOption.classList.add('selected');
+                    icon.className = 'fa-solid fa-square-check';
+                }
+            }
+        }
+
+        // ===================================================
+        // MOTEUR DE VÉRIFICATION AVEC INTEGRATION INTERCONNECTÉE
+        // ===================================================
+        function verifierReponse(idQcm) {
+            const conteneur = document.getElementById(idQcm);
+            const listeOptions = conteneur.querySelector('.options-list');
+            const feedback = conteneur.querySelector('.feedback-qcm');
+            
+            if(listeOptions.classList.contains('corrected')) return;
+
+            const optionsSelectionnees = listeOptions.querySelectorAll('.option-item.selected');
+            if (optionsSelectionnees.length === 0) {
+                feedback.style.color = 'var(--text-muted)';
+                feedback.innerHTML = "⚠️ Sélectionnez au moins une réponse !";
+                return;
+            }
+
+            listeOptions.classList.add('corrected');
+            const toutesLesOptions = listeOptions.querySelectorAll('.option-item');
+            let estParfait = true;
+
+            const questionData = banqueQCM.find(q => q.id === idQcm);
+
+            toutesLesOptions.forEach((opt, index) => {
+                const isTrue = opt.getAttribute('data-correct') === 'true';
+                const isChecked = opt.classList.contains('selected');
+                const infosOption = questionData.options[index];
+                const icon = opt.querySelector('.option-item-content i');
+
+                if (isTrue) {
+                    opt.classList.add('correct');
+                    icon.className = 'fa-solid fa-circle-check';
+                    if (!isChecked) estParfait = false; 
+                } else {
+                    if (isChecked) {
+                        opt.classList.add('incorrect');
+                        icon.className = 'fa-solid fa-circle-xmark';
+                        estParfait = false; 
+                    }
+                }
+
+                // Construction de l'affichage explicatif
+                if (infosOption && infosOption.justif) {
+                    const justifEl = document.createElement('div');
+                    justifEl.className = 'justif-text';
+                    
+                    const prefixe = isTrue ? '💡 <b>Vrai :</b> ' : '💡 <b>Faux :</b> ';
+                    let htmlContenu = `${prefixe}${infosOption.justif}`;
+                    
+                    // Injection de l'image clinique si elle existe
+                    if (infosOption.image) {
+                        htmlContenu += `<img src="${infosOption.image}" class="img-clinique" alt="${infosOption.texte}">`;
+                    }
+                    
+                    // Injection du bouton d'interconnexion vers un autre cours
+                    if (infosOption.idCoursLie && infosOption.labelCours) {
+                        htmlContenu += `<br><button class="btn-intercours" onclick="event.stopPropagation(); ouvrirCours('${infosOption.idCoursLie}', 'qcm')"><i class="fa-solid fa-book-open"></i> ${infosOption.labelCours}</button>`;
+                    }
+                    
+                    justifEl.innerHTML = htmlContenu;
+                    opt.appendChild(justifEl);
+                }
+            });
+
+            if (estParfait) {
+                feedback.style.color = 'var(--success-color)';
+                feedback.innerHTML = "Excellent ! Tout est exact. 🎉";
+            } else {
+                feedback.style.color = 'var(--error-color)';
+                feedback.innerHTML = "Il y a des erreurs dans vos choix. ❌";
+            }
+        }
+    </script>
+</body>
+</html>
