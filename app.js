@@ -104,63 +104,74 @@ function goHome(){
   show('s-scene');
   ST.mat = null;
   renderBeachSpecs();
-  window.scrollTo({top:0, behavior:'instant'});
   _resetScrollAnim();
 }
 
 // ── Scroll-driven animation ───────────────────────────────────────
 
+// ── Cache éléments scroll ─────────────────────────────────────────
+let _elCard, _elWelcome, _elStats, _elShapes, _lenis;
+
 function _resetScrollAnim(){
-  const card    = document.getElementById('beach-card');
-  const welcome = document.getElementById('beach-welcome');
-  const stats   = document.querySelector('.beach-stats-col');
-  if(card)    card.style.opacity = '0';
-  if(welcome){ welcome.style.transform='translateX(-50%) translateY(0)'; welcome.style.opacity='1'; }
-  if(stats)   stats.style.opacity = '0';
+  if(_elCard)   { _elCard.style.opacity='0'; _elCard.style.transform='translateY(120px) scale(0.9)'; }
+  if(_elWelcome){ _elWelcome.style.opacity='1'; _elWelcome.style.transform='translateX(-50%) scale(1)'; _elWelcome.style.filter='blur(0px)'; }
+  if(_elStats)    _elStats.style.opacity='0';
+  if(_elShapes)   _elShapes.forEach(s=>s.style.opacity='1');
+}
+
+function _onScroll(scrollY){
+  if(!document.getElementById('s-scene').classList.contains('active')) return;
+
+  const maxScroll = window.innerHeight * 1.6; // 260vh - 100vh
+  const p = Math.min(scrollY / maxScroll, 1);
+
+  // Titre : scale 1→1.45, blur 0→14px, opacity 1→0 (0–42%)
+  const tP  = Math.min(p / 0.42, 1);
+  const tE  = 1 - Math.pow(1 - tP, 2);
+  if(_elWelcome){
+    _elWelcome.style.opacity   = Math.max(0, 1 - tE);
+    _elWelcome.style.transform = `translateX(-50%) scale(${1 + 0.45 * tE})`;
+    _elWelcome.style.filter    = `blur(${14 * tE}px)`;
+  }
+  if(_elShapes) _elShapes.forEach(s => s.style.opacity = Math.max(0, 1 - tE * 1.4));
+
+  // Carte : monte de bas (70–100%), scale 0.9→1, easing cubic-out
+  const cP = Math.max(0, (p - 0.70) / 0.30);
+  const cE = 1 - Math.pow(1 - cP, 3);
+  if(_elCard){
+    _elCard.style.opacity   = cE;
+    _elCard.style.transform = `translateY(${120 * (1 - cE)}px) scale(${0.9 + 0.1 * cE})`;
+  }
+
+  // Stats : 88–100%
+  if(_elStats) _elStats.style.opacity = Math.max(0, (p - 0.88) / 0.12);
 }
 
 function initScrollAnim(){
-  const card    = document.getElementById('beach-card');
-  const welcome = document.getElementById('beach-welcome');
-  const stats   = document.querySelector('.beach-stats-col');
+  _elCard    = document.getElementById('beach-card');
+  _elWelcome = document.getElementById('beach-welcome');
+  _elStats   = document.querySelector('.beach-stats-col');
+  _elShapes  = document.querySelectorAll('.e-shape');
+  const scene = document.getElementById('s-scene');
 
-  // Afficher le titre seulement sur s-scene
-  function updateWelcomeVisibility(){
-    const onScene = document.getElementById('s-scene').classList.contains('active');
-    welcome.style.display = onScene ? 'block' : 'none';
+  function updateVisibility(){
+    const on = scene.classList.contains('active');
+    if(_elWelcome) _elWelcome.style.display = on ? 'block' : 'none';
+    if(_elShapes)  _elShapes.forEach(s => s.style.display = on ? 'block' : 'none');
   }
-  updateWelcomeVisibility();
+  updateVisibility();
+  new MutationObserver(updateVisibility)
+    .observe(scene, {attributes:true, attributeFilter:['class']});
 
-  // Observer les changements de screen actif
-  new MutationObserver(updateWelcomeVisibility)
-    .observe(document.getElementById('s-scene'), {attributes:true, attributeFilter:['class']});
-
-  let raf;
-  window.addEventListener('scroll', () => {
-    if(raf) cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(() => {
-      if(!document.getElementById('s-scene').classList.contains('active')) return;
-
-      const maxScroll = window.innerHeight; // s-scene = 200vh → 100vh de scroll
-      const p = Math.min(window.scrollY / maxScroll, 1); // 0→1
-
-      // Titre : glisse vers le haut et disparaît dans la première moitié
-      const wY = -50 * p;
-      const wO = Math.max(0, 1 - p * 2);
-      if(welcome){
-        welcome.style.transform = `translateX(-50%) translateY(${wY}px)`;
-        welcome.style.opacity   = wO;
-      }
-
-      // Card : apparaît dans la seconde moitié
-      const cO = Math.max(0, (p - 0.35) / 0.65);
-      if(card) card.style.opacity = cO;
-
-      // Stats : apparaissent un peu après la carte
-      const sO = Math.max(0, (p - 0.55) / 0.45);
-      if(stats) stats.style.opacity = sO;
-    });
+  // Lenis — smooth scroll
+  _lenis = new Lenis({
+    duration: 1.6,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    wheelMultiplier: 0.85,
   });
+  _lenis.on('scroll', ({scroll}) => _onScroll(scroll));
+  (function raf(time){ _lenis.raf(time); requestAnimationFrame(raf); })(0);
 }
 
 // ── Beach Card ────────────────────────────────────────────────────
@@ -251,7 +262,8 @@ function beachZoom(el, target){
 function show(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
+  if(_lenis) _lenis.scrollTo(0, {immediate:true});
+  else window.scrollTo(0,0);
 }
 
 function openMat(id){

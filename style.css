@@ -51,7 +51,7 @@ body{font-family:'Sora',sans-serif;background:transparent;color:#1a2f47;min-heig
 ══════════════════════════════════════════ */
 .screen{display:none;position:relative;z-index:1;padding:0 20px 52px;max-width:680px;margin:0 auto}
 .screen.active{display:block}
-#s-scene{padding:0!important;max-width:100%!important;margin:0!important;height:200vh}
+#s-scene{padding:0!important;max-width:100%!important;margin:0!important;height:260vh}
 
 /* ── Titre Bienvenue ── */
 #beach-welcome{
@@ -81,12 +81,70 @@ body{font-family:'Sora',sans-serif;background:transparent;color:#1a2f47;min-heig
 /* Stats cachées au départ */
 .beach-stats-col{opacity:0;transition:opacity .4s ease}
 
+/* ── Elegant Shapes ── */
+.e-shape{
+  position:fixed;border-radius:9999px;
+  border:1.5px solid rgba(255,255,255,0.13);
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  pointer-events:none;z-index:6;
+  opacity:0;transition:opacity .5s ease;
+  box-shadow:0 8px 32px rgba(255,255,255,0.06);
+}
+.e-shape::after{
+  content:'';position:absolute;inset:0;border-radius:9999px;
+  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0.15),transparent 70%);
+}
+
+/* float keyframe commun */
+@keyframes eFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(14px)}}
+
+/* shape 1 — indigo, grand, gauche haut */
+.es1{
+  width:clamp(220px,38vw,560px);height:clamp(55px,7vw,130px);
+  left:-4%;top:18%;
+  background:linear-gradient(90deg,rgba(99,102,241,0.18),transparent);
+  rotate:12deg;
+  animation:eFloat 12s 0.3s ease-in-out infinite;
+}
+/* shape 2 — rose, grand, droite bas */
+.es2{
+  width:clamp(180px,32vw,480px);height:clamp(45px,6vw,115px);
+  right:-2%;top:68%;
+  background:linear-gradient(90deg,rgba(244,63,94,0.18),transparent);
+  rotate:-15deg;
+  animation:eFloat 14s 0.5s ease-in-out infinite;
+}
+/* shape 3 — violet, moyen, gauche bas */
+.es3{
+  width:clamp(120px,20vw,280px);height:clamp(35px,4.5vw,78px);
+  left:8%;bottom:12%;
+  background:linear-gradient(90deg,rgba(139,92,246,0.18),transparent);
+  rotate:-8deg;
+  animation:eFloat 10s 0.4s ease-in-out infinite;
+}
+/* shape 4 — amber, petit, droite haut */
+.es4{
+  width:clamp(90px,13vw,190px);height:clamp(28px,3.5vw,58px);
+  right:18%;top:13%;
+  background:linear-gradient(90deg,rgba(245,158,11,0.18),transparent);
+  rotate:20deg;
+  animation:eFloat 11s 0.6s ease-in-out infinite;
+}
+/* shape 5 — cyan, petit, centre haut */
+.es5{
+  width:clamp(70px,10vw,145px);height:clamp(22px,2.8vw,42px);
+  left:28%;top:8%;
+  background:linear-gradient(90deg,rgba(6,182,212,0.18),transparent);
+  rotate:-25deg;
+  animation:eFloat 9s 0.7s ease-in-out infinite;
+}
+
 /* ══════════════════════════════════════════
    BEACH SCENE
 ══════════════════════════════════════════ */
 .beach-scene{
-  position:fixed;inset:0;
-  width:100vw;height:100dvh;overflow:hidden;
+  position:sticky;top:0;
+  width:100%;height:100dvh;overflow:hidden;
   display:flex;align-items:center;justify-content:center;
   transition:transform .7s cubic-bezier(.4,0,.9,.6),opacity .45s ease .22s;
 }
@@ -115,7 +173,8 @@ body{font-family:'Sora',sans-serif;background:transparent;color:#1a2f47;min-heig
   overflow:hidden;
   z-index:10;
   opacity:0;
-  will-change:opacity;
+  transform:translateY(120px) scale(0.9);
+  will-change:transform,opacity;
 }
 
 @media(max-width:500px){
