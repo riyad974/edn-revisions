@@ -144,6 +144,17 @@ function openMat(id){
   renderQCMs();
 }
 
+// ── Utils ─────────────────────────────────────────────────────────
+
+function shuffleArr(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 // ── QCMs ──────────────────────────────────────────────────────────
 
 function renderQCMs(){
@@ -180,11 +191,12 @@ function renderQCMs(){
         <div class="badge-source">📚 ${q.src}</div>
         <div class="q-text">${q.q}</div>
         <div class="opts" id="opts-${q.id}" data-corrected="${d ? '1' : '0'}">
-          ${q.opts.map((o, i) => {
+          ${(d ? q.opts : shuffleArr(q.opts)).map((o, i) => {
             let cls = 'opt';
             if(d){ if(o.ok) cls += ' ok'; else if(d.sel === i) cls += ' ko'; }
             const L = String.fromCharCode(65 + i);
-            return `<div class="${cls}" data-ok="${o.ok}" onclick="selOpt(this,'${q.id}')">
+            const jEsc = (o.j || '').replace(/"/g, '&quot;');
+            return `<div class="${cls}" data-ok="${o.ok}" data-j="${jEsc}" onclick="selOpt(this,'${q.id}')">
               <div class="opt-letter">${L}</div>
               <div class="opt-body">
                 <div class="opt-text">${o.t}</div>
@@ -280,16 +292,16 @@ function verify(qid){
   opts.forEach((opt, i) => {
     const isOk = opt.getAttribute('data-ok') === 'true';
     const isSel = opt.classList.contains('sel');
-    const o = q.opts[i];
+    const j = opt.dataset.j || '';
 
     if(isSel) sel = i;
     if(isOk){ opt.classList.add('ok'); if(isSel) win = true; }
     else if(isSel) opt.classList.add('ko');
 
-    if(o.j){
+    if(j){
       const ex = document.createElement('div');
       ex.className = `expl ${isOk ? 'good' : 'bad'} vis`;
-      ex.innerHTML = `<div class="expl-lbl">${isOk ? 'Correct' : 'Incorrect'}</div><p>${o.j}</p>`;
+      ex.innerHTML = `<div class="expl-lbl">${isOk ? 'Correct' : 'Incorrect'}</div><p>${j}</p>`;
       opt.querySelector('.opt-body').appendChild(ex);
     }
   });
