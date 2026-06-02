@@ -2,6 +2,31 @@ let MATS = {};
 let QCMS = [];
 const ST = {qcm: 0, ok: 0, done: {}, mat: null};
 
+// ── Réglages — Fond & Thème QCM ──────────────────────────────────
+
+const BG_SRCS = ['fond.mp4', 'fond1.mp4', 'fond2.mp4'];
+
+function setBg(idx) {
+  const vid = document.getElementById('bg-video');
+  if (vid) { vid.src = BG_SRCS[idx]; vid.load(); vid.play(); }
+  document.querySelectorAll('.bc-bg-tile').forEach((t,i) => t.classList.toggle('active', i === idx));
+  localStorage.setItem('edn_bg', idx);
+}
+
+function setQcmTheme(theme) {
+  document.body.classList.toggle('qcm-classic', theme === 'classic');
+  document.getElementById('btt-glass').classList.toggle('active', theme === 'glass');
+  document.getElementById('btt-classic').classList.toggle('active', theme === 'classic');
+  localStorage.setItem('edn_qcm_theme', theme);
+}
+
+function loadSettings() {
+  const bg = parseInt(localStorage.getItem('edn_bg') || '0');
+  setBg(bg);
+  const theme = localStorage.getItem('edn_qcm_theme') || 'glass';
+  setQcmTheme(theme);
+}
+
 window.onload = () => {
   MATS = DATA_MEDECINE.MATS;
   QCMS = DATA_MEDECINE.QCMS;
@@ -13,11 +38,49 @@ window.onload = () => {
   const elTot = document.getElementById('st2-items-tot');
   if(elTot && typeof EDN_ITEMS !== 'undefined') elTot.textContent = EDN_ITEMS.length;
   updateBeachStats();
+  renderBeachSpecs();
+  loadSettings();
 };
 
 // ── Navigation ────────────────────────────────────────────────────
 
-function goHome(){ show('s-scene'); ST.mat = null; }
+function goHome(){ show('s-scene'); ST.mat = null; renderBeachSpecs(); }
+
+// ── Beach Card ────────────────────────────────────────────────────
+
+function bcTab(id, btn) {
+  document.querySelectorAll('.bc-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.bc-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('bcp-' + id).classList.add('active');
+}
+
+function renderBeachSpecs() {
+  const el = document.getElementById('bc-spec-list');
+  if (!el) return;
+  const specs = [
+    { id:'cardio',   icon:'🫀', nom:'Cardiologie',            col:'#ef4444' },
+    { id:'dermato',  icon:'🩺', nom:'Dermatologie',           col:'#0ea5e9' },
+    { id:'infectio', icon:'🦠', nom:'Infectiologie',          col:'#22c55e' },
+    { id:'neuro',    icon:'🧠', nom:'Neurologie',             col:'#a855f7' },
+    { id:'hge',      icon:'🍕', nom:'Hépato-Gastro-Entéro',  col:'#f97316' },
+  ];
+  el.innerHTML = specs.map(s => {
+    const tot  = QCMS.filter(q => q.tags.includes(s.id)).length;
+    const done = QCMS.filter(q => q.tags.includes(s.id) && ST.done[q.id]).length;
+    const pct  = tot ? Math.round(done / tot * 100) : 0;
+    return `<div class="bc-spec-row" onclick="openMat('${s.id}')">
+      <div class="bc-spec-icon">${s.icon}</div>
+      <div class="bc-spec-info">
+        <div class="bc-spec-name">${s.nom}</div>
+        <div class="bc-spec-count">${done} / ${tot} QCMs</div>
+      </div>
+      <div class="bc-spec-track">
+        <div class="bc-spec-fill" style="width:${pct}%;background:${s.col}"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
 
 function showQCMOverlay(){
   // Petit rebond du panneau

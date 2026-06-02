@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EDN · Révisions Actives</title>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -19,18 +19,6 @@
   <div id="s-scene" class="screen active">
     <div class="beach-scene" id="beach-scene">
       <div class="beach-vignette"></div>
-
-      <!-- ── HÉRO TYPOGRAPHIQUE ── -->
-      <div class="beach-hero">
-        <div class="hero-tag">
-          <span class="hero-tag-dot"></span>
-          Révisions actives · EDN
-        </div>
-        <h1 class="hero-title">
-          <span class="hero-l1">Révisez</span>
-          <span class="hero-l2">intelligemment<em>.</em></span>
-        </h1>
-      </div>
 
       <!-- ── STATS + PROGRESSION — droite ── -->
       <div class="beach-stats-col">
@@ -50,18 +38,67 @@
         </div>
       </div>
 
-      <!-- ── BOUTONS D'ACCÈS ── -->
-      <div class="beach-cta">
-        <button class="beach-btn" onclick="showQCMOverlay()">
-          <span class="beach-btn-icon">🩺</span>
-          <span class="beach-btn-label">QCMs</span>
-          <span class="beach-btn-arrow">↗</span>
-        </button>
-        <button class="beach-btn" onclick="beachZoom(this,'items')">
-          <span class="beach-btn-icon">📋</span>
-          <span class="beach-btn-label">Référentiel R2C</span>
-          <span class="beach-btn-arrow">↗</span>
-        </button>
+      <!-- ── CARTE CENTRALE ── -->
+      <div class="beach-card" id="beach-card">
+        <div class="bc-tabs">
+          <button class="bc-tab active" onclick="bcTab('qcm',this)">QCM</button>
+          <button class="bc-tab" onclick="bcTab('items',this)">Items</button>
+          <button class="bc-tab" onclick="bcTab('reglages',this)">Réglages</button>
+        </div>
+
+        <div class="bc-panel active" id="bcp-qcm">
+          <div class="bc-spec-list" id="bc-spec-list"></div>
+        </div>
+
+        <div class="bc-panel" id="bcp-items">
+          <button class="bc-items-btn" onclick="openItems()">
+            <span class="bc-items-icon">📋</span>
+            <span class="bc-items-title">Référentiel R2C</span>
+            <span class="bc-items-sub">367 items · 11 UEs · Collèges officiels</span>
+          </button>
+        </div>
+
+        <div class="bc-panel" id="bcp-reglages">
+          <div class="bc-settings">
+
+            <div class="bc-set-section">
+              <div class="bc-set-label">Fond d'écran</div>
+              <div class="bc-set-row">
+                <div class="bc-bg-tile active" id="bgt-0" onclick="setBg(0)">
+                  <div class="bc-bg-thumb">🎬</div>
+                  <div class="bc-bg-name">Actuel</div>
+                </div>
+                <div class="bc-bg-tile" id="bgt-1" onclick="setBg(1)">
+                  <div class="bc-bg-thumb">🎬</div>
+                  <div class="bc-bg-name">Fond 1</div>
+                </div>
+                <div class="bc-bg-tile" id="bgt-2" onclick="setBg(2)">
+                  <div class="bc-bg-thumb">🎬</div>
+                  <div class="bc-bg-name">Fond 2</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bc-set-section">
+              <div class="bc-set-label">Design des QCM</div>
+              <div class="bc-set-row">
+                <div class="bc-theme-tile active" id="btt-glass" onclick="setQcmTheme('glass')">
+                  <div class="bc-theme-preview glass-preview">
+                    <div class="btp-card glass-card-preview"></div>
+                  </div>
+                  <div class="bc-theme-name">🔮 Glass</div>
+                </div>
+                <div class="bc-theme-tile" id="btt-classic" onclick="setQcmTheme('classic')">
+                  <div class="bc-theme-preview classic-preview">
+                    <div class="btp-card classic-card-preview"></div>
+                  </div>
+                  <div class="bc-theme-name">📄 Classique</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
 
       <!-- ── HINT BAR ── -->
@@ -272,6 +309,6 @@
   <script src="data-neuro.js?v=2"></script>
   <script src="data-items.js?v=2"></script>
   <script src="progress.js?v=1"></script>
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>
