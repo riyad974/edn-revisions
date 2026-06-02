@@ -67,7 +67,7 @@ body{font-family:'Sora',sans-serif;background:transparent;color:#1a2f47;min-heig
   position:absolute;
   left:50%;top:50%;
   transform:translate(-50%,-50%);
-  width:clamp(300px,38vw,420px);
+  width:min(420px, calc(100vw - 24px));
   background:rgba(255,255,255,0.14);
   backdrop-filter:blur(28px) saturate(180%);
   -webkit-backdrop-filter:blur(28px) saturate(180%);
@@ -77,6 +77,13 @@ body{font-family:'Sora',sans-serif;background:transparent;color:#1a2f47;min-heig
   overflow:hidden;
   z-index:10;
   animation:fadeUp .7s ease .3s both;
+}
+
+@media(max-width:500px){
+  .beach-card{top:54%;width:calc(100vw - 20px)}
+  .beach-stats-col{top:6%;right:3%}
+  .bsc-item strong{font-size:1.1rem}
+  .beach-hint-bar{display:none}
 }
 
 /* Tabs */
