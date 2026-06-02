@@ -51,7 +51,35 @@ body{font-family:'Sora',sans-serif;background:transparent;color:#1a2f47;min-heig
 ══════════════════════════════════════════ */
 .screen{display:none;position:relative;z-index:1;padding:0 20px 52px;max-width:680px;margin:0 auto}
 .screen.active{display:block}
-#s-scene{padding:0!important;max-width:100%!important;margin:0!important}
+#s-scene{padding:0!important;max-width:100%!important;margin:0!important;height:200vh}
+
+/* ── Titre Bienvenue ── */
+#beach-welcome{
+  position:fixed;top:28%;left:50%;
+  transform:translateX(-50%);
+  z-index:20;text-align:center;
+  pointer-events:none;
+  display:none; /* affiché par JS quand s-scene est actif */
+}
+#beach-welcome span{
+  display:block;
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(4rem,12vw,9rem);
+  font-weight:400;color:#fff;
+  text-shadow:0 4px 32px rgba(0,0,0,.45),0 1px 6px rgba(0,0,0,.3);
+  line-height:1;
+  will-change:transform,opacity;
+}
+#beach-scroll-hint{
+  margin-top:16px;
+  font-family:'Sora',sans-serif;
+  font-size:.65rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,.6);
+  animation:floatHint 2.5s ease-in-out infinite;
+}
+
+/* Stats cachées au départ */
+.beach-stats-col{opacity:0;transition:opacity .4s ease}
 
 /* ══════════════════════════════════════════
    BEACH SCENE
@@ -86,7 +114,9 @@ body{font-family:'Sora',sans-serif;background:transparent;color:#1a2f47;min-heig
   box-shadow:0 12px 48px rgba(0,20,60,.25),inset 0 1px 0 rgba(255,255,255,0.45);
   overflow:hidden;
   z-index:10;
-  animation:fadeUp .7s ease .3s both;
+  transform:perspective(1000px) rotateX(20deg) scale(1.05) translateY(50px);
+  transform-origin:center 75%;
+  will-change:transform;
 }
 
 @media(max-width:500px){

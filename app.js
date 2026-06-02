@@ -95,11 +95,76 @@ window.onload = () => {
   updateBeachStats();
   renderBeachSpecs();
   loadSettings();
+  initScrollAnim();
 };
 
 // ── Navigation ────────────────────────────────────────────────────
 
-function goHome(){ show('s-scene'); ST.mat = null; renderBeachSpecs(); }
+function goHome(){
+  show('s-scene');
+  ST.mat = null;
+  renderBeachSpecs();
+  window.scrollTo({top:0, behavior:'instant'});
+  _resetScrollAnim();
+}
+
+// ── Scroll-driven animation ───────────────────────────────────────
+
+function _resetScrollAnim(){
+  const card    = document.getElementById('beach-card');
+  const welcome = document.getElementById('beach-welcome');
+  const stats   = document.querySelector('.beach-stats-col');
+  if(card)    card.style.transform = 'perspective(1000px) rotateX(20deg) scale(1.05) translateY(50px)';
+  if(welcome){ welcome.style.transform='translateX(-50%) translateY(0)'; welcome.style.opacity='1'; }
+  if(stats)   stats.style.opacity = '0';
+}
+
+function initScrollAnim(){
+  const card    = document.getElementById('beach-card');
+  const welcome = document.getElementById('beach-welcome');
+  const stats   = document.querySelector('.beach-stats-col');
+
+  // Afficher le titre seulement sur s-scene
+  function updateWelcomeVisibility(){
+    const onScene = document.getElementById('s-scene').classList.contains('active');
+    welcome.style.display = onScene ? 'block' : 'none';
+  }
+  updateWelcomeVisibility();
+
+  // Observer les changements de screen actif
+  new MutationObserver(updateWelcomeVisibility)
+    .observe(document.getElementById('s-scene'), {attributes:true, attributeFilter:['class']});
+
+  let raf;
+  window.addEventListener('scroll', () => {
+    if(raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      if(!document.getElementById('s-scene').classList.contains('active')) return;
+
+      const maxScroll = window.innerHeight; // s-scene = 200vh → 100vh de scroll
+      const p = Math.min(window.scrollY / maxScroll, 1); // 0→1
+
+      // Card : rotateX 20→0, scale 1.05→1, translateY 50→0
+      const rX  = 20  * (1 - p);
+      const sc  = 1.05 - 0.05 * p;
+      const tY  = 50  * (1 - p);
+      if(card) card.style.transform =
+        `perspective(1000px) rotateX(${rX}deg) scale(${sc}) translateY(${tY}px)`;
+
+      // Titre : translateY 0→-60px, opacity 1→0 (disparaît à 50%)
+      const wY = -60 * p;
+      const wO = Math.max(0, 1 - p * 2);
+      if(welcome){
+        welcome.style.transform = `translateX(-50%) translateY(${wY}px)`;
+        welcome.style.opacity   = wO;
+      }
+
+      // Stats : apparaissent à partir de 60%
+      const sO = Math.max(0, (p - 0.55) / 0.45);
+      if(stats) stats.style.opacity = sO;
+    });
+  });
+}
 
 // ── Beach Card ────────────────────────────────────────────────────
 
