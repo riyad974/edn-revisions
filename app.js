@@ -106,15 +106,16 @@ function goHome(){
   renderBeachSpecs();
   // Atterrir sur la carte (90% du scroll max)
   const target = window.innerHeight * 1.6 * 0.9;
-  if(_lenis) _lenis.scrollTo(target, {immediate:true});
-  else window.scrollTo(0, target);
+  window.scrollTo(0, target);
+  _scrollRaw = target; _scrollSmooth = target;
   _onScroll(target);
 }
 
 // ── Scroll-driven animation ───────────────────────────────────────
 
 // ── Cache éléments scroll ─────────────────────────────────────────
-let _elCard, _elWelcome, _elStats, _elShapes, _lenis;
+let _elCard, _elWelcome, _elStats, _elShapes;
+let _scrollRaw = 0, _scrollSmooth = 0;
 
 function _resetScrollAnim(){
   if(_elCard)   { _elCard.style.opacity='0'; _elCard.style.transform='translateY(120px) scale(0.9)'; }
@@ -167,15 +168,13 @@ function initScrollAnim(){
   new MutationObserver(updateVisibility)
     .observe(scene, {attributes:true, attributeFilter:['class']});
 
-  // Lenis — smooth scroll
-  _lenis = new Lenis({
-    duration: 1.6,
-    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-    wheelMultiplier: 0.85,
-  });
-  _lenis.on('scroll', ({scroll}) => _onScroll(scroll));
-  (function raf(time){ _lenis.raf(time); requestAnimationFrame(raf); })(0);
+  // Lerp RAF — smooth scroll maison
+  window.addEventListener('scroll', () => { _scrollRaw = window.scrollY; }, {passive:true});
+  (function loop(){
+    _scrollSmooth += (_scrollRaw - _scrollSmooth) * 0.09;
+    _onScroll(_scrollSmooth);
+    requestAnimationFrame(loop);
+  })();
 }
 
 // ── Beach Card ────────────────────────────────────────────────────
@@ -266,8 +265,8 @@ function beachZoom(el, target){
 function show(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if(_lenis) _lenis.scrollTo(0, {immediate:true});
-  else window.scrollTo(0,0);
+  window.scrollTo(0,0);
+  _scrollRaw = 0; _scrollSmooth = 0;
 }
 
 function openMat(id){
