@@ -114,7 +114,7 @@ function _resetScrollAnim(){
   const card    = document.getElementById('beach-card');
   const welcome = document.getElementById('beach-welcome');
   const stats   = document.querySelector('.beach-stats-col');
-  if(card)    card.style.transform = 'perspective(1000px) rotateX(20deg) scale(1.05) translateY(50px)';
+  if(card)    card.style.opacity = '0';
   if(welcome){ welcome.style.transform='translateX(-50%) translateY(0)'; welcome.style.opacity='1'; }
   if(stats)   stats.style.opacity = '0';
 }
@@ -144,22 +144,19 @@ function initScrollAnim(){
       const maxScroll = window.innerHeight; // s-scene = 200vh → 100vh de scroll
       const p = Math.min(window.scrollY / maxScroll, 1); // 0→1
 
-      // Card : rotateX 20→0, scale 1.05→1, translateY 50→0
-      const rX  = 20  * (1 - p);
-      const sc  = 1.05 - 0.05 * p;
-      const tY  = 50  * (1 - p);
-      if(card) card.style.transform =
-        `perspective(1000px) rotateX(${rX}deg) scale(${sc}) translateY(${tY}px)`;
-
-      // Titre : translateY 0→-60px, opacity 1→0 (disparaît à 50%)
-      const wY = -60 * p;
+      // Titre : glisse vers le haut et disparaît dans la première moitié
+      const wY = -50 * p;
       const wO = Math.max(0, 1 - p * 2);
       if(welcome){
         welcome.style.transform = `translateX(-50%) translateY(${wY}px)`;
         welcome.style.opacity   = wO;
       }
 
-      // Stats : apparaissent à partir de 60%
+      // Card : apparaît dans la seconde moitié
+      const cO = Math.max(0, (p - 0.35) / 0.65);
+      if(card) card.style.opacity = cO;
+
+      // Stats : apparaissent un peu après la carte
       const sO = Math.max(0, (p - 0.55) / 0.45);
       if(stats) stats.style.opacity = sO;
     });

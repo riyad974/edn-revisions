@@ -114,9 +114,8 @@ body{font-family:'Sora',sans-serif;background:transparent;color:#1a2f47;min-heig
   box-shadow:0 12px 48px rgba(0,20,60,.25),inset 0 1px 0 rgba(255,255,255,0.45);
   overflow:hidden;
   z-index:10;
-  transform:perspective(1000px) rotateX(20deg) scale(1.05) translateY(50px);
-  transform-origin:center 75%;
-  will-change:transform;
+  opacity:0;
+  will-change:opacity;
 }
 
 @media(max-width:500px){
