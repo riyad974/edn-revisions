@@ -23,34 +23,23 @@ function _loadVideo(el, idx){
   el.load();
 }
 
-function _crossfade(){
-  const nextIdx  = (_bgIdx + 1) % BG_SRCS.length;
+function _crossfadeTo(idx){
   const nextSlot = 1 - _bgSlot;
   const cur  = _bgEl(_bgSlot);
   const next = _bgEl(nextSlot);
 
-  _loadVideo(next, nextIdx);
+  _loadVideo(next, idx);
+  next.loop    = true;
   next.style.opacity = '0';
   next.play().then(() => {
     next.style.opacity = '1';
     cur.style.opacity  = '0';
     setTimeout(() => {
       cur.pause();
-      _bgIdx  = nextIdx;
+      _bgIdx  = idx;
       _bgSlot = nextSlot;
     }, 1500);
   }).catch(() => {});
-}
-
-function _setupTimeupdate(el){
-  el.addEventListener('timeupdate', () => {
-    if (!el.duration) return;
-    if (el.currentTime >= el.duration - 0.5 && !el._fading){
-      el._fading = true;
-      _crossfade();
-    }
-  });
-  el.addEventListener('play', () => { el._fading = false; });
 }
 
 function initBgVideo(startIdx){
@@ -58,11 +47,10 @@ function initBgVideo(startIdx){
   _bgIdx = startIdx || 0;
   const a = _bgEl(0), b = _bgEl(1);
   _loadVideo(a, _bgIdx);
+  a.loop = true;
   a.style.opacity = '1';
   b.style.opacity = '0';
   a.play().catch(() => {});
-  _setupTimeupdate(a);
-  _setupTimeupdate(b);
   document.addEventListener('visibilitychange', () => {
     const active = _bgEl(_bgSlot);
     if (document.hidden) active.pause();
@@ -71,9 +59,8 @@ function initBgVideo(startIdx){
 }
 
 function setBg(idx){
-  _bgIdx = (idx - 1 + BG_SRCS.length) % BG_SRCS.length;
-  _bgEl(_bgSlot)._fading = true;
-  _crossfade();
+  if (idx === _bgIdx) return;
+  _crossfadeTo(idx);
   document.querySelectorAll('.bc-bg-tile').forEach((t,i) => t.classList.toggle('active', i === idx));
   localStorage.setItem('edn_bg', idx);
 }
@@ -128,7 +115,7 @@ function renderBeachSpecs() {
   if (!el) return;
   const specs = [
     { id:'cardio',   icon:'🫀', nom:'Cardiologie',            col:'#ef4444' },
-    { id:'dermato',  icon:'🩺', nom:'Dermatologie',           col:'#0ea5e9' },
+    { id:'dermato',  icon:'🪮', nom:'Dermatologie',           col:'#0ea5e9' },
     { id:'infectio', icon:'🦠', nom:'Infectiologie',          col:'#22c55e' },
     { id:'neuro',    icon:'🧠', nom:'Neurologie',             col:'#a855f7' },
     { id:'hge',      icon:'🍕', nom:'Hépato-Gastro-Entéro',  col:'#f97316' },
