@@ -2,27 +2,95 @@ let MATS = {};
 let QCMS = [];
 const ST = {qcm: 0, ok: 0, done: {}, mat: null};
 
-// ── Réglages — Fond & Thème QCM ──────────────────────────────────
+// ── Système vidéo A/B crossfade ──────────────────────────────────
 
-const BG_SRCS = ['fond.mp4', 'fond1.mp4', 'fond2.mp4'];
+const BG_SRCS = [
+  { webm:'files/fond.webm',  mp4:'fond.mp4'  },
+  { webm:'files/fond1.webm', mp4:'fond1.mp4' },
+  { webm:'files/fond2.webm', mp4:'fond2.mp4' },
+];
 
-function setBg(idx) {
-  const vid = document.getElementById('bg-video');
-  if (vid) { vid.src = BG_SRCS[idx]; vid.load(); vid.play(); }
+let _bgIdx  = 0;
+let _bgSlot = 0;
+
+function _bgEl(slot){ return document.getElementById(slot === 0 ? 'bg-video-a' : 'bg-video-b'); }
+
+function _loadVideo(el, idx){
+  el.querySelectorAll('source').forEach(s => s.remove());
+  const w = document.createElement('source'); w.src = BG_SRCS[idx].webm; w.type = 'video/webm';
+  const m = document.createElement('source'); m.src = BG_SRCS[idx].mp4;  m.type = 'video/mp4';
+  el.appendChild(w); el.appendChild(m);
+  el.load();
+}
+
+function _crossfade(){
+  const nextIdx  = (_bgIdx + 1) % BG_SRCS.length;
+  const nextSlot = 1 - _bgSlot;
+  const cur  = _bgEl(_bgSlot);
+  const next = _bgEl(nextSlot);
+
+  _loadVideo(next, nextIdx);
+  next.style.opacity = '0';
+  next.play().then(() => {
+    next.style.opacity = '1';
+    cur.style.opacity  = '0';
+    setTimeout(() => {
+      cur.pause();
+      _bgIdx  = nextIdx;
+      _bgSlot = nextSlot;
+    }, 1500);
+  }).catch(() => {});
+}
+
+function _setupTimeupdate(el){
+  el.addEventListener('timeupdate', () => {
+    if (!el.duration) return;
+    if (el.currentTime >= el.duration - 0.5 && !el._fading){
+      el._fading = true;
+      _crossfade();
+    }
+  });
+  el.addEventListener('play', () => { el._fading = false; });
+}
+
+function initBgVideo(startIdx){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  _bgIdx = startIdx || 0;
+  const a = _bgEl(0), b = _bgEl(1);
+  _loadVideo(a, _bgIdx);
+  a.style.opacity = '1';
+  b.style.opacity = '0';
+  a.play().catch(() => {});
+  _setupTimeupdate(a);
+  _setupTimeupdate(b);
+  document.addEventListener('visibilitychange', () => {
+    const active = _bgEl(_bgSlot);
+    if (document.hidden) active.pause();
+    else active.play().catch(() => {});
+  });
+}
+
+function setBg(idx){
+  _bgIdx = (idx - 1 + BG_SRCS.length) % BG_SRCS.length;
+  _bgEl(_bgSlot)._fading = true;
+  _crossfade();
   document.querySelectorAll('.bc-bg-tile').forEach((t,i) => t.classList.toggle('active', i === idx));
   localStorage.setItem('edn_bg', idx);
 }
 
-function setQcmTheme(theme) {
+// ── Thème QCM + chargement settings ──────────────────────────────
+
+function setQcmTheme(theme){
   document.body.classList.toggle('qcm-classic', theme === 'classic');
   document.getElementById('btt-glass').classList.toggle('active', theme === 'glass');
   document.getElementById('btt-classic').classList.toggle('active', theme === 'classic');
   localStorage.setItem('edn_qcm_theme', theme);
 }
 
-function loadSettings() {
+function loadSettings(){
   const bg = parseInt(localStorage.getItem('edn_bg') || '0');
-  setBg(bg);
+  initBgVideo(bg);
+  document.querySelectorAll('.bc-bg-tile').forEach((t,i) => t.classList.toggle('active', i === bg));
   const theme = localStorage.getItem('edn_qcm_theme') || 'glass';
   setQcmTheme(theme);
 }

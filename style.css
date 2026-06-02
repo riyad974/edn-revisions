@@ -5,15 +5,25 @@
 html{scroll-behavior:smooth}
 html{min-height:100vh;background:#0a1628}
 
-/* ── Vidéo fond fixe ── */
-#bg-video{
-  position:fixed;inset:0;width:100%;height:100%;
+/* ── Vidéo fond A/B crossfade ── */
+#bg-video-a, #bg-video-b{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
   object-fit:cover;object-position:center;
   z-index:-2;pointer-events:none;
+  transition:opacity 1.5s ease-in-out;
 }
-#bg-vignette{
+#bg-video-a{opacity:1}
+#bg-video-b{opacity:0}
+
+#bg-overlay{
   position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:rgba(0,0,0,0.15);
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.15) 0%,
+    rgba(0,0,0,0.05) 50%,
+    rgba(0,0,0,0.20) 100%
+  );
 }
 
 body{font-family:'Sora',sans-serif;background:transparent;color:#1a2f47;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
