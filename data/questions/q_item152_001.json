@@ -1,0 +1,18 @@
+{
+  "id": "q_item152_001",
+  "item": 152,
+  "specialite": "cardiologie",
+  "partie": "valves",
+  "tags": ["endocardite", "signes-peripheriques", "complexes-immuns", "rangA"],
+  "rang": "A",
+  "question": "Quel est le signe cutané périphérique caractéristique de l'endocardite infectieuse ?",
+  "propositions": {
+    "A": "Érythème migrant",
+    "B": "Faux panaris d'Osler",
+    "C": "Signe de Koplik",
+    "D": "Placard de Janeway",
+    "E": "Taches de Roth"
+  },
+  "reponses": ["B"],
+  "correction": "Les faux panaris d'Osler sont des nodules douloureux et fugaces de la pulpe des doigts, causés par des dépôts de complexes immuns ou des micro-emboles septiques. Ce sont des signes périphériques CLASSIQUES de l'endocardite infectieuse à connaître absolument. À distinguer des Plaques de Janeway (macules indolores des paumes = emboles septiques, rang B) et des Taches de Roth (hémorragies rétiniennes, rang B). L'érythème migrant est spécifique de la maladie de Lyme. Le signe de Koplik est pathognomonique de la rougeole."
+}

@@ -1,0 +1,18 @@
+{
+  "id": "q_item232_002",
+  "item": 232,
+  "specialite": "cardiologie",
+  "partie": "rythmologie",
+  "tags": ["FA", "anticoagulation", "CHA2DS2-VASc", "AOD", "AVC", "traitement", "rangA"],
+  "rang": "A",
+  "question": "Un homme de 68 ans est en FA permanente. Il a des antécédents d'HTA et de diabète de type 2. Quel est son score CHA₂DS₂-VASc et quelle est la conduite à tenir concernant l'anticoagulation ?",
+  "propositions": {
+    "A": "Score 1 — anticoagulation non recommandée",
+    "B": "Score 2 — anticoagulation recommandée par AOD ou AVK",
+    "C": "Score 3 — anticoagulation recommandée par AOD ou AVK",
+    "D": "Score 2 — antiagrégation plaquettaire par aspirine suffisante",
+    "E": "Score 3 — antiagrégation plaquettaire par aspirine suffisante"
+  },
+  "reponses": ["C"],
+  "correction": "Score CHA₂DS₂-VASc : C (insuffisance cardiaque congestive) = 0 · H (HTA) = 1 · A₂ (âge ≥ 75 ans) = 0 · D (diabète) = 1 · S₂ (AVC/AIT antérieur) = 0 · V (maladie vasculaire) = 0 · A (âge 65–74 ans) = 1 · Sc (sexe féminin) = 0. TOTAL = 3. Score ≥ 2 chez l'homme → anticoagulation recommandée. Les AOD (apixaban, rivaroxaban, dabigatran, edoxaban) sont préférés aux AVK en FA non valvulaire. L'aspirine seule est INSUFFISANTE et ne doit PAS être prescrite à la place des anticoagulants."
+}

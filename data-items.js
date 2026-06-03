@@ -2467,7 +2467,7 @@ const EDN_ITEMS = [
 {
 "id": 258,
 "ue": "UE8 - Circulation - Métabolismes",
-"title": "Protéinurie et syndrome néphrotique de chez l'adulte et de l'enfant",
+"title": "Élévation de la créatininémie",
 "colleges": [
 "Nép",
 "Ped"

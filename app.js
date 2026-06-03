@@ -82,6 +82,25 @@ function loadSettings(){
   setQcmTheme(theme);
 }
 
+function createStars(){
+  const types = ['', 'blue', 'soft'];
+  for(let i = 0; i < 40; i++){
+    const s   = document.createElement('div');
+    const sz  = (Math.random() * 2 + 1).toFixed(1);        // 1–3 px
+    const dur = (Math.random() * 4 + 2).toFixed(1) + 's';  // 2–6 s
+    const del = (Math.random() * 6).toFixed(1) + 's';      // 0–6 s
+    s.className = 'star ' + types[Math.floor(Math.random() * types.length)];
+    s.style.cssText = `
+      width:${sz}px;height:${sz}px;
+      left:${(Math.random()*100).toFixed(1)}%;
+      top:${(Math.random()*100).toFixed(1)}%;
+      --tw-dur:${dur};--tw-delay:${del};
+      opacity:${(Math.random()*0.4+0.1).toFixed(2)};
+    `;
+    document.body.appendChild(s);
+  }
+}
+
 window.onload = () => {
   MATS = DATA_MEDECINE.MATS;
   QCMS = DATA_MEDECINE.QCMS;
@@ -92,23 +111,125 @@ window.onload = () => {
   updateProg();
   const elTot = document.getElementById('st2-items-tot');
   if(elTot && typeof EDN_ITEMS !== 'undefined') elTot.textContent = EDN_ITEMS.length;
+  createStars();
   updateBeachStats();
-  renderBeachSpecs();
+  renderSpecsSection();
   loadSettings();
   initScrollAnim();
+  history.replaceState({section:'scene'}, '', '#accueil');
+  document.title = _TITLES.scene;
 };
+
+// ── History API ───────────────────────────────────────────────────
+
+const _TITLES = {
+  scene:   'MedRevision',
+  items:   'MedRevision — Référentiel R2C',
+};
+const _MAT_NAMES = {
+  cardio:   'Cardiologie',
+  dermato:  'Dermatologie',
+  infectio: 'Infectiologie',
+  neuro:    'Neurologie',
+  hge:      'Hépato-Gastro-Entérologie',
+};
+
+let _skipPush = false;
+
+function _pushNav(state, hash, title){
+  document.title = title;
+  if(_skipPush) return;
+  history.pushState(state, '', hash);
+}
+
+window.addEventListener('popstate', e => {
+  const s = e.state;
+  if(!s){ _restoreNav({section:'scene'}); return; }
+  _restoreNav(s);
+});
+
+function _restoreNav(s){
+  _skipPush = true;
+  if(s.section === 'mat' && s.mat){
+    openMat(s.mat);
+  } else if(s.section === 'items'){
+    openItems();
+  } else if(s.section === 'cardio'){
+    openCardio();
+  } else if(s.section === 'qcm-v2' && s.questions){
+    openCardioSession(s.questions, s.titre);
+  } else {
+    goHome();
+  }
+  _skipPush = false;
+}
 
 // ── Navigation ────────────────────────────────────────────────────
 
 function goHome(){
   show('s-scene');
   ST.mat = null;
-  renderBeachSpecs();
-  // Atterrir sur la carte (90% du scroll max)
-  const target = window.innerHeight * 1.6 * 0.9;
-  window.scrollTo(0, target);
-  _scrollRaw = target; _scrollSmooth = target;
-  _onScroll(target);
+  renderSpecsSection();
+  _resetScrollAnim();
+  snapToSection(1);
+  _pushNav({section:'scene'}, '#accueil', _TITLES.scene);
+}
+
+function snapToSection(n){
+  const c = document.getElementById('s-scene');
+  if(!c) return;
+  c.scrollTo({top: n * window.innerHeight, behavior:'smooth'});
+  _updateSnapNav(n);
+}
+
+function _snNavClick(idx){
+  if(document.getElementById('s-scene').classList.contains('active')){
+    snapToSection(idx);
+  } else {
+    _skipPush = true;
+    show('s-scene');
+    ST.mat = null;
+    renderSpecsSection();
+    _resetScrollAnim();
+    _scrollRaw = 0; _scrollSmooth = 0;
+    _skipPush = false;
+    setTimeout(() => snapToSection(idx), 40);
+    _pushNav({section:'scene'}, '#accueil', _TITLES.scene);
+  }
+}
+
+function _updateSnapNav(idx){
+  document.querySelectorAll('.snap-dot')
+    .forEach((d,i) => d.classList.toggle('active', i === idx));
+  document.querySelectorAll('#side-nav .sn-item[data-sn]')
+    .forEach(item => item.classList.toggle('active', parseInt(item.dataset.sn) === idx));
+}
+
+function renderSpecsSection(){
+  const el = document.getElementById('specs-glass-grid');
+  if(!el) return;
+  const specs = [
+    {id:'cardio',   icon:'🫀', nom:'Cardiologie',          col:'var(--cardio)'},
+    {id:'dermato',  icon:'🩺', nom:'Dermatologie',         col:'var(--dermato)'},
+    {id:'infectio', icon:'🦠', nom:'Infectiologie',        col:'var(--infectio)'},
+    {id:'neuro',    icon:'🧠', nom:'Neurologie',           col:'var(--neuro)'},
+    {id:'hge',      icon:'🍕', nom:'HGE',                  col:'var(--hge)'},
+  ];
+  el.innerHTML = specs.map(s => {
+    const tot  = QCMS.filter(q => q.tags.includes(s.id)).length;
+    const done = QCMS.filter(q => q.tags.includes(s.id) && ST.done[q.id]).length;
+    const pct  = tot ? Math.round(done / tot * 100) : 0;
+    return `<div class="sgc-card ${s.id}" onclick="openMat('${s.id}')">
+      <div class="sgc-top">
+        <span class="sgc-icon">${s.icon}</span>
+        <span class="sgc-prog-text">${done}/${tot}</span>
+      </div>
+      <div class="sgc-name">${s.nom}</div>
+      <div class="sgc-bar-wrap">
+        <div class="sgc-bar-fill" style="width:${pct}%;background:${s.col}"></div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ── Scroll-driven animation ───────────────────────────────────────
@@ -118,162 +239,95 @@ let _elCard, _elWelcome, _elStats, _elShapes;
 let _scrollRaw = 0, _scrollSmooth = 0;
 
 function _resetScrollAnim(){
-  if(_elCard)   { _elCard.style.opacity='0'; _elCard.style.transform='translateY(120px) scale(0.9)'; }
-  if(_elWelcome){ _elWelcome.style.opacity='1'; _elWelcome.style.transform='translateX(-50%) scale(1)'; _elWelcome.style.filter='blur(0px)'; }
-  if(_elStats)    _elStats.style.opacity='0';
-  if(_elShapes)   _elShapes.forEach(s=>s.style.opacity='1');
+  if(_elWelcome){
+    _elWelcome.style.opacity='1';
+    _elWelcome.style.transform='translateX(-50%) scale(1)';
+    _elWelcome.style.filter='blur(0px)';
+  }
+  if(_elShapes) _elShapes.forEach(s=>s.style.opacity='1');
 }
 
 function _onScroll(scrollY){
   if(!document.getElementById('s-scene').classList.contains('active')) return;
+  const sH = window.innerHeight;
+  const p  = Math.min(scrollY / sH, 1);
 
-  const maxScroll = window.innerHeight * 1.6; // 260vh - 100vh
-  const p = Math.min(scrollY / maxScroll, 1);
-
-  // Titre : scale 1→1.45, blur 0→14px, opacity 1→0 (0–42%)
-  const tP  = Math.min(p / 0.42, 1);
-  const tE  = 1 - Math.pow(1 - tP, 2);
+  // Titre Bienvenue : scale + blur + fade (0→65% de la section hero)
+  const tP = Math.min(p / 0.65, 1);
+  const tE = 1 - Math.pow(1 - tP, 2);
   if(_elWelcome){
     _elWelcome.style.opacity   = Math.max(0, 1 - tE);
-    _elWelcome.style.transform = `translateX(-50%) scale(${1 + 0.45 * tE})`;
-    _elWelcome.style.filter    = `blur(${14 * tE}px)`;
+    _elWelcome.style.transform = `translateX(-50%) scale(${1 + 0.30 * tE})`;
+    _elWelcome.style.filter    = `blur(${10 * tE}px)`;
   }
-  if(_elShapes) _elShapes.forEach(s => s.style.opacity = Math.max(0, 1 - tE * 1.4));
-
-  // Carte : monte de bas (70–100%), scale 0.9→1, easing cubic-out
-  const cP = Math.max(0, (p - 0.70) / 0.30);
-  const cE = 1 - Math.pow(1 - cP, 3);
-  if(_elCard){
-    _elCard.style.opacity   = cE;
-    _elCard.style.transform = `translateY(${120 * (1 - cE)}px) scale(${0.9 + 0.1 * cE})`;
-  }
-
-  // Stats : 88–100%
-  if(_elStats) _elStats.style.opacity = Math.max(0, (p - 0.88) / 0.12);
+  if(_elShapes) _elShapes.forEach(s => s.style.opacity = Math.max(0, 1 - tE * 1.5));
 }
 
 function initScrollAnim(){
-  _elCard    = document.getElementById('beach-card');
+  _elCard    = null;
   _elWelcome = document.getElementById('beach-welcome');
-  _elStats   = document.querySelector('.beach-stats-col');
+  _elStats   = null;
   _elShapes  = document.querySelectorAll('.e-shape');
-  const scene = document.getElementById('s-scene');
+  const scene     = document.getElementById('s-scene');
+  const container = document.getElementById('s-scene');
+  const dots      = document.getElementById('snap-dots');
 
   function updateVisibility(){
     const on = scene.classList.contains('active');
     if(_elWelcome) _elWelcome.style.display = on ? 'block' : 'none';
     if(_elShapes)  _elShapes.forEach(s => s.style.display = on ? 'block' : 'none');
+    if(dots) dots.classList.toggle('visible', on);
   }
   updateVisibility();
   new MutationObserver(updateVisibility)
     .observe(scene, {attributes:true, attributeFilter:['class']});
 
-  // Lerp RAF — smooth scroll maison
-  window.addEventListener('scroll', () => { _scrollRaw = window.scrollY; }, {passive:true});
+  // Lerp RAF — écoute le s-scene
+  container.addEventListener('scroll', () => { _scrollRaw = container.scrollTop; }, {passive:true});
   (function loop(){
     _scrollSmooth += (_scrollRaw - _scrollSmooth) * 0.09;
     _onScroll(_scrollSmooth);
     requestAnimationFrame(loop);
   })();
+
+  // IntersectionObserver — reveal des sections
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('revealed'); });
+  }, {root: container, threshold: 0.18});
+  document.querySelectorAll('.sec-inner').forEach(el => revealObs.observe(el));
+
+  // IntersectionObserver — tracking section active (dots + nav)
+  const sections = document.querySelectorAll('.snap-section');
+  const sectionObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting && e.intersectionRatio >= 0.5){
+        _updateSnapNav([...sections].indexOf(e.target));
+      }
+    });
+  }, {root: container, threshold: 0.5});
+  sections.forEach(s => sectionObs.observe(s));
 }
 
-// ── Beach Card ────────────────────────────────────────────────────
-
-function bcTab(id, btn) {
-  document.querySelectorAll('.bc-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.bc-panel').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('bcp-' + id).classList.add('active');
-}
-
-function renderBeachSpecs() {
-  const el = document.getElementById('bc-spec-list');
-  if (!el) return;
-  const specs = [
-    { id:'cardio',   icon:'🫀', nom:'Cardiologie',            col:'#ef4444' },
-    { id:'dermato',  icon:'🪮', nom:'Dermatologie',           col:'#0ea5e9' },
-    { id:'infectio', icon:'🦠', nom:'Infectiologie',          col:'#22c55e' },
-    { id:'neuro',    icon:'🧠', nom:'Neurologie',             col:'#a855f7' },
-    { id:'hge',      icon:'💩', nom:'Hépato-Gastro-Entéro',  col:'#f97316' },
-  ];
-  el.innerHTML = specs.map(s => {
-    const tot  = QCMS.filter(q => q.tags.includes(s.id)).length;
-    const done = QCMS.filter(q => q.tags.includes(s.id) && ST.done[q.id]).length;
-    const pct  = tot ? Math.round(done / tot * 100) : 0;
-    return `<div class="bc-spec-row" onclick="openMat('${s.id}')">
-      <div class="bc-spec-icon">${s.icon}</div>
-      <div class="bc-spec-info">
-        <div class="bc-spec-name">${s.nom}</div>
-        <div class="bc-spec-count">${done} / ${tot} QCMs</div>
-      </div>
-      <div class="bc-spec-track">
-        <div class="bc-spec-fill" style="width:${pct}%;background:${s.col}"></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function showQCMOverlay(){
-  // Petit rebond du panneau
-  const sign = document.getElementById('obj-sign');
-  if(sign){ sign.style.transition='transform .18s ease'; sign.style.transform='scale(1.08) rotate(-1.8deg)'; setTimeout(()=>{ sign.style.transform=''; sign.style.transition=''; },200); }
-
-  // Mise à jour des stats par spécialité
-  let totalDone = 0, totalAll = 0;
-  Object.keys(MATS).forEach(m => {
-    const tot  = QCMS.filter(q => q.tags.includes(m)).length;
-    const done = QCMS.filter(q => q.tags.includes(m) && ST.done[q.id]).length;
-    totalAll += tot; totalDone += done;
-    const prog = document.getElementById('sp-' + m);
-    const fill = document.getElementById('spf-' + m);
-    if(prog) prog.textContent = done + ' / ' + tot + ' QCMs';
-    if(fill) fill.style.width = (tot ? Math.round(done/tot*100) : 0) + '%';
-  });
-  const sub = document.getElementById('qcm-global-stats');
-  if(sub) sub.textContent = totalAll + ' QCMs · ' + totalDone + ' réalisés';
-
-  document.getElementById('qcm-overlay').classList.add('open');
-}
-
-function hideQCMOverlay(){
-  document.getElementById('qcm-overlay').classList.remove('open');
-}
-
-function launchMat(id){
-  hideQCMOverlay();
-  setTimeout(()=>{ openMat(id); }, 180);
-}
-
-function beachZoom(el, target){
-  const scene = document.getElementById('beach-scene');
-  const rect  = el.getBoundingClientRect();
-  const sr    = scene.getBoundingClientRect();
-  const ox = ((rect.left + rect.width  / 2 - sr.left) / sr.width  * 100).toFixed(1) + '%';
-  const oy = ((rect.top  + rect.height / 2 - sr.top)  / sr.height * 100).toFixed(1) + '%';
-  scene.style.transformOrigin = ox + ' ' + oy;
-  scene.classList.add('zooming');
-  setTimeout(() => {
-    if(target === 'items') openItems();
-    else show(target);
-    setTimeout(() => {
-      scene.classList.remove('zooming');
-      scene.style.transformOrigin = 'center center';
-    }, 80);
-  }, 680);
-}
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
   _scrollRaw = 0; _scrollSmooth = 0;
+  if(id === 's-scene'){
+    const c = document.getElementById('s-scene');
+    if(c) c.scrollTo({top:0, behavior:'instant'});
+  }
 }
 
 function openMat(id){
+  if(id === 'cardio'){ openCardio(); return; }
   ST.mat = id;
   document.getElementById('mat-titre').textContent = MATS[id].nom;
   show('s-mat');
   renderQCMs();
+  const nom = _MAT_NAMES[id] || MATS[id].nom;
+  _pushNav({section:'mat', mat:id}, '#qcm-' + id, 'MedRevision — QCM ' + nom);
 }
 
 // ── Utils ─────────────────────────────────────────────────────────
@@ -460,10 +514,12 @@ function verify(qid){
 // ── Stats & Progression ───────────────────────────────────────────
 
 function updateStats(){
-  const qf = document.getElementById('st-qcm-faits');
-  const sc = document.getElementById('st-score');
-  if(qf) qf.textContent = ST.qcm;
-  if(sc) sc.textContent = ST.qcm > 0 ? Math.round(ST.ok / ST.qcm * 100) + '%' : '—';
+  const qf  = document.getElementById('st-qcm-faits');
+  const qf3 = document.getElementById('st3-qcm-faits');
+  const sc  = document.getElementById('st-score');
+  if(qf)  qf.textContent  = ST.qcm;
+  if(qf3) qf3.textContent = ST.qcm;
+  if(sc)  sc.textContent  = ST.qcm > 0 ? Math.round(ST.ok / ST.qcm * 100) + '%' : '—';
 }
 
 function updateProg(){
@@ -487,6 +543,7 @@ function openItems(){
   show('s-items');
   _buildUETabs();
   _renderItems();
+  _pushNav({section:'items'}, '#items', _TITLES.items);
 }
 
 function _buildUETabs(){
@@ -541,4 +598,262 @@ function _renderItemRow(i){
               onclick="event.stopPropagation();toggleItemDone('${itemKey}',this)"
               title="${done ? 'Marquer non vu' : 'Marquer vu'}">${done ? '✦' : '○'}</button>
     </div>`;
+}
+
+// ══════════════════════════════════════════
+// CARDIO v2 — Accordion + QCM enrichi
+// ══════════════════════════════════════════
+
+let _cardioTagFilter = null;
+
+function openCardio(){
+  show('s-cardio');
+  _pushNav({section:'cardio'}, '#cardio', 'MedRevision — QCM Cardiologie');
+  _renderCardioAccordion();
+}
+
+function _renderCardioAccordion(){
+  // Stats globales
+  const stats = QCM_IDX.counts(CARDIO_QUESTIONS);
+  document.getElementById('scd-global-stats').innerHTML =
+    `<span class="acc-count">${stats.total} QCM</span>
+     <span class="acc-rang-a">${stats.rangA}A</span>
+     ${stats.rangB > 0 ? `<span class="acc-rang-b">${stats.rangB}B</span>` : ''}`;
+
+  // Tag bar
+  const tags = QCM_IDX.allTags();
+  document.getElementById('scd-tag-bar').innerHTML =
+    tags.map(({tag, count}) =>
+      `<span class="tag-pill${_cardioTagFilter === tag ? ' active' : ''}"
+             onclick="filterCardioByTag('${tag}')">${tag} <small>${count}</small></span>`
+    ).join('');
+
+  // Accordion
+  const summary = QCM_IDX.summaryForStructure(CARDIO_STRUCTURE);
+  document.getElementById('scd-accordion').innerHTML = summary
+    .filter(p => p.total > 0)
+    .map(partie => {
+      const pct = partie.prog.pct;
+      const itemsHtml = partie.items
+        .filter(it => it.total > 0)
+        .map(it => `
+          <div class="acc-item" onclick="launchItem(${it.num},'${it.titre.replace(/'/g,"\\'")}')">
+            <span class="acc-item-num">Item ${it.num}</span>
+            <div class="acc-item-main">
+              <span class="acc-item-titre">${it.titre}</span>
+              <div class="acc-item-tags">
+                ${it.tags.map(t =>
+                  `<span class="tag-pill sm" onclick="event.stopPropagation();filterCardioByTag('${t}')">${t}</span>`
+                ).join('')}
+              </div>
+            </div>
+            <div class="acc-item-right">
+              <div class="acc-item-badges">
+                <span class="acc-count">${it.total}</span>
+                <span class="acc-rang-a">${it.rangA}A</span>
+                ${it.rangB > 0 ? `<span class="acc-rang-b">${it.rangB}B</span>` : ''}
+              </div>
+              <div class="acc-mini-prog">
+                <div class="acc-prog-fill" style="width:${it.prog.pct}%"></div>
+              </div>
+            </div>
+          </div>`).join('');
+
+      return `
+        <div class="acc-partie" id="acc-${partie.id}">
+          <div class="acc-partie-hd" onclick="togglePartie('${partie.id}')">
+            <span class="acc-arrow" id="acc-arrow-${partie.id}">▶</span>
+            <div class="acc-hd-main">
+              <span class="acc-titre">${partie.titre}</span>
+              <div class="acc-hd-badges">
+                <span class="acc-count">${partie.total} QCM</span>
+                <span class="acc-rang-a">${partie.rangA}A</span>
+                ${partie.rangB > 0 ? `<span class="acc-rang-b">${partie.rangB}B</span>` : ''}
+              </div>
+            </div>
+            <button class="acc-launch"
+                    onclick="event.stopPropagation();launchPartie('${partie.id}','${partie.titre.replace(/'/g,"\\'")}')">
+              ▶ Lancer
+            </button>
+          </div>
+          <div class="acc-prog-bar">
+            <div class="acc-prog-fill" style="width:${pct}%"></div>
+          </div>
+          <div class="acc-partie-body" id="acc-body-${partie.id}" style="display:none">
+            ${itemsHtml}
+          </div>
+        </div>`;
+    }).join('');
+}
+
+function togglePartie(id){
+  const body  = document.getElementById('acc-body-' + id);
+  const arrow = document.getElementById('acc-arrow-' + id);
+  const open  = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  arrow.textContent = open ? '▶' : '▼';
+  arrow.classList.toggle('open', !open);
+}
+
+function launchPartie(id, titre){
+  const qs = shuffleArr(QCM_IDX.byPartie(id));
+  openCardioSession(qs, `${titre} — ${qs.length} questions`);
+}
+
+function launchItem(num, titre){
+  const qs = shuffleArr(QCM_IDX.byItem(num));
+  openCardioSession(qs, `${titre} (item ${num}) — ${qs.length} questions`);
+}
+
+function filterCardioByTag(tag){
+  _cardioTagFilter = _cardioTagFilter === tag ? null : tag;
+  if(_cardioTagFilter){
+    const qs = QCM_IDX.byTag(tag);
+    openCardioSession(qs, `Tag : ${tag} — ${qs.length} questions`);
+  } else {
+    _renderCardioAccordion();
+  }
+}
+
+function openCardioSession(questions, titre){
+  show('s-qcm-v2');
+  document.getElementById('qv2-titre').textContent = titre;
+  const stats = QCM_IDX.counts(questions);
+  document.getElementById('qv2-meta').innerHTML =
+    `<span class="acc-rang-a">${stats.rangA} rang A</span>
+     ${stats.rangB > 0 ? `<span class="acc-rang-b">${stats.rangB} rang B</span>` : ''}`;
+  renderQCMsV2(questions);
+  _pushNav({section:'qcm-v2', questions, titre}, '#session', 'MedRevision — ' + titre);
+}
+
+// ── Render QCM v2 ──────────────────────────────────────────────────
+
+function renderQCMsV2(questions){
+  const el = document.getElementById('qv2-list');
+  if(!questions.length){
+    el.innerHTML = '<div class="empty">Aucune question disponible pour ce filtre.</div>';
+    return;
+  }
+  const done0 = questions.filter(q => ST.done['v2_'+q.id]).length;
+  el.innerHTML =
+    `<div class="session-bar">
+       <span>Progression</span>
+       <strong id="qv2-sb">${done0} / ${questions.length} QCMs</strong>
+     </div>` +
+    questions.map(q => _renderQv2Card(q)).join('');
+}
+
+function _renderQv2Card(q){
+  const isQRM  = q.reponses.length > 1;
+  const type   = isQRM ? 'QRM' : 'QRU';
+  const done   = ST.done['v2_' + q.id];
+  const props  = Object.entries(q.propositions);
+
+  const optsHtml = props.map(([L, text]) => {
+    const isOk  = q.reponses.includes(L);
+    let cls = 'opt';
+    if(done){
+      if(isOk) cls += ' ok';
+      else if(done.sel && done.sel.includes(L)) cls += ' ko';
+    }
+    return `<div class="${cls}" data-letter="${L}" data-ok="${isOk}"
+                 onclick="selOptV2(this,'${q.id}')">
+              <div class="opt-letter">${L}</div>
+              <div class="opt-body"><div class="opt-text">${text}</div></div>
+            </div>`;
+  }).join('');
+
+  const corrHtml = done
+    ? `<div class="qv2-correction">
+         <div class="correction-lbl">📖 Correction</div>
+         <p>${q.correction}</p>
+       </div>`
+    : `<button class="btn-verify" id="bv2-${q.id}"
+               onclick="verifyV2('${q.id}')" disabled>
+         Vérifier ma réponse
+       </button>
+       <div class="feedback" id="fb2-${q.id}"></div>`;
+
+  return `
+    <div class="qcm-card" id="v2card-${q.id}">
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        <span class="badge-type ${type.toLowerCase()}">${type}</span>
+        <span class="badge-rang-tag rang-${q.rang.toLowerCase()}">${q.rang}</span>
+        <span class="badge-source" style="margin:0">📚 Item ${q.item}</span>
+        ${done ? `<span class="chip ${done.ok?'ok':'ko'}">${done.ok?'✓ Réussi':'✗ Raté'}</span>` : ''}
+      </div>
+      <div class="q-text">${q.question}</div>
+      <div class="opts" id="v2opts-${q.id}"
+           data-corrected="${done?'1':'0'}"
+           data-qrm="${isQRM}"
+           data-reponses="${q.reponses.join(',')}">
+        ${optsHtml}
+      </div>
+      ${corrHtml}
+    </div>`;
+}
+
+// ── Interaction QCM v2 ────────────────────────────────────────────
+
+function selOptV2(el, qid){
+  const list  = document.getElementById('v2opts-' + qid);
+  if(list.getAttribute('data-corrected') === '1') return;
+  const isQRM = list.getAttribute('data-qrm') === 'true';
+  if(isQRM){
+    el.classList.toggle('sel');
+  } else {
+    list.querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel');
+  }
+  const hasSel = !!list.querySelector('.opt.sel');
+  const btn = document.getElementById('bv2-' + qid);
+  if(btn) btn.disabled = !hasSel;
+}
+
+function verifyV2(qid){
+  const list    = document.getElementById('v2opts-' + qid);
+  if(list.getAttribute('data-corrected') === '1') return;
+  list.setAttribute('data-corrected','1');
+
+  const correct  = list.getAttribute('data-reponses').split(',');
+  const selected = [...list.querySelectorAll('.opt.sel')].map(o => o.getAttribute('data-letter'));
+  const win      = selected.length === correct.length && correct.every(l => selected.includes(l));
+
+  list.querySelectorAll('.opt').forEach(opt => {
+    const L    = opt.getAttribute('data-letter');
+    const isOk = correct.includes(L);
+    const isSel = selected.includes(L);
+    opt.classList.remove('sel');
+    if(isOk) opt.classList.add('ok');
+    else if(isSel) opt.classList.add('ko');
+  });
+
+  const q = CARDIO_QUESTIONS.find(x => x.id === qid);
+  const card = document.getElementById('v2card-' + qid);
+
+  const btn = document.getElementById('bv2-' + qid);
+  const fb  = document.getElementById('fb2-' + qid);
+  if(btn) btn.style.display = 'none';
+  if(fb){
+    fb.className = 'feedback ' + (win ? 'ok' : 'ko');
+    fb.textContent = win ? 'Excellente réponse ! 🎉' : 'Pas tout à fait — consultez la correction.';
+  }
+
+  if(q){
+    const corr = document.createElement('div');
+    corr.className = 'qv2-correction';
+    corr.innerHTML = `<div class="correction-lbl">📖 Correction</div><p>${q.correction}</p>`;
+    card.appendChild(corr);
+  }
+
+  ST.done['v2_' + qid] = {ok: win, sel: selected};
+  ST.qcm++; if(win) ST.ok++;
+  updateStats();
+
+  const sb = document.getElementById('qv2-sb');
+  if(sb){
+    const total = document.querySelectorAll('#qv2-list .qcm-card').length;
+    const done  = Object.keys(ST.done).filter(k => k.startsWith('v2_')).length;
+    sb.textContent = `${Math.min(done, total)} / ${total} QCMs`;
+  }
 }

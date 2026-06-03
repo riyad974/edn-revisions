@@ -1,0 +1,18 @@
+{
+  "id": "q_item232_001",
+  "item": 232,
+  "specialite": "cardiologie",
+  "partie": "rythmologie",
+  "tags": ["FA", "ECG", "diagnostic", "ondes-P", "RR-irregulier", "rangA"],
+  "rang": "A",
+  "question": "Parmi ces descriptions, laquelle correspond à l'aspect ECG caractéristique d'une Fibrillation Atriale (FA) ?",
+  "propositions": {
+    "A": "Ondes P régulières en dents de scie à ~300/min avec conduction ventriculaire régulière",
+    "B": "Absence d'ondes P, trémulation de la ligne de base (ondes f) et intervalles R-R irréguliers",
+    "C": "Allongement progressif de l'espace PR suivi d'une onde P bloquée",
+    "D": "Ondes P négatives en D2-D3-aVF précédant un QRS fin",
+    "E": "QRS larges et réguliers sans onde P identifiable"
+  },
+  "reponses": ["B"],
+  "correction": "La FA se définit à l'ECG par 3 éléments indissociables : (1) absence d'ondes P sinusales remplacées par une trémulation anarchique de la ligne de base (ondes f, 400–600/min), (2) intervalles R-R irréguliers (réponse ventriculaire irrégulière), (3) QRS fins (sauf aberration de conduction). A = Flutter atrial (ondes F en dents de scie régulières ~300/min, conduction souvent 2:1). C = BAV 2° type Wenckebach (Mobitz I). D = Rythme jonctionnel. E = Tachycardie ventriculaire."
+}

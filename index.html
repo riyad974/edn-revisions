@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EDN · Révisions Actives</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=14">
+  <title>MedRevision</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=16">
 </head>
 <body>
 
@@ -27,280 +27,183 @@
     <div id="beach-scroll-hint">↓ défiler</div>
   </div>
 
-  <!-- SCENE — Plage interactive -->
+  <!-- NAV LATÉRALE GAUCHE -->
+  <nav id="side-nav">
+    <div class="sn-brand">E</div>
+    <div class="sn-links">
+      <button class="sn-item active" data-sn="0" onclick="_snNavClick(0)">
+        <span class="sn-num">01</span>
+        <span class="sn-label">Accueil</span>
+      </button>
+      <button class="sn-item" data-sn="1" onclick="_snNavClick(1)">
+        <span class="sn-num">02</span>
+        <span class="sn-label">Spécialités</span>
+      </button>
+      <button class="sn-item" data-sn="2" onclick="_snNavClick(2)">
+        <span class="sn-num">03</span>
+        <span class="sn-label">Progression</span>
+      </button>
+    </div>
+    <div class="sn-footer">
+      <button class="sn-item sn-r2c" onclick="openItems()">
+        <span class="sn-num">R2C</span>
+        <span class="sn-label">Référentiel</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- DOTS DE NAVIGATION (visible sur s-scene) -->
+  <div id="snap-dots">
+    <div class="snap-dot active" onclick="_snNavClick(0)"></div>
+    <div class="snap-dot" onclick="_snNavClick(1)"></div>
+    <div class="snap-dot" onclick="_snNavClick(2)"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SCENE — Snap scroll 3 sections
+  ═══════════════════════════════════════ -->
   <div id="s-scene" class="screen active">
-    <div class="beach-scene" id="beach-scene">
-      <div class="beach-vignette"></div>
+    <div id="snap-container">
 
-      <!-- ── STATS + PROGRESSION — droite ── -->
-      <div class="beach-stats-col">
-        <div class="bsc-item">
-          <strong class="bsc-fraction">
-            <span id="st2-items-done">0</span><span class="bsc-total"> / <span id="st2-items-tot">367</span></span>
-          </strong>
-          <span>items R2C vus</span>
-        </div>
-        <div class="bsc-sep"></div>
-        <div class="bsc-item">
-          <strong id="st2-pct">0%</strong>
-          <span>progression</span>
-        </div>
-        <div class="bsc-wavebar">
-          <div class="bsc-wavebar-fill" id="st2-bar"></div>
-        </div>
-      </div>
+      <!-- 01 · HERO -->
+      <section class="snap-section" id="sec-hero">
+        <div class="snap-vignette"></div>
+      </section>
 
-      <!-- ── CARTE CENTRALE ── -->
-      <div class="beach-card" id="beach-card">
-        <div class="bc-tabs">
-          <button class="bc-tab active" onclick="bcTab('qcm',this)">QCM</button>
-          <button class="bc-tab" onclick="bcTab('items',this)">Items</button>
-          <button class="bc-tab" onclick="bcTab('reglages',this)">Réglages</button>
-        </div>
-
-        <div class="bc-panel active" id="bcp-qcm">
-          <div class="bc-spec-list" id="bc-spec-list"></div>
-        </div>
-
-        <div class="bc-panel" id="bcp-items">
-          <button class="bc-items-btn" onclick="openItems()">
-            <span class="bc-items-icon">📋</span>
-            <span class="bc-items-title">Référentiel R2C</span>
-            <span class="bc-items-sub">367 items · 11 UEs · Collèges officiels</span>
+      <!-- 02 · SPÉCIALITÉS -->
+      <section class="snap-section" id="sec-specs">
+        <div class="sec-inner" id="sec-specs-inner">
+          <p class="sec-eyebrow">Spécialités médicales</p>
+          <h2 class="sec-display-title">Choisissez<br>votre matière</h2>
+          <div class="specs-glass-grid" id="specs-glass-grid"></div>
+          <button class="sec-r2c-btn" onclick="openItems()">
+            <span class="sec-r2c-icon">📋</span>
+            <span class="sec-r2c-text">Référentiel R2C · 367 items · 11 UEs</span>
+            <span class="sec-r2c-arrow">→</span>
           </button>
         </div>
+      </section>
 
-        <div class="bc-panel" id="bcp-reglages">
-          <div class="bc-settings">
+      <!-- 03 · PROGRESSION -->
+      <section class="snap-section" id="sec-prog">
+        <div class="sec-inner" id="sec-prog-inner">
+          <p class="sec-eyebrow">Tableau de bord</p>
+          <h2 class="sec-display-title">Votre<br>progression</h2>
 
-            <div class="bc-set-section">
+          <div class="prog-glass-grid">
+            <div class="pgg-card pgg-wide">
+              <div class="pgg-num-row">
+                <span class="pgg-big" id="st2-items-done">0</span>
+                <span class="pgg-slash">/</span>
+                <span class="pgg-tot" id="st2-items-tot">367</span>
+              </div>
+              <div class="pgg-label">Items R2C vus</div>
+              <div class="pgg-bar"><div class="pgg-fill" id="st2-bar"></div></div>
+            </div>
+            <div class="pgg-card">
+              <div class="pgg-big" id="st2-pct">0%</div>
+              <div class="pgg-label">Progression R2C</div>
+            </div>
+            <div class="pgg-card">
+              <div class="pgg-big" id="st3-qcm-faits">0</div>
+              <div class="pgg-label">QCMs tentés</div>
+            </div>
+          </div>
+
+          <div class="prog-settings-inline">
+            <div class="psi-group">
               <div class="bc-set-label">Fond d'écran</div>
               <div class="bc-set-row">
-                <div class="bc-bg-tile active" id="bgt-0" onclick="setBg(0)">
-                  <div class="bc-bg-thumb">🎬</div>
-                  <div class="bc-bg-name">Actuel</div>
-                </div>
-                <div class="bc-bg-tile" id="bgt-1" onclick="setBg(1)">
-                  <div class="bc-bg-thumb">🎬</div>
-                  <div class="bc-bg-name">Fond 1</div>
-                </div>
-                <div class="bc-bg-tile" id="bgt-2" onclick="setBg(2)">
-                  <div class="bc-bg-thumb">🎬</div>
-                  <div class="bc-bg-name">Fond 2</div>
-                </div>
+                <div class="bc-bg-tile active" id="bgt-0" onclick="setBg(0)"><div class="bc-bg-thumb">🎬</div><div class="bc-bg-name">Actuel</div></div>
+                <div class="bc-bg-tile" id="bgt-1" onclick="setBg(1)"><div class="bc-bg-thumb">🎬</div><div class="bc-bg-name">Fond 1</div></div>
+                <div class="bc-bg-tile" id="bgt-2" onclick="setBg(2)"><div class="bc-bg-thumb">🎬</div><div class="bc-bg-name">Fond 2</div></div>
               </div>
             </div>
-
-            <div class="bc-set-section">
-              <div class="bc-set-label">Design des QCM</div>
+            <div class="psi-group">
+              <div class="bc-set-label">Design QCM</div>
               <div class="bc-set-row">
                 <div class="bc-theme-tile active" id="btt-glass" onclick="setQcmTheme('glass')">
-                  <div class="bc-theme-preview glass-preview">
-                    <div class="btp-card glass-card-preview"></div>
-                  </div>
+                  <div class="bc-theme-preview glass-preview"><div class="btp-card glass-card-preview"></div></div>
                   <div class="bc-theme-name">🔮 Glass</div>
                 </div>
                 <div class="bc-theme-tile" id="btt-classic" onclick="setQcmTheme('classic')">
-                  <div class="bc-theme-preview classic-preview">
-                    <div class="btp-card classic-card-preview"></div>
-                  </div>
+                  <div class="bc-theme-preview classic-preview"><div class="btp-card classic-card-preview"></div></div>
                   <div class="bc-theme-name">📄 Classique</div>
                 </div>
               </div>
             </div>
-
           </div>
+
         </div>
-      </div>
-
-      <!-- ── HINT BAR ── -->
-      <div class="beach-hint-bar">
-        <div class="hint-line"></div>
-        <span>Clique pour explorer</span>
-        <div class="hint-line"></div>
-      </div>
-
-      <!-- ── Overlay Spécialités (s'ouvre sur la plage) ── -->
-      <div class="qcm-overlay" id="qcm-overlay">
-        <div class="qcm-backdrop" onclick="hideQCMOverlay()"></div>
-        <div class="qcm-sheet">
-          <div class="qcm-sheet-bar"></div>
-          <div class="qcm-sheet-head">
-            <div>
-              <div class="qcm-sheet-title">Choisir une spécialité</div>
-              <div class="qcm-sheet-sub" id="qcm-global-stats">— QCMs disponibles</div>
-            </div>
-            <button class="qcm-sheet-close" onclick="hideQCMOverlay()">✕</button>
-          </div>
-          <div class="spec-grid">
-            <div class="spec-tile cardio" onclick="launchMat('cardio')">
-              <div class="spec-tile-icon">🫀</div>
-              <div class="spec-tile-info">
-                <div class="spec-tile-name">Cardiologie</div>
-                <div class="spec-tile-prog" id="sp-cardio">— QCMs</div>
-              </div>
-              <div class="spec-tile-bar"><div class="spec-tile-fill cardio-fill" id="spf-cardio"></div></div>
-            </div>
-            <div class="spec-tile dermato" onclick="launchMat('dermato')">
-              <div class="spec-tile-icon">🩺</div>
-              <div class="spec-tile-info">
-                <div class="spec-tile-name">Dermatologie</div>
-                <div class="spec-tile-prog" id="sp-dermato">— QCMs</div>
-              </div>
-              <div class="spec-tile-bar"><div class="spec-tile-fill dermato-fill" id="spf-dermato"></div></div>
-            </div>
-            <div class="spec-tile infectio" onclick="launchMat('infectio')">
-              <div class="spec-tile-icon">🦠</div>
-              <div class="spec-tile-info">
-                <div class="spec-tile-name">Infectiologie</div>
-                <div class="spec-tile-prog" id="sp-infectio">— QCMs</div>
-              </div>
-              <div class="spec-tile-bar"><div class="spec-tile-fill infectio-fill" id="spf-infectio"></div></div>
-            </div>
-            <div class="spec-tile neuro" onclick="launchMat('neuro')">
-              <div class="spec-tile-icon">🧠</div>
-              <div class="spec-tile-info">
-                <div class="spec-tile-name">Neurologie</div>
-                <div class="spec-tile-prog" id="sp-neuro">— QCMs</div>
-              </div>
-              <div class="spec-tile-bar"><div class="spec-tile-fill neuro-fill" id="spf-neuro"></div></div>
-            </div>
-            <div class="spec-tile hge spec-wide" onclick="launchMat('hge')">
-              <div class="spec-tile-icon">🍕</div>
-              <div class="spec-tile-info">
-                <div class="spec-tile-name">Hépato-Gastro-Entérologie</div>
-                <div class="spec-tile-prog" id="sp-hge">— QCMs</div>
-              </div>
-              <div class="spec-tile-bar"><div class="spec-tile-fill hge-fill" id="spf-hge"></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 
     </div>
   </div>
 
-  <!-- HOME -->
+  <!-- HOME (secondaire, non utilisé dans le flux principal) -->
   <div id="s-home" class="screen">
     <button class="back-btn" onclick="goHome()">← Retour</button>
-
     <header class="home-header">
       <div class="brand">EDN<span>·</span>Médecine</div>
     </header>
-
     <section class="home-hero">
-      <div class="badge-top">
-        <span class="badge-dot"></span>
-        Révisions actives
-      </div>
+      <div class="badge-top"><span class="badge-dot"></span>Révisions actives</div>
       <h1>Révisez<br><em>intelligemment.</em></h1>
       <p class="hero-sub">QCMs interactifs par spécialité, suivi de progression et référentiel R2C — tout en un.</p>
     </section>
-
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-icon">💡</div>
-        <div class="stat-num" id="st-tot-qcm">0</div>
-        <div class="stat-label">QCMs disponibles</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">✅</div>
-        <div class="stat-num" id="st-qcm-faits">0</div>
-        <div class="stat-label">QCMs faits</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🎯</div>
-        <div class="stat-num" id="st-score">—</div>
-        <div class="stat-label">Score</div>
-      </div>
+      <div class="stat-card"><div class="stat-icon">💡</div><div class="stat-num" id="st-tot-qcm">0</div><div class="stat-label">QCMs disponibles</div></div>
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-num" id="st-qcm-faits">0</div><div class="stat-label">QCMs faits</div></div>
+      <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-num" id="st-score">—</div><div class="stat-label">Score</div></div>
     </div>
-
     <div class="section-header"><span>Spécialités</span></div>
-
     <div class="mat-grid">
-
-      <div class="mat-card cardio" onclick="openMat('cardio')">
-        <div class="mat-top">
-          <div class="mat-icon">🫀</div>
-          <div class="mat-arrow">↗</div>
-        </div>
-        <h3>Cardiologie</h3>
-        <div class="prog-wrap">
-          <div class="prog-track"><div class="prog-fill" id="pg-cardio" style="width:0%"></div></div>
-          <div class="prog-lbl" id="pgl-cardio">Calcul en cours…</div>
-        </div>
-      </div>
-
-      <div class="mat-card dermato" onclick="openMat('dermato')">
-        <div class="mat-top">
-          <div class="mat-icon">🩺</div>
-          <div class="mat-arrow">↗</div>
-        </div>
-        <h3>Dermatologie</h3>
-        <div class="prog-wrap">
-          <div class="prog-track"><div class="prog-fill" id="pg-dermato" style="width:0%"></div></div>
-          <div class="prog-lbl" id="pgl-dermato">Calcul en cours…</div>
-        </div>
-      </div>
-
-      <div class="mat-card infectio" onclick="openMat('infectio')">
-        <div class="mat-top">
-          <div class="mat-icon">🦠</div>
-          <div class="mat-arrow">↗</div>
-        </div>
-        <h3>Infectiologie</h3>
-        <div class="prog-wrap">
-          <div class="prog-track"><div class="prog-fill" id="pg-infectio" style="width:0%"></div></div>
-          <div class="prog-lbl" id="pgl-infectio">Calcul en cours…</div>
-        </div>
-      </div>
-
-      <div class="mat-card neuro" onclick="openMat('neuro')">
-        <div class="mat-top">
-          <div class="mat-icon">🧠</div>
-          <div class="mat-arrow">↗</div>
-        </div>
-        <h3>Neurologie</h3>
-        <div class="prog-wrap">
-          <div class="prog-track"><div class="prog-fill" id="pg-neuro" style="width:0%"></div></div>
-          <div class="prog-lbl" id="pgl-neuro">Calcul en cours…</div>
-        </div>
-      </div>
-
-      <div class="mat-card hge wide" onclick="openMat('hge')">
-        <div class="mat-top">
-          <div class="mat-icon">🍕</div>
-          <div class="mat-arrow">↗</div>
-        </div>
-        <h3>Hépato-Gastro-Entérologie</h3>
-        <div class="prog-wrap">
-          <div class="prog-track"><div class="prog-fill" id="pg-hge" style="width:0%"></div></div>
-          <div class="prog-lbl" id="pgl-hge">Calcul en cours…</div>
-        </div>
-      </div>
-
+      <div class="mat-card cardio" onclick="openMat('cardio')"><div class="mat-top"><div class="mat-icon">🫀</div><div class="mat-arrow">↗</div></div><h3>Cardiologie</h3><div class="prog-wrap"><div class="prog-track"><div class="prog-fill" id="pg-cardio" style="width:0%"></div></div><div class="prog-lbl" id="pgl-cardio">Calcul en cours…</div></div></div>
+      <div class="mat-card dermato" onclick="openMat('dermato')"><div class="mat-top"><div class="mat-icon">🩺</div><div class="mat-arrow">↗</div></div><h3>Dermatologie</h3><div class="prog-wrap"><div class="prog-track"><div class="prog-fill" id="pg-dermato" style="width:0%"></div></div><div class="prog-lbl" id="pgl-dermato">Calcul en cours…</div></div></div>
+      <div class="mat-card infectio" onclick="openMat('infectio')"><div class="mat-top"><div class="mat-icon">🦠</div><div class="mat-arrow">↗</div></div><h3>Infectiologie</h3><div class="prog-wrap"><div class="prog-track"><div class="prog-fill" id="pg-infectio" style="width:0%"></div></div><div class="prog-lbl" id="pgl-infectio">Calcul en cours…</div></div></div>
+      <div class="mat-card neuro" onclick="openMat('neuro')"><div class="mat-top"><div class="mat-icon">🧠</div><div class="mat-arrow">↗</div></div><h3>Neurologie</h3><div class="prog-wrap"><div class="prog-track"><div class="prog-fill" id="pg-neuro" style="width:0%"></div></div><div class="prog-lbl" id="pgl-neuro">Calcul en cours…</div></div></div>
+      <div class="mat-card hge wide" onclick="openMat('hge')"><div class="mat-top"><div class="mat-icon">🍕</div><div class="mat-arrow">↗</div></div><h3>Hépato-Gastro-Entérologie</h3><div class="prog-wrap"><div class="prog-track"><div class="prog-fill" id="pg-hge" style="width:0%"></div></div><div class="prog-lbl" id="pgl-hge">Calcul en cours…</div></div></div>
     </div>
-
-    <!-- RÉFÉRENTIEL R2C -->
     <div class="section-header" style="margin-top:36px"><span>Référentiel</span></div>
     <div class="tool-card tc-items" onclick="openItems()" style="margin-bottom:8px">
       <div class="tool-card-icon">📋</div>
-      <div class="tool-card-body">
-        <div class="tool-card-title">Référentiel R2C</div>
-        <div class="tool-card-sub">367 items · 11 UEs · Collèges officiels</div>
-      </div>
+      <div class="tool-card-body"><div class="tool-card-title">Référentiel R2C</div><div class="tool-card-sub">367 items · 11 UEs · Collèges officiels</div></div>
       <div class="tool-card-arrow">↗</div>
     </div>
-
   </div>
 
-  <!-- MATIERE — QCMs uniquement -->
+  <!-- MATIERE — QCMs -->
   <div id="s-mat" class="screen">
     <button class="back-btn" onclick="goHome()">← Retour</button>
-    <div class="mat-header">
-      <h1 id="mat-titre"></h1>
-    </div>
+    <div class="mat-header"><h1 id="mat-titre"></h1></div>
     <div id="tc-qcm"></div>
+  </div>
+
+  <!-- CARDIO — Navigation accordion v2 -->
+  <div id="s-cardio" class="screen">
+    <button class="back-btn" onclick="goHome()">← Retour</button>
+    <div class="scd-header">
+      <div class="scd-title-row">
+        <span class="scd-emoji">🫀</span>
+        <div>
+          <h1 class="scd-h1">Cardiologie</h1>
+          <div id="scd-global-stats" class="scd-global-stats"></div>
+        </div>
+      </div>
+    </div>
+    <div class="scd-tag-label">Filtrer par thème</div>
+    <div class="scd-tag-bar" id="scd-tag-bar"></div>
+    <div class="scd-accordion" id="scd-accordion"></div>
+  </div>
+
+  <!-- QCM SESSION V2 — format enrichi avec correction -->
+  <div id="s-qcm-v2" class="screen">
+    <button class="back-btn" onclick="openCardio()">← Cardiologie</button>
+    <div class="qv2-header">
+      <h1 class="qv2-titre" id="qv2-titre"></h1>
+      <div class="qv2-meta" id="qv2-meta"></div>
+    </div>
+    <div id="qv2-list"></div>
   </div>
 
   <!-- ITEMS R2C -->
@@ -321,6 +224,9 @@
   <script src="data-neuro.js?v=2"></script>
   <script src="data-items.js?v=2"></script>
   <script src="progress.js?v=1"></script>
-  <script src="app.js?v=12"></script>
+  <script src="data/structure-cardio.js?v=1"></script>
+  <script src="data/questions-cardio.js?v=1"></script>
+  <script src="data/qcm-index.js?v=1"></script>
+  <script src="app.js?v=14"></script>
 </body>
 </html>
